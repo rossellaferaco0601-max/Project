@@ -326,7 +326,7 @@ Commenta LONTANO e ti mando tutte le info sui percorsi di coaching personalizzat
   {
     id: "D1-daniela",
     title: "Dal divano alla mezza maratona a 60 anni (testimonianza di Daniela, workshop 24/10)",
-    cover: { frame: 1232, kicker: "Testimonianza", lines: ["Daniela", "la mezza a 60 anni"], accent: "Daniela" },
+    cover: { frame: 1232, kicker: "Testimonianza", lines: ["Più veloce a 60", "che a 50 anni"], accent: "60" },
     props: {
       ...base,
       src: "daniela/daniela_src.mp4",
