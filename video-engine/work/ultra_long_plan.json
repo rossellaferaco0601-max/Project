@@ -3,7 +3,7 @@
  "gap": 1.6,
  "chapters": [
   {
-   "q": "Raccontami questi sei mesi",
+   "q": "Come sono andati questi sei mesi?",
    "ranges": [
     [
      56.15,
@@ -20,7 +20,7 @@
    ]
   },
   {
-   "q": "La prima ultramaratona",
+   "q": "E la prima ultramaratona?",
    "ranges": [
     [
      102.78,
@@ -29,7 +29,7 @@
    ]
   },
   {
-   "q": "Il check al cinquantesimo chilometro",
+   "q": "Il check al cinquantesimo chilometro?",
    "ranges": [
     [
      152.55,
