@@ -1,0 +1,63 @@
+{
+ "blendFrames": 8,
+ "gap": 1.6,
+ "chapters": [
+  {
+   "q": "Raccontami questi sei mesi",
+   "ranges": [
+    [
+     56.15,
+     66.8
+    ],
+    [
+     67.99,
+     73.27
+    ],
+    [
+     79.84,
+     101.05
+    ]
+   ]
+  },
+  {
+   "q": "La prima ultramaratona",
+   "ranges": [
+    [
+     102.78,
+     140.35
+    ]
+   ]
+  },
+  {
+   "q": "Il check al cinquantesimo chilometro",
+   "ranges": [
+    [
+     152.55,
+     174.86
+    ]
+   ]
+  },
+  {
+   "q": "E oltre la corsa?",
+   "ranges": [
+    [
+     185.7,
+     219.2
+    ],
+    [
+     220.5,
+     236.24
+    ]
+   ]
+  },
+  {
+   "q": "Come sta andando?",
+   "ranges": [
+    [
+     247.45,
+     367.2
+    ]
+   ]
+  }
+ ]
+}

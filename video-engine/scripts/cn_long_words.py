@@ -7,7 +7,7 @@ Stampa il testo di ogni pezzo: va letto tutto, anche per scoprire chiacchiere fu
 import json, subprocess, sys, tempfile, os
 from faster_whisper import WhisperModel
 plan = json.load(open(sys.argv[1])); wav = sys.argv[2]
-m = WhisperModel("medium", device="cpu", compute_type="int8"); out = []; tmp = tempfile.mkdtemp()
+m = WhisperModel(__import__("os").environ.get("WMODEL","medium"), device="cpu", compute_type="int8"); out = []; tmp = tempfile.mkdtemp()
 for i, s in enumerate(plan["segments"]):
     a, b = s["from"], s["to"]; f = os.path.join(tmp, "s.wav")
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{max(0, a - 0.15):.3f}", "-t", f"{b - a + 0.3:.3f}", "-i", wav, "-ac", "1", "-ar", "16000", f], check=True)

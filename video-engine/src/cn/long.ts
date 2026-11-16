@@ -16,6 +16,8 @@ import wordsDavideL from "./wordsDavideLong.json";
 import planDavide from "../../work/davide_long.json";
 import wordsGiuliaL from "./wordsGiuliaLong.json";
 import planGiulia from "../../work/giulia_long.json";
+import wordsUltraL from "./wordsC3503.json";
+import planUltra from "../../work/ultra_long.json";
 
 /** Versioni lunghe orizzontali delle testimonianze (piano dei tagli: scripts/cn_long_plan.py). */
 export const LONGS: { id: string; props: CNLongProps }[] = [
@@ -144,6 +146,22 @@ export const LONGS: { id: string; props: CNLongProps }[] = [
       chapters: planGiulia.chapters,
       name: "Giulia",
       sub: "Il primo trail",
+      end: { title: "Vuoi scrivere anche tu la tua storia?", sub: "Scopri i percorsi di coaching personalizzato" },
+      endSeconds: 6,
+    },
+  },
+  {
+    id: "T9-ultra-lungo",
+    props: {
+      master: "testimonianze/T9-ultra-lungo.mp4",
+      segments: planUltra.segments,
+      blendFrames: planUltra.blendFrames,
+      words: wordsUltraL as CNLongProps["words"],
+      wordFix: {},
+      wordOffset: -0.05,
+      chapters: planUltra.chapters,
+      name: "Luca",
+      sub: "La prima ultramaratona",
       end: { title: "Vuoi scrivere anche tu la tua storia?", sub: "Scopri i percorsi di coaching personalizzato" },
       endSeconds: 6,
     },

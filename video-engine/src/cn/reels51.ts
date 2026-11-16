@@ -8,6 +8,7 @@ import wordsC3500 from "./wordsC3500.json";
 import wordsC3501 from "./wordsC3501.json";
 import wordsC3502 from "./wordsC3502.json";
 import wordsC3504 from "./wordsC3504.json";
+import wordsC3503 from "./wordsC3503.json";
 import wordsCcbV1Runner from "./wordsCcbV1Runner.json";
 import wordsCcbV1Namibia from "./wordsCcbV1Namibia.json";
 import wordsCcbV2Ricetta from "./wordsCcbV2Ricetta.json";
@@ -1396,6 +1397,52 @@ I coach sempre a fianco, il programma modificato in corso d'opera in base a come
 Vuoi iniziare il tuo percorso? Commenta PERCORSO e ti mando tutte le info sui percorsi di coaching personalizzato di Correre Naturale®.
 
 #correrenaturale #testimonianza #corsa #running #trailrunning`,
+  },
+  {
+    id: "T9-ultra",
+    title: "«La mia prima ultramaratona: al cinquantesimo chilometro stavo benissimo» (testimonianza: bilancio di sei mesi)",
+    cover: { frame: 322, kicker: "Testimonianza", lines: ["Luca", "la prima ultra"], accent: "Luca" },
+    props: {
+      ...base,
+      src: "testimonianze/C3503.MP4",
+      words: wordsC3503 as CNReelProps["words"],
+      master: "testimonianze/T9-ultra.mp4",
+      // bilancio di sei mesi di percorso (racconto libero, girato C3503 arrivato il 16/11): nel girato non dice il nome
+      gfxShift: 60,
+      capShift: 30,
+      segments: cut([102.66, 111.1], [111.2, 120.14], [120.34, 132.45], [132.62, 140.35], [56.15, 66.8], [67.86, 73.27], [79.72, 90.6], [231.72, 236.24]),
+      hook: null,
+      elements: [
+        // nome di fantasia (regola del 12/11): nel girato non lo dice
+        { kind: "title", at: 0.2, dur: 2.2, lines: ["La mia prima", "ultramaratona"], accent: "ultramaratona" },
+        { kind: "stat", at: 3.0, word: "50", dur: 2.7, value: "50 km", label: "e faccio un check di me" },
+        { kind: "kinetic", at: 7.2, word: "benissimo", dur: 1.6, words: ["STO", "BENISSIMO"], accentIndex: 1 },
+        { kind: "nametag", at: 9.3, dur: 2.1, name: "Luca", sub: "con Correre Naturale®" },
+        { kind: "stat", at: 12.4, word: "12", dur: 2.4, value: "12 km", label: "ancora da correre" },
+        { kind: "title", at: 18.0, word: "veramente", dur: 2.9, lines: ["Alla fine stavo", "veramente bene"], accent: "bene" },
+        { kind: "title", at: 25.9, word: "come", dur: 2.2, lines: ["«Come sei arrivato", "alla fine?»"], accent: "fine?»" },
+        { kind: "kinetic", at: 30.2, word: "giusto", dur: 1.8, words: ["STANCO,", "MA IL GIUSTO"], accentIndex: 1 },
+        { kind: "title", at: 33.2, word: "stanchezza", dur: 3.2, lines: ["Non la stanchezza", "che ti stende"], accent: "stende" },
+        { kind: "question", at: 37.35, dur: 2.2, text: "E questi sei mesi?" },
+        { kind: "title", at: 40.4, word: "metodo", dur: 2.4, lines: ["Il primo percorso", "da seguito"], accent: "seguito" },
+        { kind: "kinetic", at: 44.2, word: "autodidatta", dur: 1.5, words: ["PRIMA:", "AUTODIDATTA"], accentIndex: 1 },
+        { kind: "kinetic", at: 46.4, word: "seguito", dur: 1.5, words: ["ORA: SEGUITO", "DIRETTAMENTE"], accentIndex: 0 },
+        { kind: "title", at: 50.2, word: "corpo", dur: 2.4, lines: ["Il mio corpo?", "Soddisfatto"], accent: "Soddisfatto" },
+        { kind: "title", at: 55.0, word: "bene,", dur: 3.2, lines: ["Stavo già bene,", "nessun infortunio"], accent: "bene," },
+        { kind: "title", at: 61.2, word: "portato", dur: 2.7, lines: ["Mi hanno portato", "ai miei obiettivi"], accent: "obiettivi" },
+        { kind: "title", at: 65.3, word: "percorso", dur: 2.6, lines: ["Un percorso per", "rimanere sul pezzo"], accent: "pezzo" },
+      ],
+      cta: { word: "PERCORSO", title: "Vuoi scrivere anche tu la tua storia?" },
+    },
+    didascalia: `«Sono arrivato ai 50 km e, facendo un check di me, dico: sto benissimo. Mancano solo 12.»
+
+La sua prima ultramaratona. Gli ultimi 12 km la fatica c'è stata, ma al traguardo stava veramente bene: stanco, ma il giusto. Non quella stanchezza che non ti fa stare in piedi.
+
+Prima seguiva il metodo Correre Naturale® da autodidatta; questi sei mesi sono stati il suo primo percorso da seguito. Stava già bene e non aveva infortuni da risolvere: il percorso lo ha portato a raggiungere i suoi obiettivi, e a rimanere sul pezzo.
+
+Vuoi iniziare il tuo percorso? Commenta PERCORSO e ti mando tutte le info sui percorsi di coaching personalizzato di Correre Naturale®.
+
+#correrenaturale #testimonianza #ultramaratona #corsa #running`,
   },
 ];
 

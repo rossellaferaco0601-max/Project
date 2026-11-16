@@ -1,0 +1,78 @@
+{
+ "segments": [
+  {
+   "from": 56.15,
+   "to": 66.94,
+   "zoom": 1.0
+  },
+  {
+   "from": 67.86,
+   "to": 73.4,
+   "zoom": 1.0
+  },
+  {
+   "from": 79.71,
+   "to": 101.18,
+   "zoom": 1.0
+  },
+  {
+   "from": 102.65,
+   "to": 140.48,
+   "zoom": 1.06
+  },
+  {
+   "from": 152.42,
+   "to": 174.99,
+   "zoom": 1.0
+  },
+  {
+   "from": 185.57,
+   "to": 219.33,
+   "zoom": 1.06
+  },
+  {
+   "from": 220.37,
+   "to": 236.37,
+   "zoom": 1.06
+  },
+  {
+   "from": 247.32,
+   "to": 306.76,
+   "zoom": 1.0
+  },
+  {
+   "from": 307.75,
+   "to": 367.21,
+   "zoom": 1.0
+  }
+ ],
+ "chapters": [
+  {
+   "q": "Raccontami questi sei mesi",
+   "seg": 0,
+   "at": 0.0
+  },
+  {
+   "q": "La prima ultramaratona",
+   "seg": 3,
+   "at": 37.0
+  },
+  {
+   "q": "Il check al cinquantesimo chilometro",
+   "seg": 4,
+   "at": 74.57
+  },
+  {
+   "q": "E oltre la corsa?",
+   "seg": 5,
+   "at": 96.87
+  },
+  {
+   "q": "Come sta andando?",
+   "seg": 7,
+   "at": 146.1
+  }
+ ],
+ "blendFrames": 8,
+ "total": 264.73333333333335
+}
