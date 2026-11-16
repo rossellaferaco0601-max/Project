@@ -137,6 +137,12 @@ Il problema: quattro anni di fascite plantare, e la prima maratona, in programma
 **T8 Giulia versione lunga · Venerdì Conversione · CTA PERCORSO** (v1, 13/11)
 Il racconto completo in cinque capitoli (4:13, orizzontale). Com'erano andati i sei mesi: quattro anni di fascite, un fastidio all'altro piede, la prima maratona saltata e la scelta di buttarsi nel trail; gli obiettivi rivisti e il primo trail di 25 km tra una settimana; quando ha capito di potercela fare, con gli esercizi giusti, la pazienza e i coach a fianco; che cosa si porta a casa, dalle audio experience diventate abitudine all'attenzione per la mente; la cosa che le piace di più. Chiusura: «quando mi prendo il mio momento, io sto bene».
 
+**T9 Luca (la prima ultramaratona) reel · Venerdì Conversione · CTA PERCORSO** (v1, 16/11)
+Il risultato: la sua prima ultramaratona. Al cinquantesimo chilometro si fa un check e si dice «sto benissimo», ne mancano solo 12; negli ultimi la fatica c'è, ma al traguardo sta «veramente bene», tanto che gli amici gli chiedono come sia arrivato: «stanco, ma il giusto», non quella stanchezza che non ti fa reggere in piedi. Il percorso: sei mesi, il suo primo approccio al metodo da seguito dopo averlo praticato da autodidatta; stava già bene, senza infortuni da risolvere, e il percorso lo ha portato a raggiungere i suoi obiettivi. Chiusura: «un percorso fondamentale per farti rimanere sul pezzo». Nome di fantasia: nel girato (C3503, arrivato il 16/11) non lo dice.
+
+**T9 Luca versione lunga · Venerdì Conversione · CTA PERCORSO** (v1, 16/11)
+Il racconto completo in cinque capitoli (4:31, orizzontale). I sei mesi: il primo percorso da seguito dopo averlo praticato da autodidatta e gli obiettivi di corsa raggiunti; la prima ultramaratona, dal check dei 50 km al traguardo, «stanco, ma il giusto»; il check al cinquantesimo chilometro, da solo in mezzo al bosco, con davanti solo terreno inesplorato; oltre la corsa: gli eventi e le coaching di ogni settimana, che aiutano a risolvere problemi che non pensavi neanche di avere e a rimanere sul pezzo; come sta andando: dai dubbi di dicembre al check della propria situazione da studente. Chiusura: quello che fa la differenza è «il come lo fai e il perché lo fai».
+
 ## CCB «new angle» · selfie spontanei di Daniele (7 reel in due versioni, 12/11)
 
 **C1 Il runner che sapeva troppo · Martedì Educativo · CTA parlata «te lo spiego qui sotto»** (v4, 12/11)
@@ -162,6 +168,6 @@ Il problema: la tecnica di corsa spiegata alla testa, con troppe regole da ricor
 
 Versioni «percorso» (alternative alle precedenti, non si sommano nel conteggio): stessi sette reel senza la parte sul manuale, chiusi dal pannello «Commenta PERCORSO»; senza il manuale C3 e C7 diventano educativi (martedì); tagli rifatti e durata ridotta il 12/11 (da 0:35 a 1:02 più la CTA). Schede complete in `consegne/ccb/SCHEDE.md`.
 
-## Conteggio (47 contenuti)
-Scientifico 3 · Educativo 9 · Problem/Solution 6 · Pratico 8 · Conversione 21 (due vlog dell'evento, Daniela, Massimiliano, Laura, Taddeo, Mattia e Giancarlo in reel e versione lunga, la sei ore di Franco, il bilancio di Davide, il primo trail di Giulia: nomi di fantasia). Dentro il conteggio ci sono anche i sette reel «CCB new angle» (selfie spontanei, senza grafiche): C1 e C2 educativi, C4 problem/solution, C5 e C6 pratici, C3 e C7 conversione sul manuale; le 17 stories sono a parte, in `consegne/ccb/SCHEDE.md`.
+## Conteggio (49 contenuti)
+Scientifico 3 · Educativo 9 · Problem/Solution 6 · Pratico 8 · Conversione 23 (due vlog dell'evento, Daniela, Massimiliano, Laura, Taddeo, Mattia e Giancarlo in reel e versione lunga, la sei ore di Franco, il bilancio di Davide, il primo trail di Giulia e la prima ultramaratona di Luca in reel e versione lunga: nomi di fantasia). Dentro il conteggio ci sono anche i sette reel «CCB new angle» (selfie spontanei, senza grafiche): C1 e C2 educativi, C4 problem/solution, C5 e C6 pratici, C3 e C7 conversione sul manuale; le 17 stories sono a parte, in `consegne/ccb/SCHEDE.md`.
 Buco da coprire: nelle serie YTCN non c'è nessun reel da venerdì (offerta + testimonianza reale); il più vicino è R8 «dialogo», che resta educativo.

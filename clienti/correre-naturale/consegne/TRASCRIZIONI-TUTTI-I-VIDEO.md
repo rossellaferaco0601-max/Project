@@ -1,6 +1,6 @@
 # Correre Naturale · trascrizioni di tutti i video usati (aggiornato al 12/11)
 
-Un capitolo per ogni girato: YTCN 51, YTCN 38, Longevità, evento di Vicenza (Daniela e vlog), testimonianze (Massimiliano, Laura, Taddeo, Mattia, la sei ore, Giancarlo, bilancio di metà percorso, il primo trail) e i cinque selfie CCB. Nei girati di «la sei ore», «bilancio di metà percorso» e «il primo trail» il nome non viene detto: nei reel compare un nome di fantasia (Franco, Davide, Giulia).
+Un capitolo per ogni girato: YTCN 51, YTCN 38, Longevità, evento di Vicenza (Daniela e vlog), testimonianze (Massimiliano, Laura, Taddeo, Mattia, la sei ore, Giancarlo, bilancio di metà percorso, il primo trail, la prima ultramaratona) e i cinque selfie CCB. Nei girati di «la sei ore», «bilancio di metà percorso», «il primo trail» e «la prima ultramaratona» il nome non viene detto: nei reel compare un nome di fantasia (Franco, Davide, Giulia, Luca).
 
 
 ---
@@ -657,6 +657,42 @@ Interviste della cartella Drive «Testimonianze CN» (Massimiliano ha il suo fil
 
 
 ---
+
+### La prima ultramaratona (C3503)
+
+Girato arrivato sul Drive il 16/11 (6:33, intervista al parco). Bilancio di sei mesi, racconto libero; il nome non viene detto (nel reel e nella versione lunga: «Luca», nome di fantasia). Le domande dell'intervistatore sono fuori microfono. Trascrizione automatica ricontrollata pezzo per pezzo; i tempi sono quelli del girato.
+
+[0:00] (intervistatore, fuori microfono) «Siamo arrivati a metà: guardarsi un po' indietro e dire ok, come sono cambiato, cosa ho fatto… Raccontami un po' in generale di questi sei mesi.»
+
+[0:51] Allora, che dire di questi sei mesi? È stato il mio primo… il mio primo approccio al metodo da seguito. Prima ovviamente lo seguivo da autodidatta, quindi è la prima volta che vengo seguito direttamente.
+
+[1:08] Beh, sicuramente dal punto di vista del corpo non posso che essere soddisfatto. Ha soddisfatto tutte le aspettative.
+
+[1:20] Io venivo già comunque stando bene, però non avevo infortuni, qualcosa che dovevo risolvere dal punto di vista del corpo. Però mi hanno portato a raggiungere degli obiettivi: obiettivi di corsa, possiamo parlare anche di obiettivi sportivi, comunque importanti per me, in un modo perfetto, diciamo.
+
+[1:43] Sono arrivato a correre la mia prima ultramaratona. E sono arrivato ai 50 km e, facendo un attimo un check di me, dico: boia, sto benissimo. Sto veramente bene. Mancano solo 12. E poi quei 12 c'è stata la fatica, ma arrivato alla fine stavo veramente bene rispetto a quello che ci si possa aspettare.
+
+[2:04] Ecco, diciamo, a volte mi è successo che alcuni miei amici mi chiedessero: ma come sei arrivato alla fine? Sono arrivato stanco, però… stanco ma il giusto. Non quella stanchezza dove non riuscire a reggersi in piedi o cose del genere.
+
+[2:20] (intervistatore) «Non è neanche scontato fare un check di sé.» Certo, certo. Sì, sono d'accordo, è vero.
+
+[2:33] Mi ero trovato in un momento, diciamo, da solo, in mezzo al bosco, con un pezzo molto corribile. Quindi, con questo scenario, mi sono ascoltato e ho detto: sto benissimo, ho già fatto 50 km, e il massimo di chilometraggio che avevo fatto era proprio 50. Quindi era tutto terreno inesplorato da lì in avanti.
+
+[2:57] Quindi questo per quanto riguarda l'aspetto corsa. Poi ovviamente il percorso (dice il nome del programma: non si usa) tiene conto di altri aspetti che lo vanno a impreziosire sicuramente: sia con gli eventi, sia ovviamente con il fatto di avere delle coaching tutte le settimane, che in qualche modo, anche se non le si sfrutta direttamente, penso siano fondamentali per, uno, magari risolvere dei problemi che non pensavi neanche di avere, e quindi assorbire anche dai problemi che qualcun altro ha trovato prima di te e che magari anche tu, in qualche modo, in qualche sfumatura, hai.
+
+[3:41] E poi sicuramente per poter parlare di concetti che solitamente non si trattano. E quindi l'ho trovato un percorso anche fondamentale per farti rimanere sul pezzo, se così mi spiego.
+
+[4:01] (intervistatore) «Altra domanda: come sta andando?»
+
+[4:07] Allora, sta andando meglio rispetto a quando ci siamo visti a dicembre. Venivo da un periodo con un po' di dubbi, e quindi anche sentire tutte quelle informazioni di quell'evento, buttate lì, che è quello che comunque già io credevo, però messe in un modo che lo spiegava proprio bene, quindi ti faceva capire cosa e il perché, mi aveva un attimo, diciamo, scombussolato, in positivo ovviamente.
+
+[4:44] E ovviamente il tempo poi, questi sei mesi, c'è stato tempo di metabolizzare. Io stesso sono riuscito a gestire gli aspetti che rendevano un po' difficile… o meglio, diciamo che in questi sei mesi sono riuscito a fare un attimo, in questo caso, il check della mia situazione, questa volta in ambito, diciamo, da studente, e trovare ciò che c'è di buono in questo.
+
+[5:18] Vedendolo non come un percorso che ti porta a diventare quella cosa lì, tutti uguali, ma a vederla come un modo per raggiungere degli obiettivi e raggiungere magari una certa professionalità, ma su quella costruirci qualcosa di più. Che poi, secondo me, è ciò che caratterizza il professionista: non è tanto il percorso in sé, ma le esperienze che fa durante il percorso e, diciamo, l'extra.
+
+[5:47] Perché alla fine, in questo caso l'università, tu esci che tutti dovrebbero sapere quello che hanno studiato. Però poi la differenza la fa ciò in cui credi, il come lo fai e il perché lo fai: quindi cosa ti spinge a fare quello che stai facendo.
+
+[6:08] (intervistatore, chiusura fuori microfono)
 
 ## CCB «new angle» · trascrizione completa dei cinque girati
 
