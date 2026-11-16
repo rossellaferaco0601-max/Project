@@ -290,9 +290,9 @@ Da leggere prima di ogni montaggio. Ogni correzione ricevuta va aggiunta in fond
   - Frase finale di R8 voluta da Ross: «Correre bene = andare lontano ed essere sostenibili». Niente zoom che spinge le scritte sul volto.
 - **2026-11-09 (Ross)**: a ogni consegna di reel va fatta la **classifica secondo il piano settimanale** (Lun Scientifico, Mar Educativo,
   Mer Problem/Solution, Gio Pratico, Ven Conversione) con tema in breve e CTA finale, in chat e in
-  `video-editing-correre-naturale/consegne/CLASSIFICA-SETTIMANALE.md`.
+  `video-editing/consegne/CLASSIFICA-SETTIMANALE.md`.
 - **2026-11-09 (Ross)**: insieme alla classifica settimanale, a ogni consegna va data anche la **trascrizione integrale del video
-  YouTube originale** (file in `video-editing-correre-naturale/consegne/trascrizioni/`, con i minuti, e riportata in chat).
+  YouTube originale** (file in `video-editing/consegne/trascrizioni/`, con i minuti, e riportata in chat).
 - **2026-11-09 (Ross, reel di Daniela)**: audio delle testimonianze da telefono: **solo pulizia leggera del brusio** (`afftdn` nr 10) e voce
   alzata di poco (circa +3 dB sul girato, `LUFS=-18` in `cn_finish.sh`). Niente compressore, gate o equalizzazione spinta: la v4 era
   «assordante». Sottotitoli: una pagina non finisce mai su una parolina (regola in `Captions.tsx`). Niente riquadri di testo che ripetono

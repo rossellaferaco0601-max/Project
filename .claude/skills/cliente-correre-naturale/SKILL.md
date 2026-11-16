@@ -5,9 +5,9 @@ description: Regole, brand e contesto del cliente Correre Naturale (Daniele Vecc
 
 # Cliente Correre Naturale®
 
-1. Leggi per intero `video-editing-correre-naturale/REGOLE-MONTAGGIO.md` (fonte di verità) e `video-editing-correre-naturale/CONTESTO.md`.
-   Memoria delle correzioni spiegate: `video-editing-correre-naturale/memoria/` (leggi `feedback-*.md` prima di una revisione).
-   Brand kit in `video-editing-correre-naturale/brand/` (brand.json, loghi, manuale), guida ai reel in `guide/guida-reel.md`.
+1. Leggi per intero `video-editing/REGOLE-MONTAGGIO.md` (fonte di verità) e `video-editing/CONTESTO.md`.
+   Memoria delle correzioni spiegate: `video-editing/memoria/` (leggi `feedback-*.md` prima di una revisione).
+   Brand kit in `video-editing/brand/` (brand.json, loghi, manuale), guida ai reel in `guide/guida-reel.md`.
    Due motori disponibili: `CNReel` (video-engine/src/cn, master FFmpeg + 3D) e `RSReel` (motore ReelStudio del PC, catalogo effetti e schema project.json in `video-engine/reelstudio/CLAUDE.md`; props con `scripts/rs_props.ts`). Esempi reali di project.json in `video-engine/reelstudio/progetti/`.
 2. Per un montaggio nuovo: prima il piano in chat, poi il via. In revisione: tocca SOLO i punti elencati.
 3. Ogni correzione ricevuta va aggiunta in fondo a `REGOLE-MONTAGGIO.md` con la data, e il file va committato.
@@ -17,14 +17,14 @@ Vincoli non negoziabili: volto di Daniele sempre libero · sottotitoli sempre pr
 
 ## Dopo ogni consegna
 Classifica i reel appena pronti secondo il piano settimanale di Ross (Lun Scientifico · Mar Educativo · Mer Problem/Solution ·
-Gio Pratico · Ven Conversione), con tema in breve e CTA finale: aggiorna `video-editing-correre-naturale/consegne/CLASSIFICA-SETTIMANALE.md`
+Gio Pratico · Ven Conversione), con tema in breve e CTA finale: aggiorna `video-editing/consegne/CLASSIFICA-SETTIMANALE.md`
 e riporta la tabella in chat. Consegna anche la **trascrizione integrale del video YouTube originale** (salvata in
-`video-editing-correre-naturale/consegne/trascrizioni/`, con i minuti) e riportala in chat.
+`video-editing/consegne/trascrizioni/`, con i minuti) e riportala in chat.
 
 ## Formato delle schede (Ross, 10/11/2026): sempre questo, quando chiede «le schede»
 Un titolo `##` per serie, poi per ogni reel la riga in grassetto **«ID nome · Giorno Categoria · CTA PAROLA»** e sotto un solo paragrafo
 con il tema (per Problem/Solution e testimonianze: «Il problema: … La risposta: … Chiusura: …»). Mai schede a elenco puntato.
-Esempio e dettagli: `video-editing-correre-naturale/memoria/feedback-formato-schede.md`; modello vivo: `consegne/CLASSIFICA-SETTIMANALE.md`.
+Esempio e dettagli: `video-editing/memoria/feedback-formato-schede.md`; modello vivo: `consegne/CLASSIFICA-SETTIMANALE.md`.
 
 ## Regola fissa: il volto non si copre MAI (Ross, 10/11/2026)
 Nessuna grafica, titolo, domanda o sottotitolo può stare sul volto, nemmeno per un fotogramma e nemmeno quando la persona abbassa la testa.

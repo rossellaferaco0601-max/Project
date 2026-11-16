@@ -13,7 +13,7 @@ anche su GitHub.
 
 **How to apply:** dopo i commit si fa il push sul ramo di lavoro `claude/video-editing-graphics-engine-flqe7i`, senza aprire
 pull request se Ross non lo chiede. Prima del push controllare che non ci siano chiavi né video pesanti (i video finiti restano
-in `video-engine/out/`, ignorato da git; nel repo solo copertine e didascalie finali in `video-editing-correre-naturale/consegne/`).
+in `video-engine/out/`, ignorato da git; nel repo solo copertine e didascalie finali in `video-editing/consegne/`).
 Interpretazione mia: «funziona ora» = via libera al push; se Ross dice di nuovo di lasciarlo stare, si torna al solo locale.
 
 Stesso giorno, «ripulisci github e il mio pc da tutte le versioni che non servono, tieni solo quelle finali di ogni video»:

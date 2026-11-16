@@ -22,7 +22,7 @@ Prima di montare qualsiasi cosa per questo cliente: leggere `REGOLE-MONTAGGIO.md
 | Lime | `#95FF00` — SOLO parola detta nei sottotitoli / parola chiave del titolo |
 | Font | Blinker (400/600/700/800; ExtraBold per i titoli). Deroga solo per i cambi di stile della parola «workshop» nel reel condensato: DM Serif, Pacifico, Anton, Playfair, Caveat, Bebas, Lobster, Fraunces, Marker, Abril, Instrument, Righteous, Oswald, Bangers (da `FONT_FILES` in `src/remotion/lib.ts`) |
 | Velo sotto titolo | `rgba(73,118,46,0.62)` (verde brand, mai scuro) |
-| brand.json | `video-editing-correre-naturale/brand/brand.json` (importato dal PC l'8/11): colori primary/accent/cream/dark/light, font Blinker, 7 varianti di logo, CTA predefinita, speaker |
+| brand.json | `video-editing/brand/brand.json` (importato dal PC l'8/11): colori primary/accent/cream/dark/light, font Blinker, 7 varianti di logo, CTA predefinita, speaker |
 | Logo | `ReelStudio/clients/correre-naturale/logo-circolare-bianco.png` (693×695, bianco su trasparente, ombra cotta nel PNG: blur 10, offset 8 px, 55 %, padding 48 px); circolare, scontornato; mai ruotato/deformato/azzurro; mai su disco o cartiglio; mai icona Instagram |
 | Prodotto | «percorsi di coaching **personalizzato** di Correre Naturale®» (singolare) |
 | Formato | 9:16, 1080×1920, 30 fps, MP4 H.264 |
@@ -50,7 +50,7 @@ Prima di montare qualsiasi cosa per questo cliente: leggere `REGOLE-MONTAGGIO.md
 - Consegna: MP4 + copertina (volto libero) + didascalia + checklist; controllare 6-8 fotogrammi prima.
 
 ## Cosa è stato portato nel repo dal PC (8/11/2026)
-- `video-editing-correre-naturale/`: brand kit completo, guide, `archivio-pc/CLAUDE-pc.md` (istruzioni del progetto PC), `consegne/` (checklist e didascalie di longevità, YTCN 38, evento), `archivio-pc/scripts/` (pipeline Python/JS del PC), `reference/` (4 reel CN già pubblicati + reference-reel-01 + analisi reference).
+- `video-editing/`: brand kit completo, guide, `archivio-pc/CLAUDE-pc.md` (istruzioni del progetto PC), `consegne/` (checklist e didascalie di longevità, YTCN 38, evento), `archivio-pc/scripts/` (pipeline Python/JS del PC), `reference/` (4 reel CN già pubblicati + reference-reel-01 + analisi reference).
 - `video-engine/reelstudio/`: codice Remotion di ReelStudio (Reel.tsx, effects*.tsx, captions, lib), `shared/`, `project.json` di tutti i 35 progetti costruiti, CLAUDE.md con lo schema di project.json e il catalogo dei 60+ effetti, REGOLE di ReelStudio.
 - `video-engine/`: il motore ReelStudio gira anche nel cloud come composizione **RSReel** (asset in `public/rs/`: font, 29 suoni, 15 musiche, loghi). `scripts/rs_props.ts` converte un project.json nelle props. Quindi nel cloud si possono usare sia il motore nuovo (`CNReel`, con 3D e simulazioni) sia tutti gli effetti di ReelStudio (kinetic, stageCard, behindTitle, togglePills, glass widget, documentary, orbit, bento, ecc.).
 - Solo in locale/PC (non in git, troppo pesanti): «Nuove reference reel» (zip 69 MB), reference-reel-02/03, Reference Dashboard (596 MB), scontorni, sorgenti video, render.

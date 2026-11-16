@@ -4,10 +4,10 @@ Tutto quello che serve per montare reel e video di Correre Naturale®: questa ca
 
 ## Mappa
 ```
-Project/
+correrenaturale/
 ├─ CLAUDE.md                          ← istruzioni per Claude (strumenti, regole di lavoro)
 ├─ .claude/skills/                    ← skill: regole del cliente, Remotion, tipografia, 3D, sottotitoli, effects (51 effetti volto)
-├─ video-editing-correre-naturale/    ← QUESTA cartella
+├─ video-editing/                    ← QUESTA cartella
 │  ├─ LEGGIMI.md                      ← questa mappa
 │  ├─ REGOLE-MONTAGGIO.md             ← FONTE DI VERITÀ: brief, correzioni di Ross/Paola/Oscar, note tecniche
 │  ├─ CONTESTO.md                     ← persone, brand, stile, stato dei progetti
@@ -17,7 +17,7 @@ Project/
 │  ├─ reference/                      ← reel CN già pubblicati, reference reel, analisi del materiale di riferimento
 │  ├─ consegne/                       ← cosa è stato consegnato: longevita/, ytcn38/, evento/, ytcn51/ (checklist, didascalie, copertine)
 │  └─ archivio-pc/                    ← vecchio flusso Windows (script Python, CLAUDE del PC, proposte): solo consultazione
-└─ video-engine/                      ← il motore di montaggio (Remotion), condiviso con gli altri progetti video
+└─ video-engine/                      ← il motore di montaggio (Remotion), motore di montaggio
    ├─ src/cn/                         ← motore «CN»: master FFmpeg, sottotitoli, hook, grafiche 2D/3D, CTA (reel YTCN 51)
    ├─ src/rs/                         ← motore «ReelStudio» (lo stesso del PC): 60+ effetti, legge i project.json
    ├─ reelstudio/                     ← codice originale di ReelStudio, i project.json fatti finora, CLAUDE.md con

@@ -1,16 +1,11 @@
-# Project — progetti di contenuti social
+# Correre Naturale® — reel e video
 
-Ogni progetto ha la sua cartella. Lavora solo nella cartella del progetto della sessione.
+Repository dedicata solo a Correre Naturale® (Daniele Vecchioni, @correrenaturale). ValeFitCoach e Ciak Studio hanno repository proprie (`valefitcoach`, `ciakstudioAI`): non mescolarli.
 
-| Cartella | Progetto | Leggi prima |
+| Cartella | Contenuto | Leggi prima |
 |---|---|---|
-| `caroselli-valefitcoach/` | Caroselli Instagram per @vale.fitcoach | `CONTESTO.md` |
-| `video-editing-correre-naturale/` | Reel e vlog per Correre Naturale® | `LEGGIMI.md`, skill `cliente-correre-naturale`, `REGOLE-MONTAGGIO.md`, `CONTESTO.md` |
-| `video-editing-valefitcoach/` | Reel per @vale.fitcoach | `../caroselli-valefitcoach/CONTESTO.md` |
-| `ciak-studio/` | Ciak Studio | `README.md` |
-| `video-engine/` | Motore grafico condiviso (Remotion) per tutti i progetti video | `video-engine/README.md` |
-
-Le skill in `.claude/skills/` valgono per tutti i progetti.
+| `video-editing/` | Regole, contesto, brand, guide, consegne, memoria | `LEGGIMI.md`, skill `cliente-correre-naturale`, `REGOLE-MONTAGGIO.md`, `CONTESTO.md` |
+| `video-engine/` | Motore grafico (Remotion) | `video-engine/README.md` |
 
 # Motore grafico video/reel (`video-engine/`)
 
@@ -25,8 +20,8 @@ Claude è usato come motore grafico per montare video e reel. Il progetto Remoti
 ## Skill disponibili (`.claude/skills/`)
 - Remotion ufficiali: `remotion-best-practices`, `remotion-create`, `remotion-markup`, `remotion-render`, `remotion-studio`, `remotion-captions`, `remotion-multimedia`, `remotion-interactivity`, `remotion-maps`, `remotion-saas`, `remotion-docs`, `remotion-upgrade`, `remotion-license`.
 - Personalizzate: `kinetic-typography`, `motion-graphics`, `cinematic-animation`, `video-editing`, `compositing`, `audio-sync`, `subtitle-animation`, `broll-editing`, `web-animation-stack`, `cliente-correre-naturale`.
-- `effects` (Vibha, 51 effetti con tracciamento del volto, Python/mediapipe): venv già pronto in `.claude/skills/effects/.venv` (font sostituiti con Blinker). Nel motore CN si usano via `props.fx` + `scripts/cn_fx.ts`; quali effetti vanno bene e quali no è scritto in `video-editing-correre-naturale/REGOLE-MONTAGGIO.md` (8/11). Le regole del cliente vincono sugli effetti (niente emoji, volto libero).
-- Dal PC di Ross (8/11), 34 skill generiche di montaggio e motion: editing reel (`reels-editor`, `video-edit`, `talking-head-editing-skill`, `claude-video-reel-editor`, `edit-video`, `ffmpeg-skill`, `beat-sync-editing`), motion graphics (`motion-doctrine`, `motion-graphics`, `motion-art-direction`, `motion-background`, `motion-broll`, `logo-animation`, `animation-principles`, `color-motion`, `shot-composition`, `cut-the-curve`, `cinematic-camera`, `article-highlights`, `sound-effects`, `media-use`, `style-motion`, `style-sampling`), Remotion extra (`remotion-motion-graphics`, `remotion-overlays`, `remotion-video`), HyperFrames (`hyperframes`, `hyperframes-cli`, `hyperframes-registry`, `remotion-to-hyperframes`, `reverse-any-video`, `captions-overlay`, `seam-craft`), `after-effects`. Le regole del cliente (cartella del progetto) vincono sempre su queste skill.
+- `effects` (Vibha, 51 effetti con tracciamento del volto, Python/mediapipe): venv già pronto in `.claude/skills/effects/.venv` (font sostituiti con Blinker). Nel motore CN si usano via `props.fx` + `scripts/cn_fx.ts`; quali effetti vanno bene e quali no è scritto in `video-editing/REGOLE-MONTAGGIO.md` (8/11). Le regole del cliente vincono sugli effetti (niente emoji, volto libero).
+- Dal PC di Ross (8/11), 34 skill generiche di montaggio e motion: editing reel (`reels-editor`, `video-edit`, `talking-head-editing-skill`, `claude-video-reel-editor`, `edit-video`, `ffmpeg-skill`, `beat-sync-editing`), motion graphics (`motion-doctrine`, `motion-graphics`, `motion-art-direction`, `motion-background`, `motion-broll`, `logo-animation`, `animation-principles`, `color-motion`, `shot-composition`, `cut-the-curve`, `cinematic-camera`, `article-highlights`, `sound-effects`, `media-use`, `style-motion`, `style-sampling`), Remotion extra (`remotion-motion-graphics`, `remotion-overlays`, `remotion-video`), HyperFrames (`hyperframes`, `hyperframes-cli`, `hyperframes-registry`, `remotion-to-hyperframes`, `reverse-any-video`, `captions-overlay`, `seam-craft`), `after-effects`. Le regole del cliente (`video-editing/`) vincono sempre su queste skill.
 - HyperFrames (`npm hyperframes` in `video-engine`): render HTML→video alternativo a Remotion per grafiche da pagina web.
 
 ## Comandi
@@ -58,7 +53,7 @@ python3 scripts/gemini.py models|testo|analizza|immagine|video   # Gemini (chiav
 ```
 
 ## Clienti
-Contesto e regole di montaggio stanno nella cartella di ogni progetto (vedi tabella sopra). Per Correre Naturale usa la skill `cliente-correre-naturale` prima di qualsiasi montaggio. Ogni nuova regola di montaggio va nel `REGOLE-MONTAGGIO.md` del progetto.
+Contesto e regole di montaggio stanno in `video-editing/`. Per Correre Naturale usa la skill `cliente-correre-naturale` prima di qualsiasi montaggio. Ogni nuova regola di montaggio va in `video-editing/REGOLE-MONTAGGIO.md`.
 
 ## Regole
 - Le sorgenti (video/audio/immagini) vanno in `video-engine/public/` e si caricano con `staticFile()`.
