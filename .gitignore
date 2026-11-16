@@ -13,3 +13,15 @@ video-engine/work/**/frames/
 video-engine/work/**/*.wav
 video-engine/work/**/*.csv
 video-engine/work/**/*.log
+video-engine/public/reference/
+reelstudio-ref/impostazioni.json
+**/impostazioni.json
+.claude/skills/effects/.venv/
+
+video-engine/public/longevita_v4/
+video-engine/public/longevita/
+video-engine/public/daniela/
+video-engine/public/testimonianze/
+video-engine/public/ccb/
+video-engine/public/foto-daniele/
+video-engine/work/models/

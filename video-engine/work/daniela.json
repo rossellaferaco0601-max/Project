@@ -1,0 +1,54 @@
+{
+ "id": "D1-daniela",
+ "src": "public/daniela/daniela_src.mp4",
+ "out": "public/daniela/D1-daniela.mp4",
+ "faceX": 0.5,
+ "faceY": 0.2,
+ "zooms": [
+  1.3,
+  1.5
+ ],
+ "blendFrames": 5,
+ "segments": [
+  {
+   "from": 0,
+   "to": 10.83
+  },
+  {
+   "from": 26.36,
+   "to": 31.52
+  },
+  {
+   "from": 33.72,
+   "to": 48.96
+  },
+  {
+   "from": 50.27,
+   "to": 53.83
+  },
+  {
+   "from": 62.27,
+   "to": 68.93
+  },
+  {
+   "from": 72.72,
+   "to": 76.21
+  },
+  {
+   "from": 112.3,
+   "to": 116.42
+  },
+  {
+   "from": 118.96,
+   "to": 126.9
+  }
+ ],
+ "broll": [
+  {
+   "file": "public/daniela/b623.mp4",
+   "from": 0.3,
+   "at": 34.03,
+   "dur": 2.85
+  }
+ ]
+}

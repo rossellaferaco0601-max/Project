@@ -7,3 +7,5 @@ Reel e vlog per Correre Naturale® (Daniele Vecchioni, @correrenaturale).
 - Prima di montare usa la skill `cliente-correre-naturale`.
 - Codice dei reel: [`../video-engine/src/cn/`](../video-engine/src/cn/); file di lavoro: `../video-engine/work/` (es. `ytcn51/`).
 - Canali personali di Daniele: documento Drive «Coordinamento SMM & Videomaker» (29/10/2026) — min. 1 contenuto al giorno per piattaforma, YouTube, report mensile, meeting settimanali.
+- Mappa completa e flusso di lavoro: [`LEGGIMI.md`](LEGGIMI.md).
+- Materiale: `memoria/` (correzioni spiegate), `brand/` (brand kit), `guide/`, `reference/`, `consegne/`, `archivio-pc/` (solo consultazione).

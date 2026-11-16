@@ -1,0 +1,81 @@
+{
+ "id": "T1-massimiliano-lungo",
+ "src": "public/testimonianze/C3498-009.MP4",
+ "out": "public/testimonianze/T1-massimiliano-lungo.mp4",
+ "size": [
+  1920,
+  1080
+ ],
+ "faceX": 0.475,
+ "faceY": 0.33,
+ "zooms": [
+  1.0,
+  1.07
+ ],
+ "blendFrames": 8,
+ "vf": "cas=0.3,eq=contrast=1.04:saturation=1.06",
+ "voice": "highpass=f=80,",
+ "segments": [
+  {
+   "from": 15.38,
+   "to": 23.94,
+   "zoom": 1.0
+  },
+  {
+   "from": 29.29,
+   "to": 45.83,
+   "zoom": 1.06
+  },
+  {
+   "from": 54.45,
+   "to": 118.28,
+   "zoom": 1.0
+  },
+  {
+   "from": 125.92,
+   "to": 127.38,
+   "zoom": 1.06
+  },
+  {
+   "from": 132.07,
+   "to": 177.98,
+   "zoom": 1.06
+  },
+  {
+   "from": 187.99,
+   "to": 224.03,
+   "zoom": 1.0
+  },
+  {
+   "from": 239.9,
+   "to": 253.9,
+   "zoom": 1.06
+  },
+  {
+   "from": 255.06,
+   "to": 274.09,
+   "zoom": 1.06
+  },
+  {
+   "from": 283.35,
+   "to": 297.04,
+   "zoom": 1.0
+  },
+  {
+   "from": 298.05,
+   "to": 353.05,
+   "zoom": 1.0
+  },
+  {
+   "from": 366.27,
+   "to": 412.08,
+   "zoom": 1.06
+  },
+  {
+   "from": 423.37,
+   "to": 424.9,
+   "zoom": 1.0
+  }
+ ],
+ "broll": []
+}

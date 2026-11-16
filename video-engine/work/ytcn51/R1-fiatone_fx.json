@@ -1,0 +1,22 @@
+{
+ "effects": [
+  {
+   "fx": "spotlight",
+   "start": 0,
+   "end": 3.4,
+   "text": "TI MANCA IL FIATO?",
+   "color": "#95FF00",
+   "font": "bold",
+   "push": 1
+  },
+  {
+   "fx": "reject-stamp",
+   "start": 9.967,
+   "end": 12.367,
+   "text": "SBAGLIATO",
+   "color": "#95FF00",
+   "bg": "#0B0F0A",
+   "y": 0.62
+  }
+ ]
+}

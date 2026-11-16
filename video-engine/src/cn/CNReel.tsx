@@ -1,16 +1,27 @@
-import { AbsoluteFill, OffthreadVideo, Sequence, staticFile, useVideoConfig, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, OffthreadVideo, Sequence, staticFile, useVideoConfig, interpolate, useCurrentFrame, Easing } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Blinker";
 import { useMemo } from "react";
 import type { CNReelProps, Element } from "./types";
-import { FPS } from "./types";
-import { layout, remapWords, resolveStart, secToFrames } from "./timeline";
+import { FPS, TAIL_FRAMES, H } from "./types";
+import { layout, remapWords, resolveStart, resolveCues, secToFrames, tailFrames } from "./timeline";
 import { Captions } from "./Captions";
 import { Hook } from "./Hook";
 import { ElementView } from "./Elements";
 import { Text3D, Wave, Sphere3D, Gauge3D, ECG, Steps, Bars } from "./Elements3D";
 import { CTA } from "./CTA";
+import { Stairs, SplitCard, splitCamera, SPLIT_CARD_H, Metronome, Road3D, Graph, Toggles } from "./Elements2";
+import { Clip, Compare, Step, Airflow, Filter, Beats, Ring, Duo, Slam, Orbit, Drill, slamImpact, slamShake, orbitCam } from "./Elements5";
+import { Pair, Lifebar, Fulltext, Slides } from "./Elements6";
+import { Flow, Renew, Versus, Grid4, Plan, Lights, Cycle, Beat } from "./Elements7";
+import { TopWord, Counter, BigPointer, Wall, Side, SIDE, sideK } from "./Elements8";
+import { Title, Mouth, Runner, Lungs, Horizon, Chat, BigStrike, Stack, Guide, Question, NameTag } from "./Elements4";
 
 loadFont("normal", { weights: ["600", "700", "800", "900"], subsets: ["latin"] });
+
+/** elementi che occupano tutto il fotogramma: fuori dallo spostamento/scala della zona grafiche */
+// fuori dalla zona grafiche (non si spostano né si rimpiccioliscono con gfxShift/gfxScale): schede a tutto schermo e, nei selfie, le parole
+// sopra la testa, il richiamo alla CTA, il muro di parole e il pannello laterale
+const FULLSCREEN = new Set<Element["kind"]>(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "topword", "pointer", "wall", "side"]);
 
 const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => {
   switch (el.kind) {
@@ -21,6 +32,51 @@ const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => 
     case "ecg": return <ECG el={el} start={start} />;
     case "steps": return <Steps el={el} start={start} />;
     case "bars": return <Bars el={el} start={start} />;
+    case "stairs": return <Stairs el={el} start={start} />;
+    case "split": return <SplitCard el={el} start={start} />;
+    case "metronome": return <Metronome el={el} start={start} />;
+    case "road3d": return <Road3D el={el} start={start} />;
+    case "graph": return <Graph el={el} start={start} />;
+    case "toggles": return <Toggles el={el} start={start} />;
+    case "title": return <Title el={el} start={start} />;
+    case "mouth": return <Mouth el={el} start={start} />;
+    case "runner": return <Runner el={el} start={start} />;
+    case "lungs": return <Lungs el={el} start={start} />;
+    case "horizon": return <Horizon el={el} start={start} />;
+    case "chat": return <Chat el={el} start={start} />;
+    case "bigstrike": return <BigStrike el={el} start={start} />;
+    case "stack": return <Stack el={el} start={start} />;
+    case "guide": return <Guide el={el} start={start} />;
+    case "question": return <Question el={el} start={start} />;
+    case "pair": return <Pair el={el} start={start} />;
+    case "lifebar": return <Lifebar el={el} start={start} />;
+    case "fulltext": return <Fulltext el={el} start={start} />;
+    case "slides": return <Slides el={el} start={start} />;
+    case "flow": return <Flow el={el} start={start} />;
+    case "renew": return <Renew el={el} start={start} />;
+    case "versus": return <Versus el={el} start={start} />;
+    case "grid4": return <Grid4 el={el} start={start} />;
+    case "plan": return <Plan el={el} start={start} />;
+    case "lights": return <Lights el={el} start={start} />;
+    case "pointer": return <BigPointer el={el} start={start} />;
+    case "topword": return <TopWord el={el} start={start} />;
+    case "counter": return <Counter el={el} start={start} />;
+    case "wall": return <Wall el={el} start={start} />;
+    case "side": return <Side el={el} start={start} />;
+    case "cycle": return <Cycle el={el} start={start} />;
+    case "beat": return <Beat el={el} start={start} />;
+    case "clip": return <Clip el={el} start={start} />;
+    case "compare": return <Compare el={el} start={start} />;
+    case "step": return <Step el={el} start={start} />;
+    case "airflow": return <Airflow el={el} start={start} />;
+    case "filter": return <Filter el={el} start={start} />;
+    case "beats": return <Beats el={el} start={start} />;
+    case "ring": return <Ring el={el} start={start} />;
+    case "duo": return <Duo el={el} start={start} />;
+    case "slam": return <Slam el={el} start={start} />;
+    case "orbit": return <Orbit el={el} start={start} />;
+    case "drill": return <Drill el={el} start={start} />;
+    case "nametag": return <NameTag el={el} start={start} />;
     default: return <ElementView el={el} start={start} />;
   }
 };
@@ -36,30 +92,75 @@ const Master: React.FC<{ src: string; total: number }> = ({ src, total }) => {
 export const CNReel: React.FC<CNReelProps> = (p) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
-  const { items, total } = useMemo(() => layout(p.segments, p.blendFrames), [p.segments, p.blendFrames]);
+  const tailF = tailFrames(p.tailSeconds);
+  const { items, total } = useMemo(() => layout(p.segments, p.blendFrames, tailF), [p.segments, p.blendFrames, tailF]);
   const words = useMemo(() => remapWords(p.words, items, p.wordFix, p.wordOffset), [p.words, items, p.wordFix, p.wordOffset]);
   const starts = useMemo(() => p.elements.map((el) => resolveStart(el, words)), [p.elements, words]);
   const ctaFrames = Math.round(p.ctaSeconds * fps);
-  const xfade = 12;
-  const videoFade = interpolate(frame, [total - xfade, total], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const xfade = tailF; // la CTA parte al taglio e sale dal basso mentre il video (coda) continua sotto
+  const tailPush = 1;
+  const videoFade = 1; // niente dissolvenza verde sul video: il pannello della CTA lo copre salendo
+  // camera del titolo spezzato: il video scende sotto la scheda a tutta larghezza (la testa resta intera)
+  let cam = 0;
+  p.elements.forEach((el, i) => { if (el.kind === "split") cam = Math.max(cam, splitCamera(frame, starts[i], Math.round(el.dur * fps))); });
+  const camShift = H * SPLIT_CARD_H * cam;
+  // push-in lento durante l'hook (tutto in Remotion: niente doppia immagine al rilascio)
+  const hookF = p.hook ? Math.round(p.hook.dur * fps) : 0;
+  const hookZoom = p.hookZoom && hookF ? interpolate(frame, [0, hookF, hookF + 15], [1, p.hookZoom, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.quad) }) : 1;
+
+  // schianto: scossa della camera sull'urto della parola
+  let shake = { dx: 0, dy: 0, sc: 1 };
+  p.elements.forEach((el, i) => { if (el.kind === "slam") { const sh = slamShake(frame, slamImpact({ ...el, onAt: resolveCues(el, starts[i], words) } as Extract<Element, { kind: "slam" }>, starts[i], fps)); if (sh.sc !== 1) shake = sh; } });
+
+  // orbita: il video continua a scorrere ma arretra (ancorato in basso), su fondo brand
+  let orb = 0, orbBack = 0.72;
+  p.elements.forEach((el, i) => { if (el.kind === "orbit") { const z = orbitCam(el, starts[i], frame, fps); if (z > orb) { orb = z; orbBack = el.back ?? 0.72; } } });
+  const orbScale = 1 - (1 - orbBack) * orb;
+  // selfie: mentre una grafica occupa la fascia bassa (tutte tranne parole sopra la testa, pannello laterale e muro) niente sottotitoli
+  const capHidden = !!p.capHideOnGfx && p.elements.some((el, i) => {
+    if (el.kind === "side" || el.kind === "wall" || (el.kind === "topword" && el.zone !== "strip")) return false;
+    const l = frame - starts[i]; return l >= -2 && l < Math.round(el.dur * fps) + 2;
+  });
+  // pannello laterale: il video si ritira a sinistra (sempre visibile) e lascia la colonna di destra a un elenco o a una mappa
+  let sd = 0;
+  p.elements.forEach((el, i) => { if (el.kind === "side") { const l = frame - starts[i], d = Math.round(el.dur * fps); if (l >= 0 && l < d) sd = Math.max(sd, sideK(l, d)); } });
 
   return (
     <AbsoluteFill style={{ background: "#2F4D1E", fontFamily: "Blinker, sans-serif" }}>
       <Sequence from={0} durationInFrames={total} layout="none">
-        <AbsoluteFill style={{ opacity: videoFade }}>
+        {cam > 0 ? <AbsoluteFill style={{ background: "#E9E4D2", opacity: cam }} /> : null}
+        {orb > 0 || sd > 0 ? <AbsoluteFill style={{ background: "linear-gradient(180deg,#1C3D15 0%,#0B0F0A 100%)" }} /> : null}
+        <AbsoluteFill style={{ transform: `translate(${sd * SIDE.x}px, ${sd * SIDE.y}px) scale(${1 - (1 - SIDE.scale) * sd})`, transformOrigin: "0 0", borderRadius: sd > 0 ? 60 * sd : 0, overflow: sd > 0 ? "hidden" : "visible" }}>
+        <AbsoluteFill style={{ transform: `scale(${orbScale})`, transformOrigin: "50% 100%", borderRadius: 44 * orb, overflow: "hidden", boxShadow: orb > 0 ? "0 -20px 80px rgba(0,0,0,0.6)" : "none" }}>
+        <AbsoluteFill style={{ opacity: videoFade, transform: `translate(${shake.dx}px, ${camShift + shake.dy}px) scale(${hookZoom * shake.sc * tailPush})`, transformOrigin: "50% 30%" }}>
           <Master src={p.master} total={total} />
         </AbsoluteFill>
-        <Hook hook={p.hook} />
-        {p.elements.map((el, i) => (
-          <AnyElement key={i} el={el} start={starts[i]} />
-        ))}
-        <Captions words={words} endFrame={total - 4} />
+        </AbsoluteFill>
+        </AbsoluteFill>
+        {p.hook ? <Hook hook={p.hook} /> : null}
+        <AbsoluteFill style={{ transform: `translateY(${p.gfxShift ?? 0}px) scale(${p.gfxScale ?? 1})`, transformOrigin: `50% ${H * 0.44}px` }}>
+          {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : (
+            <AnyElement key={i} el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} />
+          )))}
+        </AbsoluteFill>
+        {/* le grafiche a tutto schermo non si spostano né si rimpiccioliscono: devono coprire tutto il fotogramma (Ross 11/11: banda in alto) */}
+        {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? (
+          <AnyElement key={i} el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} />
+        ) : null))}
+        {capHidden ? null : (
+          <AbsoluteFill style={{ transform: `translateY(${p.capShift ?? 0}px)` }}>
+            <Captions words={words} endFrame={total - 4} startFrame={Math.round((p.capFrom ?? 0) * fps)} />
+          </AbsoluteFill>
+        )}
       </Sequence>
-      <Sequence from={total - xfade} durationInFrames={ctaFrames + xfade} layout="none">
-        <CTA cta={p.cta} frames={ctaFrames} />
-      </Sequence>
+      {/* ctaSeconds: 0 = reel senza pannello finale (video «spontanei»: la chiusa la dice chi parla) */}
+      {ctaFrames > 0 ? (
+        <Sequence from={total - xfade} durationInFrames={ctaFrames + xfade} layout="none">
+          <CTA cta={p.cta} frames={ctaFrames} />
+        </Sequence>
+      ) : null}
     </AbsoluteFill>
   );
 };
 
-export const reelDuration = (p: CNReelProps) => layout(p.segments, p.blendFrames).total + Math.round(p.ctaSeconds * FPS);
+export const reelDuration = (p: CNReelProps) => layout(p.segments, p.blendFrames, tailFrames(p.tailSeconds)).total + Math.round(p.ctaSeconds * FPS);

@@ -1,0 +1,49 @@
+{
+ "id": "T9-ultra",
+ "src": "public/testimonianze/C3503.MP4",
+ "pre": "crop=516:918:732:160,scale=1080:1920:flags=lanczos+accurate_rnd",
+ "out": "public/testimonianze/T9-ultra.mp4",
+ "faceX": 0.5,
+ "faceY": 0.27,
+ "zooms": [
+  1,
+  1.04
+ ],
+ "blendFrames": 5,
+ "vf": "cas=0.3,eq=contrast=1.04:saturation=1.06",
+ "voice": "highpass=f=80,",
+ "segments": [
+  {
+   "from": 102.66,
+   "to": 111.1933
+  },
+  {
+   "from": 111.117,
+   "to": 120.217
+  },
+  {
+   "from": 120.257,
+   "to": 132.5237
+  },
+  {
+   "from": 132.537,
+   "to": 140.437
+  },
+  {
+   "from": 56.067,
+   "to": 66.867
+  },
+  {
+   "from": 67.777,
+   "to": 73.3437
+  },
+  {
+   "from": 79.637,
+   "to": 90.6703
+  },
+  {
+   "from": 231.637,
+   "to": 236.237
+  }
+ ]
+}

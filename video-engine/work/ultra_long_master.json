@@ -1,0 +1,66 @@
+{
+ "id": "T9-ultra-lungo",
+ "src": "public/testimonianze/C3503.MP4",
+ "out": "public/testimonianze/T9-ultra-lungo.mp4",
+ "size": [
+  1920,
+  1080
+ ],
+ "faceX": 0.516,
+ "faceY": 0.364,
+ "zooms": [
+  1.0,
+  1.06
+ ],
+ "blendFrames": 8,
+ "vf": "cas=0.3,eq=contrast=1.04:saturation=1.06",
+ "voice": "highpass=f=80,",
+ "segments": [
+  {
+   "from": 56.15,
+   "to": 66.94,
+   "zoom": 1.0
+  },
+  {
+   "from": 67.86,
+   "to": 73.4,
+   "zoom": 1.0
+  },
+  {
+   "from": 79.71,
+   "to": 101.18,
+   "zoom": 1.0
+  },
+  {
+   "from": 102.65,
+   "to": 140.48,
+   "zoom": 1.06
+  },
+  {
+   "from": 152.42,
+   "to": 174.99,
+   "zoom": 1.0
+  },
+  {
+   "from": 185.57,
+   "to": 219.33,
+   "zoom": 1.06
+  },
+  {
+   "from": 220.37,
+   "to": 236.37,
+   "zoom": 1.06
+  },
+  {
+   "from": 247.32,
+   "to": 306.76,
+   "zoom": 1.0
+  },
+  {
+   "from": 307.75,
+   "to": 367.21,
+   "zoom": 1.0
+  }
+ ],
+ "broll": []
+}

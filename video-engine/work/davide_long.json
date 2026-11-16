@@ -1,0 +1,53 @@
+{
+ "segments": [
+  {
+   "from": 9.1,
+   "to": 33.33,
+   "zoom": 1.0
+  },
+  {
+   "from": 48.27,
+   "to": 167.43,
+   "zoom": 1.06
+  },
+  {
+   "from": 208.07,
+   "to": 220.63,
+   "zoom": 1.0
+  },
+  {
+   "from": 240.07,
+   "to": 295.73,
+   "zoom": 1.0
+  },
+  {
+   "from": 392.87,
+   "to": 464.45,
+   "zoom": 1.06
+  }
+ ],
+ "chapters": [
+  {
+   "q": "Come stai?",
+   "seg": 0,
+   "at": 0.0
+  },
+  {
+   "q": "Il bilancio di metà percorso?",
+   "seg": 1,
+   "at": 23.97
+  },
+  {
+   "q": "Un momento che ha spostato l'asticella?",
+   "seg": 2,
+   "at": 142.87
+  },
+  {
+   "q": "E il secondo momento?",
+   "seg": 4,
+   "at": 210.57
+  }
+ ],
+ "blendFrames": 8,
+ "total": 282.1333333333333
+}
