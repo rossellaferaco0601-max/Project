@@ -16,6 +16,7 @@ import wordsCcbV2Ritrova from "./wordsCcbV2Ritrova.json";
 import wordsCcbV2Sentendo from "./wordsCcbV2Sentendo.json";
 import wordsLongevita from "./wordsLongevita.json";
 import type { CNReelProps, Seg } from "./types";
+import { REELS22 } from "./reels22";
 import { layout } from "./timeline";
 
 const SRC = "ytcn51/ytcn51_src.mp4";
@@ -1482,3 +1483,6 @@ for (const v of PERCORSO) {
     didascalia: r.didascalia.replace(/\n\n(#[^\n]*)$/, `\n\n${PERCORSO_CTA}\n\n$1`),
   });
 }
+
+// YTCN 22 · «Il costo invisibile degli infortuni» (17/11): serie F, definita in reels22.ts
+REELS.push(...REELS22);

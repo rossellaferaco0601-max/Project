@@ -19,6 +19,7 @@ import json, os, subprocess, sys
 FPS, OW, OH, AX = 30, 1080, 1920, 0.04
 c = json.load(open(sys.argv[1]))
 SW, SH = c.get("srcSize", [3840, 2160])
+MINH = 1250 * SH / 2160   # ritaglio più stretto ammesso (in pixel del sorgente): 1250 su un 4K, 625 su un Full HD
 shots = json.load(open(c["shots"]))
 blend, TAIL = c.get("blendFrames", 2), c.get("tail", 0.5)
 tmp = os.path.join(os.path.dirname(c["out"]), f"tmp_{c['id']}"); os.makedirs(tmp, exist_ok=True)
@@ -33,8 +34,8 @@ def crop_of(shot):
     if key in c.get("crops", {}): return c["crops"][key]
     f = shot.get("face")
     if not f: return [(SW - SH * 9 / 16) / 2, 0, SH * 9 / 16, SH]
-    ch = min(SH, max(1250, f[3] * SH / 0.25))
-    ch = max(1250, min(ch, (SH - f[1] * SH) / 0.9)); cw = ch * 9 / 16   # se il volto è basso nel sorgente si stringe un po': la fronte resta a 0,10
+    ch = min(SH, max(MINH, f[3] * SH / 0.25))
+    ch = max(MINH, min(ch, (SH - f[1] * SH) / 0.9)); cw = ch * 9 / 16   # se il volto è basso nel sorgente si stringe un po': la fronte resta a 0,10
     x = min(max(0, (f[0] + f[2] / 2) * SW - cw / 2), SW - cw); y = min(max(0, f[1] * SH - 0.10 * ch), SH - ch)
     return [x, y, cw, ch]
 
@@ -59,7 +60,9 @@ for i, s in enumerate(segs):
         cuts = [br["until"]] + [x for x in cuts[1:] if x > br["until"] + 0.05]
     for k, (a, b) in enumerate(zip(cuts[:-1], cuts[1:])):
         first = k == 0 and not br
-        pieces.append(((vlead if vlead and first else a), (vend if vend else (b if vlead and first else None)), round((a - s["from"]) * FPS), round((b - s["from"]) * FPS)))
+        # bordi interni (stacchi del sorgente) arrotondati per difetto: nessun fotogramma dell'inquadratura dopo finisce in coda a quella prima
+        fr = lambda t: n if t >= s["to"] else (0 if t <= s["from"] else int((t - s["from"]) * FPS + 1e-6))
+        pieces.append(((vlead if vlead and first else a), (vend if vend else (b if vlead and first else None)), fr(a), fr(b)))
     inputs, fc, labels = [], "", []
     for k, (va, vb, f0, f1) in enumerate(pieces):
         b = vb or s["from"] + f1 / FPS
@@ -79,22 +82,27 @@ for i, s in enumerate(segs):
     nv = n + (round(TAIL * FPS) if last else 0)
     fc += "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[vc];[vc]" + (f"tpad=stop_mode=clone:stop_duration={TAIL}," if last else "") + f"trim=end_frame={nv},setpts=PTS-STARTPTS[vo]"
     hb = blend / 2 / FPS
-    a0 = 0 if i == 0 else hb - AX / 2
-    a1 = n / FPS if last else n / FPS - hb + AX / 2
+    # stacco netto (blend 0 o 1): l'audio parte un filo prima del pezzo, così il micro-incrocio non accorcia l'audio rispetto al video
+    pre = max(0.0, AX / 2 - hb) if i else 0.0
+    a0 = 0 if i == 0 else hb - AX / 2 + pre
+    a1 = (n / FPS if last else n / FPS - hb + AX / 2) + pre
     af = f"aresample=48000,atrim={a0:.4f}:{a1:.4f},asetpts=PTS-STARTPTS" + (f",afade=t=out:st={a1 - a0 - 0.09:.4f}:d=0.09,apad=whole_dur={a1 - a0 + TAIL:.4f}" if last else "")
     na = len(labels)
     p = f"{tmp}/p{i}.mp4"
-    run(["ffmpeg", "-loglevel", "error", "-y", *inputs, "-ss", f"{s['from']:.3f}", "-t", f"{n / FPS + 0.3:.3f}", "-i", c["src"],
-         "-filter_complex", fc, "-map", "[vo]", "-map", f"{na}:a", "-af", af, "-frames:v", str(nv),
-         "-c:v", "libx264", "-preset", "fast", "-crf", "14", "-pix_fmt", "yuv420p", "-c:a", "pcm_s16le", p])
+    run(["ffmpeg", "-loglevel", "error", "-y", *inputs, "-ss", f"{s['from'] - pre:.3f}", "-t", f"{n / FPS + 0.3 + pre:.3f}", "-i", c["src"],
+         "-filter_complex", fc, "-map", "[vo]", "-frames:v", str(nv), "-c:v", "libx264", "-preset", "fast", "-crf", "14", "-pix_fmt", "yuv420p", "-an", p,
+         # audio in un file a parte: dentro l'mp4 del pezzo verrebbe troncato alla fine del video (e negli stacchi netti deve sbordare di 0,02 s)
+         "-map", f"{na}:a", "-af", af, "-c:a", "pcm_s16le", p.replace(".mp4", ".wav")])
     parts.append((p, nv))
 
-inputs = []; fv = fa = ""; pv, pa = "[0:v]", "[0:a]"; off = 0.0; total = parts[0][1]; d = blend / FPS
+NP = len(parts)
+inputs = []; fv = fa = ""; pv, pa = "[0:v]", f"[{NP}:a]"; off = 0.0; total = parts[0][1]; d = blend / FPS
 for p, _ in parts: inputs += ["-i", p]
+for p, _ in parts: inputs += ["-i", p.replace(".mp4", ".wav")]
 for i in range(1, len(parts)):
     off += parts[i - 1][1] / FPS - d
     fv += f"{pv}[{i}:v]xfade=transition=fade:duration={d:.4f}:offset={off:.4f}[v{i}];" if blend else f"{pv}[{i}:v]concat=n=2:v=1:a=0[v{i}];"
-    fa += f"{pa}[{i}:a]acrossfade=d={AX}:c1=tri:c2=tri[a{i}];"
+    fa += f"{pa}[{NP + i}:a]acrossfade=d={AX}:c1=tri:c2=tri[a{i}];"
     pv, pa = f"[v{i}]", f"[a{i}]"; total += parts[i][1] - blend
 run(["ffmpeg", "-loglevel", "error", "-y", *inputs, "-filter_complex", fv + fa + f"{pv}null[vt];{pa}anull[at]", "-map", "[vt]", "-map", "[at]",
      "-r", str(FPS), "-frames:v", str(total), "-c:v", "libx264", "-preset", "fast", "-crf", "14", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", c["out"]])

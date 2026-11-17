@@ -208,7 +208,7 @@ export const Slam: React.FC<P<"slam">> = ({ el, start }) => {
           })}
         </svg>
       ) : null}
-      <div style={{ position: "absolute", left: -60, top: 170, width: PANEL_W + 120, textAlign: "center", fontWeight: 900, fontSize: 236, lineHeight: 1, letterSpacing: -2, textTransform: "uppercase", color: BRAND.lime, textShadow: "0 10px 0 rgba(11,15,10,0.85), 0 18px 40px rgba(0,0,0,0.7)", transform: `scale(${scale}) rotate(${f < 0 ? -6 * (1 - fall) : 0}deg)`, opacity: clamp01((f + SLAM_IN) / 2), filter: f < 0 ? `blur(${6 * (1 - fall)}px)` : "none" }}>{el.text}</div>
+      <div style={{ position: "absolute", left: -60, top: 170, width: PANEL_W + 120, textAlign: "center", fontWeight: 900, fontSize: Math.min(236, Math.floor(1640 / el.text.length)), lineHeight: 1, letterSpacing: -2, textTransform: "uppercase", color: BRAND.lime, textShadow: "0 10px 0 rgba(11,15,10,0.85), 0 18px 40px rgba(0,0,0,0.7)", transform: `scale(${scale}) rotate(${f < 0 ? -6 * (1 - fall) : 0}deg)`, opacity: clamp01((f + SLAM_IN) / 2), filter: f < 0 ? `blur(${6 * (1 - fall)}px)` : "none" }}>{el.text}</div>
     </Zone>
   );
 };

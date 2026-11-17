@@ -3,7 +3,7 @@
 # Uso: scripts/cn_finish.sh R1-fiatone [versione]
 set -euo pipefail
 cd "$(dirname "$0")/.."
-ID="$1"; V="${2:-v2}"; OUT="out/ytcn51"; mkdir -p "$OUT/check" "$OUT/consegna"
+ID="$1"; V="${2:-v2}"; OUT="${OUT:-out/ytcn51}"; WK="${WK:-work/ytcn51}"; mkdir -p "$OUT/check" "$OUT/consegna" "$WK"   # OUT/WK: cartelle di uscita e di lavoro (serie nuove: OUT=out/ytcn22 WK=work/ytcn22)
 RAW="$OUT/${ID}_${V}_raw.mp4"; FIN="$OUT/consegna/${ID}_${V}.mp4"
 [ -f "$RAW" ] || npx remotion render "$ID" "$RAW" --codec=h264 --crf=18 --log=error
 # audio in un solo passaggio (una sola codifica AAC, 48 kHz): loudness, clic di «Pubblica» tenuto discreto (la normalizzazione lo alzerebbe), limitatore sui picchi
@@ -20,10 +20,10 @@ npx tsx -e "import {REELS} from './src/cn/reels51'; const r=REELS.find(x=>x.id==
 ffmpeg -loglevel error -y -i "$FIN" -vf "fps=1/3,scale=270:-1,tile=8x2" -frames:v 1 "$OUT/check/${ID}_${V}_sheet.jpg"
 echo "== $ID $V"; ffprobe -v error -show_entries format=duration -of csv=p=0 "$FIN" | sed 's/^/durata /'
 ffmpeg -i "$FIN" -af "loudnorm=print_format=summary" -f null - 2>&1 | grep -E "Input Integrated|Input True Peak"
-ffmpeg -loglevel error -y -i "$FIN" -ac 1 -ar 16000 -vn "work/ytcn51/${ID}_check.wav"
+ffmpeg -loglevel error -y -i "$FIN" -ac 1 -ar 16000 -vn "$WK/${ID}_check.wav"
 HF_HUB_DISABLE_XET=1 python3 - <<PY 2>/dev/null
 from faster_whisper import WhisperModel
-m=WhisperModel('medium',device='cpu',compute_type='int8')
-segs,_=m.transcribe('work/ytcn51/${ID}_check.wav',language='it',vad_filter=False)
+m=WhisperModel('${WMODEL:-medium}',device='cpu',compute_type='int8')
+segs,_=m.transcribe('$WK/${ID}_check.wav',language='it',vad_filter=False)
 print('ritrascrizione:', ' '.join(s.text.strip() for s in segs))
 PY

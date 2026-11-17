@@ -1,0 +1,24 @@
+{
+ "id": "F1-normale",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F1-normale.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0.1,
+ "segments": [
+  {
+   "from": 24.84,
+   "to": 65.1067
+  },
+  {
+   "from": 187.29,
+   "to": 200.9233
+  }
+ ],
+ "crops": {}
+}

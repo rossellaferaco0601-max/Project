@@ -117,8 +117,8 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
   p.elements.forEach((el, i) => { if (el.kind === "orbit") { const z = orbitCam(el, starts[i], frame, fps); if (z > orb) { orb = z; orbBack = el.back ?? 0.72; } } });
   const orbScale = 1 - (1 - orbBack) * orb;
   // selfie: mentre una grafica occupa la fascia bassa (tutte tranne parole sopra la testa, pannello laterale e muro) niente sottotitoli
-  const capHidden = !!p.capHideOnGfx && p.elements.some((el, i) => {
-    if (el.kind === "side" || el.kind === "wall" || (el.kind === "topword" && el.zone !== "strip")) return false;
+  const capHidden = p.elements.some((el, i) => {
+    if (!el.hideCaps && (!p.capHideOnGfx || el.kind === "side" || el.kind === "wall" || (el.kind === "topword" && el.zone !== "strip"))) return false;
     const l = frame - starts[i]; return l >= -2 && l < Math.round(el.dur * fps) + 2;
   });
   // pannello laterale: il video si ritira a sinistra (sempre visibile) e lascia la colonna di destra a un elenco o a una mappa
@@ -139,7 +139,9 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
         </AbsoluteFill>
         {p.hook ? <Hook hook={p.hook} /> : null}
         <AbsoluteFill style={{ transform: `translateY(${p.gfxShift ?? 0}px) scale(${p.gfxScale ?? 1})`, transformOrigin: `50% ${H * 0.44}px` }}>
-          {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : (
+          {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : el.dy ? (
+            <AbsoluteFill key={i} style={{ transform: `translateY(${el.dy}px)` }}><AnyElement el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} /></AbsoluteFill>
+          ) : (
             <AnyElement key={i} el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} />
           )))}
         </AbsoluteFill>

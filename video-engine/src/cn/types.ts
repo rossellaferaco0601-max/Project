@@ -5,7 +5,9 @@ export type Seg = { from: number; to: number };
 /** Ogni elemento vive nella zona grafiche (y 0,47-0,74), uno alla volta. `word` aggancia l'inizio alla parola detta più vicina ad `at`. */
 /** `cues`: parole dette (in ordine) a cui agganciare le parti interne della grafica (righe di un elenco, cambio di stato): diventano `onAt`
  *  (secondi dall'inizio dell'elemento), calcolati sui tempi reali delle parole. */
-export type ElementBase = { at: number; dur: number; word?: string; cues?: string[]; onAt?: number[] };
+/** `dy`: sposta in basso (px) una grafica della zona grafiche, per i primi piani in cui il mento scende sotto il bordo normale;
+ *  `hideCaps`: mentre la grafica è a schermo i sottotitoli si spengono (in basso un solo testo alla volta, Ross 12/11). */
+export type ElementBase = { at: number; dur: number; word?: string; cues?: string[]; onAt?: number[]; dy?: number; hideCaps?: boolean };
 
 export type Element = ElementBase &
   (
