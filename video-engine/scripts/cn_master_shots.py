@@ -11,12 +11,16 @@ config: {id, src, out, shots: "work/x_shots.json", blendFrames, tail, tailLive, 
                  di poco per durare quanto l'audio: serve quando la frase sconfina di qualche fotogramma nell'inquadratura dopo)
          broll: {"<indice del pezzo>": {"until": t, "clips": [[da, a, secondi], ...]}}   (fino al tempo t del sorgente il video del pezzo
                  è fatto di riprese di copertura prese da altri punti, ognuna a schermo per quei secondi; l'audio resta quello del pezzo)
+         push: {"<inizio inquadratura>": [x1, y1, w1, h1]}   (avvicinamento lento: il ritaglio arriva a questi valori a fine inquadratura)
+         soft: [inizio inquadratura, ...]   (stacchi del sorgente resi morbidi: dissolvenza di 5 fotogrammi dal fermo dell'inquadratura prima)
+         vstop: {"<indice del pezzo>": t}   (il video del pezzo si ferma al tempo t del sorgente: ultimo fotogramma ripetuto fino a fine pezzo)
          lead: {"<indice del pezzo>": inizio_video}   (la prima inquadratura del pezzo parte da quel tempo del sorgente, appena rallentata:
                  serve quando la frase comincia qualche fotogramma prima dello stacco e non si vuole un lampo dell'inquadratura precedente)
 Stampa anche la mappa dei pezzi (tempo nel master di ogni inquadratura): serve per coprire le schede grafiche del sorgente."""
 import json, os, subprocess, sys
 
 FPS, OW, OH, AX = 30, 1080, 1920, 0.04
+SOFT_XF = 5   # fotogrammi di dissolvenza degli stacchi morbidi (`soft`)
 c = json.load(open(sys.argv[1]))
 SW, SH = c.get("srcSize", [3840, 2160])
 MINH = 1250 * SH / 2160   # ritaglio più stretto ammesso (in pixel del sorgente): 1250 su un 4K, 625 su un Full HD
@@ -43,7 +47,10 @@ segs, parts, cursor, pieces_map = c["segments"], [], 0, []
 for i, s in enumerate(segs):
     n = round((s["to"] - s["from"]) * FPS); last = i == len(segs) - 1
     start = 0 if i == 0 else cursor - blend; cursor = start + n
-    cuts = [s["from"]] + [sh["from"] for sh in shots if s["from"] + 0.05 < sh["from"] < s["to"] - 0.05] + [s["to"]]
+    # vstop: il video dell'ultima inquadratura del pezzo si ferma a quel tempo del sorgente (ultimo fotogramma ripetuto fino alla fine del pezzo):
+    # serve quando il sorgente cambia inquadratura pochi fotogrammi prima della fine della frase (niente lampo dell'inquadratura dopo)
+    vstop = c.get("vstop", {}).get(str(i))
+    cuts = [s["from"]] + [sh["from"] for sh in shots if s["from"] + 0.05 < sh["from"] < s["to"] - 0.05 and (not vstop or sh["from"] < vstop - 0.05)] + [s["to"]]
     live = min(round(c.get("tailLive", TAIL) * FPS), round(TAIL * FPS)) if last else 0
     vend = c.get("stretch", {}).get(str(i))
     if vend: cuts = [s["from"], s["to"]]
@@ -56,28 +63,50 @@ for i, s in enumerate(segs):
         fu, acc = round((br["until"] - s["from"]) * FPS), 0
         for j, (ca, cb, sec) in enumerate(br["clips"]):
             nfk = fu - acc if j == len(br["clips"]) - 1 else round(sec * FPS)
-            pieces.append((ca, cb, acc, acc + nfk)); acc += nfk
+            pieces.append((ca, cb, acc, acc + nfk, None)); acc += nfk
         cuts = [br["until"]] + [x for x in cuts[1:] if x > br["until"] + 0.05]
     for k, (a, b) in enumerate(zip(cuts[:-1], cuts[1:])):
         first = k == 0 and not br
         # bordi interni (stacchi del sorgente) arrotondati per difetto: nessun fotogramma dell'inquadratura dopo finisce in coda a quella prima
         fr = lambda t: n if t >= s["to"] else (0 if t <= s["from"] else int((t - s["from"]) * FPS + 1e-6))
-        pieces.append(((vlead if vlead and first else a), (vend if vend else (b if vlead and first else None)), fr(a), fr(b)))
+        pieces.append(((vlead if vlead and first else a), (vend if vend else (b if vlead and first else None)), fr(a), fr(b), (b if b < s["to"] - 1e-6 else vstop)))
     inputs, fc, labels = [], "", []
-    for k, (va, vb, f0, f1) in enumerate(pieces):
+    for k, (va, vb, f0, f1, bcut) in enumerate(pieces):
         b = vb or s["from"] + f1 / FPS
         sh = next(x for x in shots if x["from"] - 0.001 <= (va + b) / 2 < x["to"])
         nf = f1 - f0 + (live if k == len(pieces) - 1 else 0)
         cr = crop_of(sh); x, y, w, h = [int(v) // 2 * 2 for v in cr[:4]]
         if len(cr) > 4: x = f"'min({max(x, int(cr[4]))},max({min(x, int(cr[4]))},{x}+({int(cr[4]) - x})*t/{cr[5]}))'"
+        # avvicinamento lento (push): il ritaglio passa da quello dell'inquadratura a [x1, y1, w1, h1] lungo tutta la durata, con partenza e arrivo
+        # morbidi; serve a far arrivare il volto alla stessa grandezza e posizione dell'inquadratura successiva (stacco che non si nota)
+        pz = c.get("push", {}).get(f"{sh['from']:.2f}")
+        if pz:
+            T = max(0.2, nf / FPS); E = f"(3*pow(min(t/{T:.3f},1),2)-2*pow(min(t/{T:.3f},1),3))"
+            HH = f"({cr[3]:.2f}+({pz[3] - cr[3]:.2f})*{E})"; SC = f"({OH}/{HH})"
+            XX = f"({cr[0]:.2f}+({pz[0] - cr[0]:.2f})*{E})"; YY = f"({cr[1]:.2f}+({pz[1] - cr[1]:.2f})*{E})"
+            cropf = f"scale=w='trunc(iw*{SC}/2)*2':h='trunc(ih*{SC}/2)*2':eval=frame:flags=lanczos,crop={OW}:{OH}:x='max(0,min(iw-{OW},{XX}*{SC}))':y='max(0,min(ih-{OH},{YY}*{SC}))'"
+        else: cropf = f"crop={w}:{h}:{x}:{y},scale={OW}:{OH}:flags=lanczos"
         if vb:
             fac = (nf / FPS) / (vb - va - 0.02)
             inputs += ["-ss", f"{va:.3f}", "-t", f"{vb - va - 0.02:.3f}", "-i", c["src"]]
-            fc += f"[{k}:v]crop={w}:{h}:{x}:{y},scale={OW}:{OH}:flags=lanczos,setpts={fac:.5f}*(PTS-STARTPTS),fps={FPS}:round=down,tpad=stop_mode=clone:stop_duration=0.3,trim=end_frame={nf},setpts=PTS-STARTPTS,setsar=1[v{k}];"
+            fc += f"[{k}:v]{cropf},setpts={fac:.5f}*(PTS-STARTPTS),fps={FPS}:round=down,tpad=stop_mode=clone:stop_duration=0.3,trim=end_frame={nf},setpts=PTS-STARTPTS,setsar=1[v{k}];"
         else:
-            inputs += ["-ss", f"{va:.3f}", "-t", f"{nf / FPS + 0.4:.3f}", "-i", c["src"]]
-            fc += f"[{k}:v]crop={w}:{h}:{x}:{y},scale={OW}:{OH}:flags=lanczos,fps={FPS}:round=down,trim=end_frame={nf},setpts=PTS-STARTPTS,setsar=1[v{k}];"
-        labels.append(f"[v{k}]")
+            ss = round(va - 0.001, 3)   # un soffio prima: il primo fotogramma dell'inquadratura non resta fuori per l'arrotondamento
+            inputs += ["-ss", f"{ss:.3f}", "-t", f"{nf / FPS + 0.4:.3f}", "-i", c["src"]]
+            # l'inquadratura parte dal suo primo fotogramma vero (anche se cade fino a un fotogramma dopo il bordo): se così finisce prima
+            # del bordo successivo, l'ultimo fotogramma buono viene ripetuto (mai un fotogramma dell'inquadratura dopo nel ritaglio di questa)
+            # `start_time=0`: il fotogramma i dell'uscita mostra l'ultimo fotogramma del sorgente con tempo < (i+1)/30 dall'inizio (senza, la
+            # numerazione può partire da 1 e tutto slitta di un fotogramma)
+            n_ok = min(nf, int((bcut - ss) * FPS + 1e-6)) if bcut else nf
+            hold = f",trim=end_frame={n_ok},tpad=stop_mode=clone:stop={nf - n_ok}" if n_ok < nf else ""
+            fc += f"[{k}:v]{cropf},fps={FPS}:round=down:start_time=0{hold},trim=end_frame={nf},setpts=PTS-STARTPTS,setsar=1[v{k}];"
+        # stacco morbido (soft): l'inquadratura entra in dissolvenza di SOFT_XF fotogrammi dal fermo dell'ultimo fotogramma di quella prima
+        # (i tempi non cambiano); da usare solo con il volto allineato (push), altrimenti la dissolvenza mostra due volti
+        if k and any(abs(sh["from"] - t) < 0.02 for t in c.get("soft", [])):
+            fc += f"{labels[-1]}split[v{k - 1}a][v{k - 1}b];[v{k - 1}b]trim=start_frame={prev_nf - 1},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop={SOFT_XF - 1},trim=end_frame={SOFT_XF},settb=1/{FPS}[h{k}];[v{k}]settb=1/{FPS}[w{k}];[h{k}][w{k}]xfade=transition=fade:duration={SOFT_XF / FPS:.4f}:offset=0[v{k}x];"
+            labels[-1] = f"[v{k - 1}a]"; labels.append(f"[v{k}x]")
+        else: labels.append(f"[v{k}]")
+        prev_nf = nf
         pieces_map.append({"seg": i, "src": [round(va, 3), round(b, 3)], "master": [round((start + f0) / FPS, 3), round((start + f1) / FPS, 3)], "face": bool(sh.get("face")), "shot": sh["from"]})
     nv = n + (round(TAIL * FPS) if last else 0)
     fc += "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[vc];[vc]" + (f"tpad=stop_mode=clone:stop_duration={TAIL}," if last else "") + f"trim=end_frame={nv},setpts=PTS-STARTPTS[vo]"

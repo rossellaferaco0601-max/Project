@@ -1,0 +1,45 @@
+{
+ "id": "F15-rispetto",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F15-rispetto.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 712.845,
+   "to": 751.145
+  }
+ ],
+ "crops": {},
+ "push": {
+  "745.87": [
+   692.3,
+   0,
+   587.7,
+   1044.9
+  ],
+  "747.62": [
+   736.8,
+   17,
+   494.2,
+   878.6
+  ],
+  "749.71": [
+   643.1,
+   0,
+   512.3,
+   910.8
+  ]
+ },
+ "soft": [
+  747.6219,
+  749.7073,
+  750.4997
+ ]
+}

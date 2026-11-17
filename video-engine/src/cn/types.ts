@@ -68,6 +68,15 @@ export type Element = ElementBase &
     | { kind: "drill"; n: number; title: string; fadeIn?: number; fadeOut?: number; steps: { label: string; sub: string; shape: "hold" | "grow" | "shrink" | "ring" | "feet" | "pulse" | "count"; color?: "lime" | "az" | "cream"; n?: number; big?: string }[] }
     | { kind: "question"; text: string; label?: string }
     | { kind: "nametag"; name: string; sub?: string }
+    | { kind: "loop"; title: string; items: string[] }
+    | { kind: "drain"; title: string; items: string[]; fill?: boolean }
+    | { kind: "stamp"; lines: string[]; stamp: string; tone?: "lime" | "coral" }
+    | { kind: "chips"; items: string[] }
+    | { kind: "switches"; title: string; items: string[] }
+    | { kind: "pressure"; title: string; label: string; end: string }
+    | { kind: "journey"; title: string; items: string[] }
+    | { kind: "progress"; title: string; label: string; after: string; zero: string }
+    | { kind: "scale2"; title: string; left: string; right: string }
     | { kind: "road3d"; title: string; fromLabel: string; toLabel: string; fromSpeed: number; toSpeed: number; unit?: string }
   );
 

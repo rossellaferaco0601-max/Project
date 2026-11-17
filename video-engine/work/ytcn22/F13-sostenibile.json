@@ -1,0 +1,24 @@
+{
+ "id": "F13-sostenibile",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F13-sostenibile.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 639.73,
+   "to": 643.63
+  },
+  {
+   "from": 664.46,
+   "to": 710.1933
+  }
+ ],
+ "crops": {}
+}

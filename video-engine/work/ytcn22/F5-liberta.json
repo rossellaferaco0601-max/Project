@@ -1,0 +1,31 @@
+{
+ "id": "F5-liberta",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F5-liberta.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 246.1,
+   "to": 287.4667
+  }
+ ],
+ "crops": {},
+ "push": {
+  "283.78": [
+   616.3,
+   24.6,
+   590.9,
+   1050.5
+  ]
+ },
+ "soft": [
+  286.7865
+ ]
+}

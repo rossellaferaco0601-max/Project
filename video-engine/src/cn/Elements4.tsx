@@ -204,7 +204,7 @@ export const Chat: React.FC<{ el: Extract<Element, { kind: "chat" }>; start: num
   const n = el.messages.length;
   const per = Math.max(10, Math.floor((durF - 24) / n));
   return (
-    <Box s={s} out={out}>
+    <Box s={s} out={out} height={n <= 2 ? 392 : undefined}>
       <div style={{ position: "absolute", top: 20, left: 34, display: "flex", alignItems: "center", gap: 16 }}>
         <div style={{ width: 66, height: 66, borderRadius: 33, background: BRAND.lime, color: BRAND.ink, fontWeight: 900, fontSize: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>C</div>
         <div style={{ fontWeight: 800, fontSize: 46, color: BRAND.cream }}>{el.sender}</div>

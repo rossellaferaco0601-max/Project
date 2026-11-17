@@ -1,0 +1,54 @@
+{
+ "id": "F4-prezzi",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F4-prezzi.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 201.05,
+   "to": 210.0833
+  },
+  {
+   "from": 221.2,
+   "to": 245.3
+  },
+  {
+   "from": 289.56,
+   "to": 294.76
+  },
+  {
+   "from": 349.7,
+   "to": 355
+  },
+  {
+   "from": 397.4,
+   "to": 402.7333
+  },
+  {
+   "from": 442,
+   "to": 451.7667
+  }
+ ],
+ "crops": {},
+ "stretch": {
+  "0": 209.86
+ },
+ "push": {
+  "441.98": [
+   706.9,
+   0,
+   574.3,
+   1021
+  ]
+ },
+ "soft": [
+  450.9088
+ ]
+}

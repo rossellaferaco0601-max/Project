@@ -40,7 +40,7 @@ export const CTA: React.FC<{ cta: CTAT; frames: number }> = ({ cta, frames }) =>
       {/* 2 · commenta la parola: campo che si scrive e si pubblica */}
       <div style={{ position: "absolute", top: 800, left: 0, width: W, textAlign: "center", opacity: s(T_WORD), transform: `translateY(${(1 - s(T_WORD)) * 40}px)` }}>
         <div style={{ fontWeight: 700, fontSize: 52, color: BRAND.cream }}>Commenta</div>
-        <div style={{ fontWeight: 900, fontSize: 170, lineHeight: 1, color: BRAND.lime }}>{cta.word}</div>
+        <div style={{ fontWeight: 900, fontSize: Math.min(170, Math.floor(1650 / cta.word.length)), lineHeight: 1, color: BRAND.lime }}>{cta.word}</div>
       </div>
       <div style={{ position: "absolute", top: 1070, left: 90, width: W - 180, transform: `translateY(${(1 - s(T_BOX)) * 50}px)`, opacity: s(T_BOX) }}>
         <div style={{ background: BRAND.white, borderRadius: 999, height: 112, display: "flex", alignItems: "center", padding: "0 20px 0 36px" }}>

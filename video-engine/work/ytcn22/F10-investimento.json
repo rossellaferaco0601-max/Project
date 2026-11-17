@@ -1,0 +1,24 @@
+{
+ "id": "F10-investimento",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F10-investimento.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0.15,
+ "segments": [
+  {
+   "from": 501.23,
+   "to": 525.0967
+  },
+  {
+   "from": 527.365,
+   "to": 549.965
+  }
+ ],
+ "crops": {}
+}

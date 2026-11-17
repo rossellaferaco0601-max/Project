@@ -32,6 +32,7 @@ export const TopWord: React.FC<P<"topword">> = ({ el, start }) => {
   if (!visible) return null;
   // nella fascia bassa due righe devono stare sopra 0,80: corpo massimo 104
   const size = topwordSize(el.lines, el.zone === "strip" && el.lines.length > 1 ? Math.min(el.max ?? 104, 104) : el.max);
+  const low = el.zone === "strip" || (el.y ?? 0) > 0.3;   // sotto il mento (fascia o `y` basso): le lettere cadono dentro la targa, mai da sopra il volto
   const top = Math.round(H * (el.zone === "strip" ? STRIP_Y : el.y ?? TOP_Y));
   const on = (i: number) => (el.onAt?.[i] !== undefined ? Math.round(el.onAt[i] * fps) : i * 7);
   let letterNo = 0;
@@ -53,14 +54,14 @@ export const TopWord: React.FC<P<"topword">> = ({ el, start }) => {
         // lettere che cadono: la targa si apre, poi ogni lettera scende dall'alto con un rimbalzo, sfalsata di 1,6 fotogrammi.
         // Nella fascia sotto il mento le lettere cadono DENTRO la targa (ritagliate): da più in alto passerebbero sul volto
         return (
-          <div key={li} style={{ ...plate, transform: `scale(${0.9 + 0.1 * k})`, opacity: Math.min(1, k * 2), display: "flex", overflow: el.zone === "strip" ? "hidden" : "visible" }}>
+          <div key={li} style={{ ...plate, transform: `scale(${0.9 + 0.1 * k})`, opacity: Math.min(1, k * 2), display: "flex", overflow: low ? "hidden" : "visible" }}>
             {line.split("").map((ch, ci) => {
               const n = letterNo++;
               const f = local - t0 - 2 - (ci * 1.6);
               const d = spring({ frame: f, fps, config: { damping: 9, stiffness: 170, mass: 0.6 } });
               const inAccent = hit >= 0 && ci >= hit && ci < hit + el.accent!.length;
               return (
-                <span key={ci} style={{ display: "inline-block", color: inAccent ? BRAND.lime : BRAND.white, transform: `translateY(${(1 - d) * -(el.zone === "strip" ? size + 40 : 260 + (n % 3) * 40)}px) rotate(${(1 - Math.min(1, d)) * ((n % 2 ? 1 : -1) * 18)}deg)`, opacity: f < 0 ? 0 : 1 }}>{ch}</span>
+                <span key={ci} style={{ display: "inline-block", color: inAccent ? BRAND.lime : BRAND.white, transform: `translateY(${(1 - d) * -(low ? size + 40 : 260 + (n % 3) * 40)}px) rotate(${(1 - Math.min(1, d)) * ((n % 2 ? 1 : -1) * 18)}deg)`, opacity: f < 0 ? 0 : 1 }}>{ch}</span>
               );
             })}
           </div>
@@ -79,7 +80,7 @@ export const Counter: React.FC<P<"counter">> = ({ el, start }) => {
   const RUN = Math.min(26, Math.max(12, Math.round(durF * 0.4)));
   const p = easeOut(local / RUN);
   const v = (el.from ?? 0) + (el.to - (el.from ?? 0)) * p;
-  const shown = el.decimals ? v.toFixed(el.decimals).replace(".", ",") : String(Math.round(v));
+  const shown = el.decimals ? v.toFixed(el.decimals).replace(".", ",") : el.to >= 10000 ? String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") : String(Math.round(v));   // migliaia col punto (30.000)
   const hitK = spring({ frame: local - RUN, fps, config: { damping: 8, stiffness: 260, mass: 0.5 } });
   return (
     <div style={{ position: "absolute", left: 0, width: W, top: GFX_TOP, textAlign: "center", opacity: out, fontFamily: FONT }}>

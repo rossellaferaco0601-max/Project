@@ -1,0 +1,20 @@
+{
+ "id": "F12-metodo",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F12-metodo.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0.1,
+ "segments": [
+  {
+   "from": 554.934,
+   "to": 598.834
+  }
+ ],
+ "crops": {}
+}

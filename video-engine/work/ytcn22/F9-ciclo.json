@@ -1,0 +1,24 @@
+{
+ "id": "F9-ciclo",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F9-ciclo.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 451.79,
+   "to": 472.79
+  },
+  {
+   "from": 479.275,
+   "to": 494.775
+  }
+ ],
+ "crops": {}
+}

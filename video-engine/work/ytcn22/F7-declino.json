@@ -1,0 +1,23 @@
+{
+ "id": "F7-declino",
+ "src": "public/ytcn22/ytcn22_src.mp4",
+ "out": "public/ytcn22/masters/F7-declino.mp4",
+ "shots": "work/ytcn22_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.5,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 355.068,
+   "to": 395.9347
+  }
+ ],
+ "crops": {},
+ "vstop": {
+  "0": 395.8
+ }
+}

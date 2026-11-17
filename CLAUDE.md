@@ -50,6 +50,10 @@ python3 scripts/transcribe.py public/clip.mp4 --lang it --out src/captions/clip.
 scripts/ffmpeg-presets.sh                     # elenco preset FFmpeg
 blender -b -P scripts/blender_render.py -- "TITOLO" out/title.png
 python3 scripts/gemini.py models|testo|analizza|immagine|video   # Gemini (chiave: secret di rete dell'ambiente)
+npx tsx scripts/f_cfg.ts F1-normale && python3 scripts/cn_master_shots.py work/ytcn22/F1-normale.json   # serie F (YTCN 22, sorgente Full HD a tre camere): master per inquadratura; poi python3 scripts/f_cutcheck.py master.mp4
+python3 scripts/f_match.py F1-normale 199.2   # stacco fluido prima della CTA: avvicinamento lento + dissolvenza breve verso l'inquadratura che inizia a quel tempo del sorgente
+npx tsx scripts/f_map.ts F2-ciclista          # mappa di lavoro: inquadrature, mento e parole (dove si possono mettere le grafiche); npx tsx scripts/f_facecheck.ts = volto libero su grafiche e sottotitoli
+scripts/f_queue.sh F2-ciclista:v1 F3-fastidi:v1   # coda render della serie F; finitura con OUT=out/ytcn22 WK=work/ytcn22 WMODEL=large-v3-turbo scripts/cn_finish.sh ID v1
 ```
 
 ## Clienti

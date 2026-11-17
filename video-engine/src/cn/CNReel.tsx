@@ -14,6 +14,7 @@ import { Clip, Compare, Step, Airflow, Filter, Beats, Ring, Duo, Slam, Orbit, Dr
 import { Pair, Lifebar, Fulltext, Slides } from "./Elements6";
 import { Flow, Renew, Versus, Grid4, Plan, Lights, Cycle, Beat } from "./Elements7";
 import { TopWord, Counter, BigPointer, Wall, Side, SIDE, sideK } from "./Elements8";
+import { Loop, Drain, Progress, Scale2, Stamp, Chips, Switches, Pressure, Journey } from "./Elements9";
 import { Title, Mouth, Runner, Lungs, Horizon, Chat, BigStrike, Stack, Guide, Question, NameTag } from "./Elements4";
 
 loadFont("normal", { weights: ["600", "700", "800", "900"], subsets: ["latin"] });
@@ -77,6 +78,15 @@ const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => 
     case "orbit": return <Orbit el={el} start={start} />;
     case "drill": return <Drill el={el} start={start} />;
     case "nametag": return <NameTag el={el} start={start} />;
+    case "loop": return <Loop el={el} start={start} />;
+    case "drain": return <Drain el={el} start={start} />;
+    case "progress": return <Progress el={el} start={start} />;
+    case "scale2": return <Scale2 el={el} start={start} />;
+    case "stamp": return <Stamp el={el} start={start} />;
+    case "chips": return <Chips el={el} start={start} />;
+    case "switches": return <Switches el={el} start={start} />;
+    case "pressure": return <Pressure el={el} start={start} />;
+    case "journey": return <Journey el={el} start={start} />;
     default: return <ElementView el={el} start={start} />;
   }
 };

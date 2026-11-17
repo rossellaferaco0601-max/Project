@@ -3143,18 +3143,11 @@
 "confidence": 0.9999804496765137
 },
 {
-"text": " 30",
+"text": " 30.000",
 "startMs": 166440,
-"endMs": 166740,
+"endMs": 166940,
 "timestampMs": 166590,
 "confidence": 0.9653905034065247
-},
-{
-"text": " .000",
-"startMs": 166780,
-"endMs": 166940,
-"timestampMs": 166860,
-"confidence": 0.9843597114086151
 },
 {
 "text": " persone,",
