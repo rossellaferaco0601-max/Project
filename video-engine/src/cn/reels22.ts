@@ -69,7 +69,7 @@ Vuoi correre senza farti male? Commenta BASTA e ti mando tutte le info sui perco
   {
     id: "F2-ciclista",
     title: "Se un ciclista cadesse sempre",
-    cover: { kicker: KICKER, lines: ["Se un ciclista","cadesse sempre?"], accent: "cadesse sempre?" },
+    cover: { frame: 300, kicker: KICKER, lines: ["Se un ciclista","cadesse sempre?"], accent: "cadesse sempre?" },
     props: {
       ...base,
       master: master("F2-ciclista"),
@@ -98,7 +98,7 @@ Vuoi capire da dove partire? Commenta BICI e ti mando tutte le info sui percorsi
   {
     id: "F3-fastidi",
     title: "Quante volte ti sei infortunato?",
-    cover: { kicker: KICKER, lines: ["Quante volte","ti sei infortunato?"], accent: "infortunato?" },
+    cover: { frame: 142, kicker: KICKER, lines: ["Quante volte","ti sei infortunato?"], accent: "infortunato?" },
     props: {
       ...base,
       master: master("F3-fastidi"),
@@ -126,7 +126,7 @@ Vuoi tornare a correre così? Commenta FASTIDI e ti mando tutte le info sui perc
   {
     id: "F4-prezzi",
     title: "I 5 prezzi di un infortunio",
-    cover: { kicker: KICKER, lines: ["I 5 prezzi","di un infortunio"], accent: "5 prezzi" },
+    cover: { frame: 318, kicker: KICKER, lines: ["I 5 prezzi","di un infortunio"], accent: "5 prezzi" },
     props: {
       ...base,
       master: master("F4-prezzi"),
@@ -154,7 +154,7 @@ Vuoi lavorare sulla prevenzione? Commenta PREZZO e ti mando tutte le info sui pe
   {
     id: "F5-liberta",
     title: "Il primo prezzo: la tua libertà",
-    cover: { kicker: KICKER, lines: ["Un infortunio","non ferma solo la corsa"], accent: "non ferma" },
+    cover: { frame: 854, kicker: KICKER, lines: ["Un infortunio","non ferma solo la corsa"], accent: "non ferma" },
     props: {
       ...base,
       master: master("F5-liberta"),
@@ -182,7 +182,7 @@ Vuoi proteggere la tua libertà di movimento? Commenta LIBERO e ti mando tutte l
   {
     id: "F6-valvola",
     title: "Quando perdi la tua valvola di sfogo",
-    cover: { kicker: KICKER, lines: ["Se perdi","la tua valvola di sfogo"], accent: "valvola di sfogo" },
+    cover: { frame: 304, kicker: KICKER, lines: ["Se perdi","la tua valvola di sfogo"], accent: "valvola di sfogo" },
     props: {
       ...base,
       master: master("F6-valvola"),
@@ -210,7 +210,7 @@ Vuoi costruire questa continuità? Commenta SFOGO e ti mando tutte le info sui p
   {
     id: "F7-declino",
     title: "Il circolo vizioso dello stop",
-    cover: { kicker: KICKER, lines: ["Il circolo vizioso","dello stop"], accent: "circolo vizioso" },
+    cover: { frame: 404, kicker: KICKER, lines: ["Il circolo vizioso","dello stop"], accent: "circolo vizioso" },
     props: {
       ...base,
       master: master("F7-declino"),
@@ -238,7 +238,7 @@ Vuoi allenarti senza interruzioni? Commenta FORMA e ti mando tutte le info sui p
   {
     id: "F8-zero",
     title: "Ricominciare da zero",
-    cover: { kicker: KICKER, lines: ["Mesi di progressi","persi"], accent: "persi" },
+    cover: { frame: 250, kicker: KICKER, lines: ["Mesi di progressi","persi"], accent: "persi" },
     props: {
       ...base,
       master: master("F8-zero"),
@@ -266,7 +266,7 @@ Vuoi costruire progressi che restano? Commenta PROGRESSI e ti mando tutte le inf
   {
     id: "F9-ciclo",
     title: "Il ciclo degli infortuni",
-    cover: { kicker: KICKER, lines: ["Il ciclo","degli infortuni"], accent: "ciclo" },
+    cover: { frame: 254, kicker: KICKER, lines: ["Il ciclo","degli infortuni"], accent: "ciclo" },
     props: {
       ...base,
       master: master("F9-ciclo"),
@@ -293,7 +293,7 @@ Vuoi uscire da questo ciclo? Commenta CICLO e ti mando tutte le info sui percors
   {
     id: "F10-investimento",
     title: "La prevenzione è un investimento",
-    cover: { kicker: KICKER, lines: ["La prevenzione","è un investimento"], accent: "investimento" },
+    cover: { frame: 982, kicker: KICKER, lines: ["La prevenzione","è un investimento"], accent: "investimento" },
     props: {
       ...base,
       master: master("F10-investimento"),
@@ -304,7 +304,7 @@ Vuoi uscire da questo ciclo? Commenta CICLO e ti mando tutte le info sui percors
         { kind: "topword", at: 0.1, dur: 2.75, zone: "strip", lines: ["La prevenzione", "è un investimento"], accent: "investimento", hideCaps: true },
         { kind: "stat", at: 21.3, word: "sano", dur: 2.0, value: "Molti anni", label: "sano e attivo" },
         { kind: "widget", at: 29.5, word: "imparando", dur: 6.6, cues: ["imparando", "costruendo", "allenarsi"], title: "Investire sulla tua corsa", lines: ["Imparare a correre", "Un corpo pronto per correre", "Imparare ad allenarsi"] },
-        { kind: "wall", at: 40.2, dur: 6.3, cues: ["salute", "benessere", "forma", "longevità", "libertà"], title: "Garantirà", rows: ["Salute", "Benessere", "Forma fisica", "Longevità", "Libertà"] },
+        { kind: "wall", at: 40.2, dur: 6.7, hold: true, cues: ["salute", "benessere", "forma", "longevità", "libertà"], title: "Garantirà", rows: ["Salute", "Benessere", "Forma fisica", "Longevità", "Libertà"] },
       ],
       cta: { word: "INVESTO", title: "Vuoi investire sulla tua corsa?" },
     },
@@ -321,7 +321,7 @@ Vuoi iniziare a investire sulla tua corsa? Commenta INVESTO e ti mando tutte le 
   {
     id: "F11-trentamila",
     title: "Basta infortuni",
-    cover: { kicker: KICKER, lines: ["Basta","infortuni"], accent: "Basta" },
+    cover: { frame: 196, kicker: KICKER, lines: ["Basta","infortuni"], accent: "Basta" },
     props: {
       ...base,
       master: master("F11-trentamila"),
@@ -350,7 +350,7 @@ Vuoi provarlo anche tu? Commenta BENEFICI e ti mando tutte le info sui percorsi 
   {
     id: "F12-metodo",
     title: "Il metodo Correre Naturale",
-    cover: { kicker: KICKER, lines: ["Il metodo","in tre passi"], accent: "tre passi" },
+    cover: { frame: 146, kicker: KICKER, lines: ["Il metodo","in tre passi"], accent: "tre passi" },
     props: {
       ...base,
       master: master("F12-metodo"),
@@ -377,7 +377,7 @@ Vuoi partire dal primo passo? Commenta METODO e ti mando tutte le info sui perco
   {
     id: "F13-sostenibile",
     title: "A che prezzo?",
-    cover: { kicker: KICKER, lines: ["Più veloce:","a che prezzo?"], accent: "a che prezzo?" },
+    cover: { frame: 394, kicker: KICKER, lines: ["Più veloce:","a che prezzo?"], accent: "a che prezzo?" },
     props: {
       ...base,
       master: master("F13-sostenibile"),
@@ -406,7 +406,7 @@ Vuoi scegliere i secondi? Commenta SOSTENIBILE e ti mando tutte le info sui perc
   {
     id: "F14-consapevole",
     title: "Quello che quasi nessuno fa",
-    cover: { kicker: KICKER, lines: ["Quello che","quasi nessuno fa"], accent: "quasi nessuno" },
+    cover: { frame: 70, kicker: KICKER, lines: ["Quello che","quasi nessuno fa"], accent: "quasi nessuno" },
     props: {
       ...base,
       master: master("F14-consapevole"),
@@ -433,7 +433,7 @@ Vuoi imparare ad ascoltare il tuo corpo? Commenta CONSAPEVOLE e ti mando tutte l
   {
     id: "F15-rispetto",
     title: "Un atto di rispetto",
-    cover: { kicker: KICKER, lines: ["Prevenire","è rispettarsi"], accent: "rispettarsi" },
+    cover: { frame: 110, kicker: KICKER, lines: ["Prevenire","è rispettarsi"], accent: "rispettarsi" },
     props: {
       ...base,
       master: master("F15-rispetto"),

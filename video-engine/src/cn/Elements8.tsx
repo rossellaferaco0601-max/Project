@@ -138,7 +138,7 @@ export const Wall: React.FC<P<"wall">> = ({ el, start }) => {
   const { local, visible } = useInOut(start, durF);
   if (!visible) return null;
   const IN = 9, OUT = 9;
-  const up = 1 - Math.pow(1 - clamp01(local / IN), 3), down = Math.pow(1 - clamp01((durF - local) / OUT), 3);
+  const up = 1 - Math.pow(1 - clamp01(local / IN), 3), down = el.hold ? 0 : Math.pow(1 - clamp01((durF - local) / OUT), 3);   // hold: il muro resta fermo fino alla fine (lo copre il pannello della CTA)
   const n = el.rows.length;
   const rowH = Math.min(230, Math.floor((H * 0.745 - 190) / n));   // il muro si ferma sopra i sottotitoli
   const styles: React.CSSProperties[] = [
