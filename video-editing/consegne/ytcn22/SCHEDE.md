@@ -1,6 +1,6 @@
 # Schede dei reel · YTCN 22 (serie F)
 
-Formato fisso delle schede (vedi `memoria/feedback-formato-schede.md`). File in `video-engine/out/ytcn22/consegna/` (`F1-normale_v2`, `F2-ciclista_v1` … `F15-rispetto_v1`, con copertina, didascalia e anteprima). Nella serie non c'è un «Lunedì Scientifico»: nel video Daniele non cita studi.
+Formato fisso delle schede (vedi `memoria/feedback-formato-schede.md`). File in `video-engine/out/ytcn22/consegna/` (`F1-normale_v2`, `F4-prezzi_v2`, `F7-declino_v2`, `F11-trentamila_v2`, `F13-sostenibile_v2`, `F14-consapevole_v2`, gli altri `_v1`, con copertina, didascalia e anteprima). Nella serie non c'è un «Lunedì Scientifico»: nel video Daniele non cita studi.
 
 ## YTCN 22 · «Il costo invisibile degli infortuni» (serie F, 15 reel, 17/11)
 
