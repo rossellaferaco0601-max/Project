@@ -17,6 +17,8 @@ else
   npx remotion still "$ID" "$OUT/consegna/${ID}_copertina.jpg" --frame=40 --log=error
 fi
 npx tsx -e "import {REELS} from './src/cn/reels51'; const r=REELS.find(x=>x.id==='$ID')!; require('fs').writeFileSync('$OUT/consegna/${ID}_didascalia.txt', r.didascalia+'\n')"
+# la didascalia rifinita a mano (es. versione SEO del 18/11) sta in clienti/.../consegne: se c'è, vince quella
+for f in ../clienti/correre-naturale/consegne/*/"${ID}_didascalia.txt"; do [ -f "$f" ] && cp "$f" "$OUT/consegna/${ID}_didascalia.txt"; done
 ffmpeg -loglevel error -y -i "$FIN" -vf "fps=1/3,scale=270:-1,tile=8x2" -frames:v 1 "$OUT/check/${ID}_${V}_sheet.jpg"
 echo "== $ID $V"; ffprobe -v error -show_entries format=duration -of csv=p=0 "$FIN" | sed 's/^/durata /'
 ffmpeg -i "$FIN" -af "loudnorm=print_format=summary" -f null - 2>&1 | grep -E "Input Integrated|Input True Peak"
