@@ -26,6 +26,13 @@ const base = {
   capShift: 60,
 };
 const KICKER = "Infortuni nella corsa";
+/** Assetto dal 18/11 (Ross: «più spazio tra i sottotitoli e le animazioni», «rispettare i layout di Instagram»): sottotitoli più su (bordo basso
+ *  a 1497 px, sotto il limite dei 1500), grafiche al 96 % (bordo destro dentro lo 0,90) e almeno ~100 px di aria sopra i sottotitoli: ogni grafica ha
+ *  il suo `dy`, calcolato con scripts/f_place.ts sul mento più basso mentre è a schermo. */
+const V2 = { capShift: 40, gfxScale: 0.96 };
+/** Finale morbido (Ross 18/11: «stacco troppo netto prima della CTA»): coda di 0,8 s che continua a muoversi (master con `ping`) e CTA che parte
+ *  0,3 s dopo l'ultima parola; l'ultima grafica esce prima. */
+const SOFT_END = { tailSeconds: 0.8, tailHold: 0.3 };
 /** fascia bassa dei primi piani: la grafica scende di LOW px (bordo alto a ~0,65) e i sottotitoli si spengono */
 const LOW = { dy: 250, hideCaps: true };
 
@@ -131,13 +138,16 @@ Vuoi tornare a correre così? Commenta FASTIDI e ti mando tutte le info sui perc
       ...base,
       master: master("F4-prezzi"),
       segments: cut([201.05, 210.1], [221.2, 245.3], [289.56, 294.76], [349.7, 355.0], [397.4, 402.74], [442.0, 451.76]),
-      tailLive: 0,
       capFrom: 3.9,
+      ...V2,
+      tailLive: 0,
       elements: [
-        { kind: "kinetic", at: 0.15, dur: 3.6, words: ["Infortuni:", "il costo", "invisibile"], accentIndex: 2 },
-        { kind: "title", at: 21.0, word: "influire", dur: 3.0, lines: ["Non solo", "sulla corsa"], accent: "corsa" },
-        // i cinque prezzi: il video si ritira a sinistra e l'elenco si costruisce a destra, una voce per ogni «prezzo da pagare»
-        { kind: "side", at: 28.13, dur: 29.6, cues: ["primo", "secondo", "terzo", "quarto", "quinto"], title: "5 prezzi", items: ["Limiti fisici", "Mente", "Salute e forma", "Progressi", "Ricadute"] },
+        { kind: "kinetic", at: 0.15, dur: 3.6, words: ["Infortuni:", "il costo", "invisibile"], accentIndex: 2, dy: -23 },
+        { kind: "title", at: 21.0, word: "influire", dur: 2.9, lines: ["Non solo", "sulla corsa"], accent: "corsa" },
+        // i cinque prezzi: lo scontrino stampa una riga per ogni «prezzo da pagare» (video a tutto schermo, niente elenco a lato su fondo scuro)
+        { kind: "receipt", at: 28.2, dur: 27.95, cues: ["primo", "secondo", "terzo", "quarto", "quinto"], title: "Il conto di un infortunio", items: ["Limiti fisici", "Demotivazione", "Salute e forma", "Progressi persi", "Nuovi infortuni"], dy: -51 },
+        // il conto intero a tutto schermo fino alla CTA: l'ultima frase finisce dopo uno stacco del video di partenza, che così non si vede
+        { kind: "bill", at: 56.3, word: "rischio", dur: 2.87, title: "Il conto di un infortunio", items: ["Limiti fisici", "Demotivazione", "Salute e forma", "Progressi persi", "Nuovi infortuni"], total: "5 prezzi da pagare" },
       ],
       cta: { word: "PREZZO", title: "Vuoi smettere di pagare questi prezzi?" },
     },
@@ -215,13 +225,15 @@ Vuoi costruire questa continuità? Commenta SFOGO e ti mando tutte le info sui p
       ...base,
       master: master("F7-declino"),
       segments: cut([355.068, 395.92]),
-      tailLive: 0,
       capFrom: 3.8,
+      ...V2,
+      ...SOFT_END,
+      tailLive: 0,
       elements: [
         { kind: "topword", at: 0.15, dur: 3.5, y: 0.53, anim: "drop", lines: ["Se ti fermi", "cosa perdi davvero?"], accent: "davvero?", hideCaps: true },
-        { kind: "drain", at: 12.5, dur: 6.4, cues: ["energia", "umore", "forma"], title: "Se non corri", items: ["Energia", "Umore", "Forma fisica"] },
-        { kind: "drain", at: 19.4, dur: 6.3, cues: ["energia", "umore", "forma"], title: "Se ti muovi", items: ["Energia", "Umore", "Forma fisica"], fill: true },
-        { kind: "kinetic", at: 36.6, word: "circolo", dur: 3.4, words: ["Circolo", "vizioso"], accentIndex: 1 },
+        { kind: "drain", at: 12.5, dur: 6.4, cues: ["energia", "umore", "forma"], title: "Se non corri", items: ["Energia", "Umore", "Forma fisica"], dy: -26 },
+        { kind: "drain", at: 19.4, dur: 6.3, cues: ["energia", "umore", "forma"], title: "Se ti muovi", items: ["Energia", "Umore", "Forma fisica"], fill: true, dy: -12 },
+        { kind: "kinetic", at: 36.6, word: "circolo", dur: 3.4, words: ["Circolo", "vizioso"], accentIndex: 1, dy: 20 },
       ],
       cta: { word: "FORMA", title: "Vuoi restare in forma correndo?" },
     },
@@ -326,14 +338,17 @@ Vuoi iniziare a investire sulla tua corsa? Commenta INVESTO e ti mando tutte le 
       ...base,
       master: master("F11-trentamila"),
       segments: cut([139.7, 178.76]),
-      tailLive: 0,
       capFrom: 3.9,
+      ...V2,
+      ...SOFT_END,
+      tailLive: 0,
       elements: [
         { kind: "stat", at: 0.15, dur: 3.6, value: "12 anni", label: "voce fuori dal coro" },
         { kind: "kinetic", at: 7.2, word: "basta", dur: 1.2, words: ["Basta", "infortuni"], accentIndex: 0 },
         { kind: "title", at: 14.3, word: "godendo", dur: 2.8, lines: ["Solo i benefici", "della corsa"], accent: "benefici" },
         { kind: "counter", at: 26.4, word: "30.000", dur: 4.6, to: 30000, prefix: "+", label: "persone" },
-        { kind: "bigstrike", at: 37.2, word: "problemi", dur: 1.9, big: true, text: "Problemi e infortuni" },
+        // esce prima che parta la CTA (prima la CTA la copriva a metà)
+        { kind: "bigstrike", at: 36.9, word: "senza", dur: 1.55, big: true, text: "Problemi e infortuni" },
       ],
       cta: { word: "BENEFICI", title: "Vuoi solo i benefici della corsa?" },
     },
@@ -382,14 +397,18 @@ Vuoi partire dal primo passo? Commenta METODO e ti mando tutte le info sui perco
       ...base,
       master: master("F13-sostenibile"),
       segments: cut([639.73, 643.63], [664.46, 710.2]),
-      tailLive: 0,
       capFrom: 3.8,
+      ...V2,
+      ...SOFT_END,
+      tailLive: 0,
       elements: [
         { kind: "topword", at: 0.15, dur: 3.5, y: 0.53, anim: "drop", lines: ["Risultati", "immediati?"], accent: "immediati?", hideCaps: true },
-        { kind: "scale2", at: 10.1, dur: 4.9, cues: ["veloce", "velocemente"], title: "Cosa ti promettono", left: "Più veloce", right: "Il prezzo?" },
+        // la bilancia resta finché Daniele dice «a che prezzo?» e non sta mai ferma; allo stacco sul primo piano (15,07 s) scende sotto il mento
+        // e i sottotitoli si spengono (in basso un solo testo alla volta)
+        { kind: "scale2", at: 10.5, dur: 5.9, cues: ["ti", "velocemente"], title: "Cosa ti promettono", left: "Più veloce", right: "Il prezzo?", dy: -47, shiftAt: 137 / 30, shiftDy: 172, hideCapsFrom: 137 / 30 },
         { kind: "kinetic", at: 22.2, word: "sostenibile", dur: 1.9, words: ["Il modo", "sostenibile"], accentIndex: 1 },
         { kind: "title", at: 25.2, word: "percorso", dur: 3.4, lines: ["Un percorso", "passo dopo passo"], accent: "percorso" },
-        { kind: "chips", at: 45.9, word: "risultati", dur: 4.05, cues: ["autentici", "concreti", "reali", "e"], items: ["Autentici", "Concreti", "Reali", "Duraturi"] },
+        { kind: "chips", at: 45.9, word: "risultati", dur: 4.0, cues: ["autentici", "concreti", "reali", "e"], items: ["Autentici", "Concreti", "Reali", "Duraturi"] },
       ],
       cta: { word: "SOSTENIBILE", title: "Vuoi risultati che durano?" },
     },
@@ -411,12 +430,18 @@ Vuoi scegliere i secondi? Commenta SOSTENIBILE e ti mando tutte le info sui perc
       ...base,
       master: master("F14-consapevole"),
       segments: cut([598.99, 639.7]),
-      tailLive: 0,
       capFrom: 3.6,
+      ...V2,
+      ...SOFT_END,
+      tailLive: 0,
       elements: [
         { kind: "topword", at: 0.15, dur: 3.4, y: 0.53, lines: ["Quello che", "quasi nessuno fa"], accent: "nessuno", hideCaps: true },
-        { kind: "grid4", at: 10.6, dur: 9.4, cues: ["correre", "preparare", "ascoltarlo", "allenarsi", "consapevole"], items: ["Correre bene", "Preparare il corpo", "Ascoltarlo", "Allenarsi bene"], foot: "In modo consapevole" },
-        { kind: "title", at: 29.6, word: "aumento", dur: 3.4, lines: ["Più rischio", "di farti male"], accent: "rischio" },
+        { kind: "kinetic", at: 7.9, word: "corpo", dur: 1.6, words: ["Corpo", "e mente"], accentIndex: 0 },
+        // le quattro cose da fare, una casella per volta sulla parola detta (testo sempre dentro la casella)
+        { kind: "quad", at: 10.6, dur: 9.35, cues: ["correre", "preparare", "ascoltarlo", "allenarsi"], items: ["Correre bene", "Preparare il corpo", "Ascoltare il corpo", "Allenarsi bene"], dy: -10 },
+        { kind: "topword", at: 21.2, word: "maggioranza", dur: 2.4, zone: "strip", lines: ["La maggioranza non lo fa"], accent: "non lo fa", hideCaps: true },
+        { kind: "rise", at: 29.2, word: "aumento", dur: 4.4, cues: ["aumento", "farmi", "infortunarmi"], label: "Rischio", lines: ["di farti male", "di infortunarti"] },
+        { kind: "chips", at: 35.7, word: "salute", dur: 4.6, cues: ["salute", "benessere", "performance"], items: ["Salute", "Benessere", "Performance"], strike: true, dy: 100 },
       ],
       cta: { word: "CONSAPEVOLE", title: "Vuoi allenarti in modo consapevole?" },
     },

@@ -7,7 +7,9 @@ export type Seg = { from: number; to: number };
  *  (secondi dall'inizio dell'elemento), calcolati sui tempi reali delle parole. */
 /** `dy`: sposta in basso (px) una grafica della zona grafiche, per i primi piani in cui il mento scende sotto il bordo normale;
  *  `hideCaps`: mentre la grafica è a schermo i sottotitoli si spengono (in basso un solo testo alla volta, Ross 12/11). */
-export type ElementBase = { at: number; dur: number; word?: string; cues?: string[]; onAt?: number[]; dy?: number; hideCaps?: boolean };
+/** `shiftAt` / `shiftDy`: da quel secondo (dall'inizio della grafica) la grafica scende di altri `shiftDy` px (cambio di inquadratura con il volto più
+ *  grande); `hideCapsFrom`: da quel secondo i sottotitoli si spengono (in basso un solo testo alla volta). */
+export type ElementBase = { at: number; dur: number; word?: string; cues?: string[]; onAt?: number[]; dy?: number; hideCaps?: boolean; shiftAt?: number; shiftDy?: number; hideCapsFrom?: number };
 
 export type Element = ElementBase &
   (
@@ -71,12 +73,16 @@ export type Element = ElementBase &
     | { kind: "loop"; title: string; items: string[] }
     | { kind: "drain"; title: string; items: string[]; fill?: boolean }
     | { kind: "stamp"; lines: string[]; stamp: string; tone?: "lime" | "coral" }
-    | { kind: "chips"; items: string[] }
+    | { kind: "chips"; items: string[]; strike?: boolean }
     | { kind: "switches"; title: string; items: string[] }
     | { kind: "pressure"; title: string; label: string; end: string }
     | { kind: "journey"; title: string; items: string[] }
     | { kind: "progress"; title: string; label: string; after: string; zero: string }
-    | { kind: "scale2"; title: string; left: string; right: string }
+    | { kind: "scale2"; title: string; left: string; right: string; from?: "tilted"; phase?: number }
+    | { kind: "receipt"; title: string; items: string[] }
+    | { kind: "bill"; title: string; items: string[]; total: string }
+    | { kind: "quad"; items: string[]; foot?: string }
+    | { kind: "rise"; label: string; lines: string[] }
     | { kind: "road3d"; title: string; fromLabel: string; toLabel: string; fromSpeed: number; toSpeed: number; unit?: string }
   );
 
@@ -112,6 +118,9 @@ export type CNReelProps = {
   tailSeconds?: number;
   /** secondi di coda in cui il sorgente continua dal vivo (default: tutta la coda). Se subito dopo il taglio il sorgente cambia inquadratura, va messo a 0: la coda tiene l'ultimo fotogramma mentre il pannello della CTA sale */
   tailLive?: number;
+  /** secondi di coda che passano prima che la CTA cominci a salire (default 0: parte al taglio). Serve con una coda più lunga (`tailSeconds`)
+   *  per lasciare un respiro dopo l'ultima parola; nel master la coda va fatta con `ping` (niente fermo immagine) */
+  tailHold?: number;
   /** secondi iniziali senza sottotitoli (Oscar 12/11: «la parte iniziale dove c'è l'hook visivo togliamo i sottotitoli»): ripartono dalla prima pagina intera dopo questo tempo */
   capFrom?: number;
   /** selfie: in basso un solo testo alla volta. Mentre è a schermo una grafica della fascia bassa i sottotitoli si spengono (Ross 12/11: «titoli sovrapposti») */

@@ -14,6 +14,7 @@ config: {id, src, out, shots: "work/x_shots.json", blendFrames, tail, tailLive, 
          push: {"<inizio inquadratura>": [x1, y1, w1, h1]}   (avvicinamento lento: il ritaglio arriva a questi valori a fine inquadratura)
          soft: [inizio inquadratura, ...]   (stacchi del sorgente resi morbidi: dissolvenza di 5 fotogrammi dal fermo dell'inquadratura prima)
          vstop: {"<indice del pezzo>": t}   (il video del pezzo si ferma al tempo t del sorgente: ultimo fotogramma ripetuto fino a fine pezzo)
+         ping: true   (la coda non è un fermo immagine: il video torna indietro sui suoi ultimi fotogrammi; vale anche per i fotogrammi dopo vstop)
          lead: {"<indice del pezzo>": inizio_video}   (la prima inquadratura del pezzo parte da quel tempo del sorgente, appena rallentata:
                  serve quando la frase comincia qualche fotogramma prima dello stacco e non si vuole un lampo dell'inquadratura precedente)
 Stampa anche la mappa dei pezzi (tempo nel master di ogni inquadratura): serve per coprire le schede grafiche del sorgente."""
@@ -26,6 +27,7 @@ SW, SH = c.get("srcSize", [3840, 2160])
 MINH = 1250 * SH / 2160   # ritaglio più stretto ammesso (in pixel del sorgente): 1250 su un 4K, 625 su un Full HD
 shots = json.load(open(c["shots"]))
 blend, TAIL = c.get("blendFrames", 2), c.get("tail", 0.5)
+PING = bool(c.get("ping"))   # coda con andata e ritorno invece del fermo immagine
 tmp = os.path.join(os.path.dirname(c["out"]), f"tmp_{c['id']}"); os.makedirs(tmp, exist_ok=True)
 
 def run(cmd):
@@ -70,7 +72,7 @@ for i, s in enumerate(segs):
         # bordi interni (stacchi del sorgente) arrotondati per difetto: nessun fotogramma dell'inquadratura dopo finisce in coda a quella prima
         fr = lambda t: n if t >= s["to"] else (0 if t <= s["from"] else int((t - s["from"]) * FPS + 1e-6))
         pieces.append(((vlead if vlead and first else a), (vend if vend else (b if vlead and first else None)), fr(a), fr(b), (b if b < s["to"] - 1e-6 else vstop)))
-    inputs, fc, labels = [], "", []
+    inputs, fc, labels, short = [], "", [], 0
     for k, (va, vb, f0, f1, bcut) in enumerate(pieces):
         b = vb or s["from"] + f1 / FPS
         sh = next(x for x in shots if x["from"] - 0.001 <= (va + b) / 2 < x["to"])
@@ -98,6 +100,8 @@ for i, s in enumerate(segs):
             # `start_time=0`: il fotogramma i dell'uscita mostra l'ultimo fotogramma del sorgente con tempo < (i+1)/30 dall'inizio (senza, la
             # numerazione può partire da 1 e tutto slitta di un fotogramma)
             n_ok = min(nf, int((bcut - ss) * FPS + 1e-6)) if bcut else nf
+            if PING and last and k == len(pieces) - 1 and n_ok < nf:
+                short = nf - n_ok; nf = n_ok   # con `ping` i fotogrammi mancanti dopo vstop non si clonano: li dà l'andata e ritorno della coda
             hold = f",trim=end_frame={n_ok},tpad=stop_mode=clone:stop={nf - n_ok}" if n_ok < nf else ""
             fc += f"[{k}:v]{cropf},fps={FPS}:round=down:start_time=0{hold},trim=end_frame={nf},setpts=PTS-STARTPTS,setsar=1[v{k}];"
         # stacco morbido (soft): l'inquadratura entra in dissolvenza di SOFT_XF fotogrammi dal fermo dell'ultimo fotogramma di quella prima
@@ -106,10 +110,16 @@ for i, s in enumerate(segs):
             fc += f"{labels[-1]}split[v{k - 1}a][v{k - 1}b];[v{k - 1}b]trim=start_frame={prev_nf - 1},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop={SOFT_XF - 1},trim=end_frame={SOFT_XF},settb=1/{FPS}[h{k}];[v{k}]settb=1/{FPS}[w{k}];[h{k}][w{k}]xfade=transition=fade:duration={SOFT_XF / FPS:.4f}:offset=0[v{k}x];"
             labels[-1] = f"[v{k - 1}a]"; labels.append(f"[v{k}x]")
         else: labels.append(f"[v{k}]")
-        prev_nf = nf
+        prev_nf = nf; last_nf = nf
         pieces_map.append({"seg": i, "src": [round(va, 3), round(b, 3)], "master": [round((start + f0) / FPS, 3), round((start + f1) / FPS, 3)], "face": bool(sh.get("face")), "shot": sh["from"]})
     nv = n + (round(TAIL * FPS) if last else 0)
-    fc += "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[vc];[vc]" + (f"tpad=stop_mode=clone:stop_duration={TAIL}," if last else "") + f"trim=end_frame={nv},setpts=PTS-STARTPTS[vo]"
+    if last and PING:
+        # coda «andata e ritorno»: dopo l'ultimo fotogramma buono il video torna indietro sui suoi ultimi fotogrammi invece di fermarsi
+        # (niente fermo immagine prima della CTA quando il sorgente cambia inquadratura subito dopo l'ultima parola)
+        kv = n + live - short; ext = nv - kv; E = max(1, min(ext, last_nf - 2))
+        fc += "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[vc];[vc]trim=end_frame={kv},setpts=PTS-STARTPTS,split[vm][vr];[vr]trim=start_frame={kv - E - 1},setpts=PTS-STARTPTS,reverse,trim=start_frame=1,setpts=PTS-STARTPTS[vrv];[vm][vrv]concat=n=2:v=1:a=0,tpad=stop_mode=clone:stop_duration=1,trim=end_frame={nv},setpts=PTS-STARTPTS[vo]"
+    else:
+        fc += "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[vc];[vc]" + (f"tpad=stop_mode=clone:stop_duration={TAIL}," if last else "") + f"trim=end_frame={nv},setpts=PTS-STARTPTS[vo]"
     hb = blend / 2 / FPS
     # stacco netto (blend 0 o 1): l'audio parte un filo prima del pezzo, così il micro-incrocio non accorcia l'audio rispetto al video
     pre = max(0.0, AX / 2 - hb) if i else 0.0

@@ -14,7 +14,7 @@ import { Clip, Compare, Step, Airflow, Filter, Beats, Ring, Duo, Slam, Orbit, Dr
 import { Pair, Lifebar, Fulltext, Slides } from "./Elements6";
 import { Flow, Renew, Versus, Grid4, Plan, Lights, Cycle, Beat } from "./Elements7";
 import { TopWord, Counter, BigPointer, Wall, Side, SIDE, sideK } from "./Elements8";
-import { Loop, Drain, Progress, Scale2, Stamp, Chips, Switches, Pressure, Journey } from "./Elements9";
+import { Loop, Drain, Progress, Scale2, Stamp, Chips, Switches, Pressure, Journey, Receipt, Bill, Quad, Rise } from "./Elements9";
 import { Title, Mouth, Runner, Lungs, Horizon, Chat, BigStrike, Stack, Guide, Question, NameTag } from "./Elements4";
 
 loadFont("normal", { weights: ["600", "700", "800", "900"], subsets: ["latin"] });
@@ -22,7 +22,7 @@ loadFont("normal", { weights: ["600", "700", "800", "900"], subsets: ["latin"] }
 /** elementi che occupano tutto il fotogramma: fuori dallo spostamento/scala della zona grafiche */
 // fuori dalla zona grafiche (non si spostano né si rimpiccioliscono con gfxShift/gfxScale): schede a tutto schermo e, nei selfie, le parole
 // sopra la testa, il richiamo alla CTA, il muro di parole e il pannello laterale
-const FULLSCREEN = new Set<Element["kind"]>(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "topword", "pointer", "wall", "side"]);
+const FULLSCREEN = new Set<Element["kind"]>(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "topword", "pointer", "wall", "side", "bill"]);
 
 const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => {
   switch (el.kind) {
@@ -87,6 +87,10 @@ const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => 
     case "switches": return <Switches el={el} start={start} />;
     case "pressure": return <Pressure el={el} start={start} />;
     case "journey": return <Journey el={el} start={start} />;
+    case "receipt": return <Receipt el={el} start={start} />;
+    case "bill": return <Bill el={el} start={start} />;
+    case "quad": return <Quad el={el} start={start} />;
+    case "rise": return <Rise el={el} start={start} />;
     default: return <ElementView el={el} start={start} />;
   }
 };
@@ -107,7 +111,9 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
   const words = useMemo(() => remapWords(p.words, items, p.wordFix, p.wordOffset), [p.words, items, p.wordFix, p.wordOffset]);
   const starts = useMemo(() => p.elements.map((el) => resolveStart(el, words)), [p.elements, words]);
   const ctaFrames = Math.round(p.ctaSeconds * fps);
-  const xfade = tailF; // la CTA parte al taglio e sale dal basso mentre il video (coda) continua sotto
+  // la CTA parte al taglio e sale dal basso mentre il video (coda) continua sotto; con `tailHold` parte quei secondi dopo il taglio
+  // (respiro dopo l'ultima parola: Ross 18/11, «stacco troppo netto prima della CTA»)
+  const xfade = Math.max(9, tailF - Math.round((p.tailHold ?? 0) * fps));
   const tailPush = 1;
   const videoFade = 1; // niente dissolvenza verde sul video: il pannello della CTA lo copre salendo
   // camera del titolo spezzato: il video scende sotto la scheda a tutta larghezza (la testa resta intera)
@@ -128,8 +134,10 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
   const orbScale = 1 - (1 - orbBack) * orb;
   // selfie: mentre una grafica occupa la fascia bassa (tutte tranne parole sopra la testa, pannello laterale e muro) niente sottotitoli
   const capHidden = p.elements.some((el, i) => {
+    const l = frame - starts[i];
+    if (el.hideCapsFrom !== undefined) return l >= Math.round(el.hideCapsFrom * fps) && l < Math.round(el.dur * fps) + 2;
     if (!el.hideCaps && (!p.capHideOnGfx || el.kind === "side" || el.kind === "wall" || (el.kind === "topword" && el.zone !== "strip"))) return false;
-    const l = frame - starts[i]; return l >= -2 && l < Math.round(el.dur * fps) + 2;
+    return l >= -2 && l < Math.round(el.dur * fps) + 2;
   });
   // pannello laterale: il video si ritira a sinistra (sempre visibile) e lascia la colonna di destra a un elenco o a una mappa
   let sd = 0;
@@ -149,8 +157,8 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
         </AbsoluteFill>
         {p.hook ? <Hook hook={p.hook} /> : null}
         <AbsoluteFill style={{ transform: `translateY(${p.gfxShift ?? 0}px) scale(${p.gfxScale ?? 1})`, transformOrigin: `50% ${H * 0.44}px` }}>
-          {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : el.dy ? (
-            <AbsoluteFill key={i} style={{ transform: `translateY(${el.dy}px)` }}><AnyElement el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} /></AbsoluteFill>
+          {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : el.dy || el.shiftAt !== undefined ? (
+            <AbsoluteFill key={i} style={{ transform: `translateY(${(el.dy ?? 0) + (el.shiftAt !== undefined && frame - starts[i] >= Math.round(el.shiftAt * fps) ? el.shiftDy ?? 0 : 0)}px)` }}><AnyElement el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} /></AbsoluteFill>
           ) : (
             <AnyElement key={i} el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} />
           )))}
