@@ -20,6 +20,8 @@ export const RemotionRoot: React.FC = () => (
 
       <Composition key={`${r.id}-copertina`} id={`${r.id}-copertina`} component={CNCover} width={1080} height={1920} fps={30} durationInFrames={1} defaultProps={{ ...r.cover!, master: (r.cover!.master ?? r.props.master).replace("_fx.mp4", ".mp4").replace("C6-metronomo-manuale", "C6-metronomo"), frame: r.cover!.frame ?? 60 }} />
     ))}
+    {/* copertina del vlog lungo del workshop (Ross 19/11): il vlog è fatto in ReelStudio, qui c'è solo il fotogramma (public/evento/vlog_cover_src.mp4, ripulito dal sottotitolo) */}
+    <Composition id="VLOG-workshop-copertina" component={CNCover} width={1080} height={1920} fps={30} durationInFrames={1} defaultProps={{ master: "evento/vlog_cover_src.mp4", frame: 0, kicker: "Dal vivo", lines: ["Una giornata", "di workshop"], accent: "workshop", shiftY: -0.15 }} />
     {LONGS.map((r) => (
       <Composition key={r.id} id={r.id} component={CNLong} durationInFrames={longDuration(r.props)} width={1920} height={1080} fps={30} defaultProps={r.props} />
     ))}
