@@ -83,6 +83,12 @@ export type Element = ElementBase &
     | { kind: "bill"; title: string; items: string[]; total: string }
     | { kind: "quad"; items: string[]; foot?: string }
     | { kind: "rise"; label: string; lines: string[] }
+    | { kind: "fog"; lines: string[]; accent?: string }
+    | { kind: "layers"; stage: 1 | 2 | 3; lines: string[]; chips: string[] }
+    | { kind: "hangtag"; lines: string[] }
+    | { kind: "gust"; words: string[] }
+    | { kind: "rings"; phases: string[][] }
+    | { kind: "duel"; left: string; right: string }
     | { kind: "road3d"; title: string; fromLabel: string; toLabel: string; fromSpeed: number; toSpeed: number; unit?: string }
   );
 

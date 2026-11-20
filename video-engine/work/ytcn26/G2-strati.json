@@ -1,0 +1,21 @@
+{
+ "id": "G2-strati",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G2-strati.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 100.72,
+   "to": 157.0533
+  }
+ ],
+ "crops": {},
+ "ping": true
+}

@@ -3,7 +3,7 @@
 // Regola (Ross 18/11): tra grafiche e sottotitoli almeno ~100 px; tutto dentro le zone sicure di Instagram (sottotitoli sopra 1500 px).
 // Uso: npx tsx scripts/f_place.ts F4-prezzi [...]     ✗ = aria sotto i 90 px (accorciare la grafica o spostarla in un altro momento)
 import { readFileSync } from "node:fs";
-import { REELS22 } from "../src/cn/reels22";
+import { ALL as REELS22, dirOf } from "./f_series";
 import { layout, remapWords, resolveStart, tailFrames } from "../src/cn/timeline";
 const FULL = new Set(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "wall", "side", "bill", "split"]);
 /** altezza in px (a scala 1) di ogni grafica della zona */
@@ -17,6 +17,7 @@ export const heightOf = (el: any): number => {
     case "drain": return 86 + el.items.length * 84; case "progress": return 340; case "lights": return 400; case "loop": return 392; case "stat": return 250;
     case "widget": return 110 + el.lines.length * 64; case "counter": return 250; case "bigstrike": return 260; case "journey": return 96 + el.items.length * 98;
     case "scale2": return 372; case "grid4": return 394; case "checklist": return el.items.length * (el.big ? 112 : 78); case "receipt": return 376; case "quad": return el.foot ? 370 : 270; case "rise": return 250;
+    case "fog": return 20 + el.lines.length * 116; case "layers": return 320; case "hangtag": return 290; case "gust": return 250; case "rings": return 320; case "duel": return 212;
     case "nametag": return 230; default: return 400;
   }
 };

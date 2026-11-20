@@ -3,7 +3,7 @@
 // Controlla anche i sottotitoli: dove sono accesi, il mento deve restare sopra il bordo alto della scatola dei sottotitoli.
 // Uso: npx tsx scripts/f_facecheck.ts F1-normale [...]
 import { readFileSync } from "node:fs";
-import { REELS22 } from "../src/cn/reels22";
+import { ALL as REELS22, dirOf } from "./f_series";
 import { layout, remapWords, resolveStart, tailFrames } from "../src/cn/timeline";
 const FULL = new Set(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "wall", "side", "bill", "split"]);
 let bad = 0;

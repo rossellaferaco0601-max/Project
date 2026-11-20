@@ -6,12 +6,12 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."; mkdir -p out/ytcn22
 for item in "$@"; do
-  ID="${item%%:*}"; V="${item##*:}"
+  ID="${item%%:*}"; V="${item##*:}"; case "$ID" in G*) Y=ytcn26;; *) Y=ytcn22;; esac; mkdir -p "out/$Y"   # serie F = YTCN 22, serie G = YTCN 26
   echo "=== START $ID $V $(date +%H:%M)"
-  [ -f "public/ytcn22/masters/${ID}_sorriso.json" ] || ../.claude/skills/effects/.venv/bin/python scripts/cn_smile.py "public/ytcn22/masters/$ID.mp4" 2>/dev/null | head -1
-  rm -f "out/ytcn22/${ID}_${V}_raw.mp4"
-  npx remotion render "$ID" "out/ytcn22/${ID}_${V}_raw.mp4" --codec=h264 --crf=18 --log=error 2>&1 | grep -v "Memory\|docker\|lower amount" | tail -2
-  ls -la "out/ytcn22/${ID}_${V}_raw.mp4" | awk '{print $5}'
+  [ -f "public/$Y/masters/${ID}_sorriso.json" ] || ../.claude/skills/effects/.venv/bin/python scripts/cn_smile.py "public/$Y/masters/$ID.mp4" 2>/dev/null | head -1
+  rm -f "out/$Y/${ID}_${V}_raw.mp4"
+  npx remotion render "$ID" "out/$Y/${ID}_${V}_raw.mp4" --codec=h264 --crf=18 --log=error 2>&1 | grep -v "Memory\|docker\|lower amount" | tail -2
+  ls -la "out/$Y/${ID}_${V}_raw.mp4" | awk '{print $5}'
   echo "=== DONE $ID $(date +%H:%M)"
 done
 echo "=== QUEUE FINISHED"

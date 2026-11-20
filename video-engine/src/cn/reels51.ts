@@ -17,6 +17,7 @@ import wordsCcbV2Sentendo from "./wordsCcbV2Sentendo.json";
 import wordsLongevita from "./wordsLongevita.json";
 import type { CNReelProps, Seg } from "./types";
 import { REELS22 } from "./reels22";
+import { REELS26 } from "./reels26";
 import { layout } from "./timeline";
 
 const SRC = "ytcn51/ytcn51_src.mp4";
@@ -1486,3 +1487,6 @@ for (const v of PERCORSO) {
 
 // YTCN 22 · «Il costo invisibile degli infortuni» (17/11): serie F, definita in reels22.ts
 REELS.push(...REELS22);
+
+// YTCN 26 · «Correre al freddo» (20/11): serie G, definita in reels26.ts
+REELS.push(...REELS26);

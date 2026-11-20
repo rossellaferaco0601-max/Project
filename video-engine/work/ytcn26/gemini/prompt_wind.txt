@@ -1,0 +1,10 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemWind: React.FC<{ t: number; uid: string; gust: number }>
+- `t` = seconds since the graphic appeared. Pure function of t: no hooks, no state, no CSS transitions, no external assets, NO TEXT. Only inline SVG. Every id inside <defs> must be prefixed with `uid`.
+- Canvas: <svg viewBox="0 0 880 250" width={880} height={250} style={{ overflow: "visible" }}>, transparent background (it is drawn over live video, so shapes need enough contrast: white / ice-blue #B8D7EA strokes with a soft dark shadow copy underneath, offset 3px, #0B0F0A at 0.5 opacity).
+- Concept: a cold winter wind crossing the frame from left to right. Draw 9 long elegant wind ribbons: smooth bezier curves with a curl/spiral near their end (classic stylised wind swirl), different lengths and heights, each animated by stroke-dashoffset so that it sweeps across from left to right, looping with staggered phases. Stroke widths 4 to 8, round caps.
+- Add 14 small ice crystals / snow particles (tiny 6-arm asterisks and dots, #F4F1E5) carried by the wind: they travel left to right along wavy paths, rotate, and loop with staggered phases; sizes 5 to 12 px.
+- `gust` (seconds): before t = gust the wind is gentle (slow speed, 5 ribbons visible, low opacity 0.55). From t >= gust the wind becomes a strong gust over 0.4 s: speed x2.4, all 9 ribbons visible, opacity 1, particles faster and more numerous-looking, ribbons slightly more tilted.
+- Leave the central area between x=180 and x=700, y=40 and y=210 less dense (ribbons may pass through it but thinner and at 0.5 opacity), because big words are displayed there.
+- Strict TypeScript, React 19, `import React from "react"`.

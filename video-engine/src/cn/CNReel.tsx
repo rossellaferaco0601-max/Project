@@ -14,6 +14,7 @@ import { Clip, Compare, Step, Airflow, Filter, Beats, Ring, Duo, Slam, Orbit, Dr
 import { Pair, Lifebar, Fulltext, Slides } from "./Elements6";
 import { Flow, Renew, Versus, Grid4, Plan, Lights, Cycle, Beat } from "./Elements7";
 import { TopWord, Counter, BigPointer, Wall, Side, SIDE, sideK } from "./Elements8";
+import { Fog, Layers, HangTag, Gust, Rings, Duel } from "./Elements10";
 import { Loop, Drain, Progress, Scale2, Stamp, Chips, Switches, Pressure, Journey, Receipt, Bill, Quad, Rise } from "./Elements9";
 import { Title, Mouth, Runner, Lungs, Horizon, Chat, BigStrike, Stack, Guide, Question, NameTag } from "./Elements4";
 
@@ -91,6 +92,12 @@ const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => 
     case "bill": return <Bill el={el} start={start} />;
     case "quad": return <Quad el={el} start={start} />;
     case "rise": return <Rise el={el} start={start} />;
+    case "fog": return <Fog el={el} start={start} />;
+    case "layers": return <Layers el={el} start={start} />;
+    case "hangtag": return <HangTag el={el} start={start} />;
+    case "gust": return <Gust el={el} start={start} />;
+    case "rings": return <Rings el={el} start={start} />;
+    case "duel": return <Duel el={el} start={start} />;
     default: return <ElementView el={el} start={start} />;
   }
 };

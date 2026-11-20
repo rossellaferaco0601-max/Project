@@ -1,7 +1,7 @@
 // Serie F: mappa di lavoro di un reel — per ogni inquadratura del master (tempi del reel) il mento (mediana / massimo) e le parole dette,
 // con il tempo di inizio di ogni frase. Serve per piazzare le grafiche (solo dove il mento sta sopra il bordo). Uso: npx tsx scripts/f_map.ts F2-ciclista
 import { readFileSync } from "node:fs";
-import { REELS22 } from "../src/cn/reels22";
+import { ALL as REELS22, dirOf } from "./f_series";
 import { layout, remapWords, tailFrames } from "../src/cn/timeline";
 for (const id of process.argv.slice(2)) {
   const r = REELS22.find((x) => x.id === id)!; const p = r.props;

@@ -5,14 +5,15 @@ morbido (`soft`). Scrive/aggiorna work/ytcn22/<id>_extra.json (letto da scripts/
 Uso: python3 scripts/f_match.py F1-normale 199.2 [altri inizi di B ...]     (il tempo è l'inizio di B nel sorgente, ±0,1 s)"""
 import json, os, statistics, sys
 rid, times = sys.argv[1], [float(v) for v in sys.argv[2:]]
-shots = json.load(open("work/ytcn22_shots.json")); raw = json.load(open("work/shots/ytcn22_src.json")); F = raw["faces"]; SW, SH = raw["size"]
+Y = "ytcn26" if rid.startswith("G") else "ytcn22"  # serie F = YTCN 22, serie G = YTCN 26
+shots = json.load(open(f"work/{Y}_shots.json")); raw = json.load(open(f"work/shots/{Y}_src.json")); F = raw["faces"]; SW, SH = raw["size"]
 MINH = 1250 * SH / 2160
 def crop_of(f):
     ch = min(SH, max(MINH, f[3] * SH / 0.25)); ch = max(MINH, min(ch, (SH - f[1] * SH) / 0.9)); cw = ch * 9 / 16
     return [min(max(0, (f[0] + f[2] / 2) * SW - cw / 2), SW - cw), min(max(0, f[1] * SH - 0.10 * ch), SH - ch), cw, ch]
 def med(i0, i1):
     fs = [f for f in F[i0:i1] if f]; return [statistics.median(x[i] for x in fs) for i in range(4)]
-path = f"work/ytcn22/{rid}_extra.json"; ex = json.load(open(path)) if os.path.exists(path) else {}
+path = f"work/{Y}/{rid}_extra.json"; ex = json.load(open(path)) if os.path.exists(path) else {}
 ex.setdefault("push", {}); ex.setdefault("soft", [])
 for t in times:
     j = min(range(len(shots)), key=lambda i: abs(shots[i]["from"] - t)); A, B = shots[j - 1], shots[j]

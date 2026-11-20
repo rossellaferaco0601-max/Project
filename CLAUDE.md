@@ -54,6 +54,8 @@ npx tsx scripts/f_cfg.ts F1-normale && python3 scripts/cn_master_shots.py work/y
 python3 scripts/f_match.py F1-normale 199.2   # stacco fluido prima della CTA: avvicinamento lento + dissolvenza breve verso l'inquadratura che inizia a quel tempo del sorgente
 npx tsx scripts/f_map.ts F2-ciclista          # mappa di lavoro: inquadrature, mento e parole (dove si possono mettere le grafiche); npx tsx scripts/f_facecheck.ts = volto libero su grafiche e sottotitoli
 scripts/f_queue.sh F2-ciclista:v1 F3-fastidi:v1   # coda render della serie F; finitura con OUT=out/ytcn22 WK=work/ytcn22 WMODEL=large-v3-turbo scripts/cn_finish.sh ID v1
+scripts/f_queue.sh G2-strati:v1                  # serie G (YTCN 26, «Correre al freddo»): stessi script della serie F (scripts/f_series.ts), cartelle ytcn26; finitura con OUT=out/ytcn26 WK=work/ytcn26
+npx tsx work/ytcn26/gem_preview.tsx GemLayers out/chk/gem '{"stage":2,"cue":0.4,"fx":[1.4,2.6]}' 0.3,1,2   # pagine di controllo di un'illustrazione scritta da Gemini (src/cn/gem)
 ```
 
 ## Clienti
