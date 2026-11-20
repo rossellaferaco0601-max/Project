@@ -35,7 +35,7 @@ export const REELS26: ReelDef[] = [
   {
     id: "G2-strati",
     title: "Gli strati giusti per correre al freddo",
-    cover: { frame: 130, kicker: KICKER, lines: ["Freddo: gli", "strati giusti"], accent: "strati giusti" },
+    cover: { frame: 130, kicker: KICKER, lines: ["Freddo:", "gli strati giusti"], accent: "strati giusti" },
     props: {
       ...base,
       master: master("G2-strati"),
