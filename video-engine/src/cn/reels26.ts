@@ -52,9 +52,11 @@ export const REELS26: ReelDef[] = [
       segments: cut([41.62, 92.7]),
       elements: [
         { kind: "fog", anim: "snap", at: 0.1, dur: 4.4, lines: ["Correre al freddo:", "l'errore più comune"], accent: "l'errore più comune" },
-        { kind: "gem", dy: -19, art: "over", at: 7.0, word: "vestiamo", dur: 14.2, cues: ["più", "realtà", "incubo"], phases: [{ lines: ["Più strati,", "più calore?"] }, { lines: ["L'errore", "più comune"] }, { lines: ["Un incubo", "di sudore"] }] },
+        { kind: "gem", dy: -19, art: "over", at: 8.3, word: "eccessivo", dur: 12.9, cues: ["più", "realtà", "incubo"], phases: [{ lines: ["Più strati,", "più calore?"] }, { lines: ["L'errore", "più comune"] }, { lines: ["Un incubo", "di sudore"] }] },
         { kind: "gem", dy: -19, art: "warm", at: 27.9, dur: 11.9, cues: ["congelare", "5-10", "riscaldarsi"], phases: [{ lines: ["Sembra di", "congelare"] }, { lines: ["Dopo", "5-10 minuti"] }, { lines: ["Il corpo", "si scalda"] }], artCues: [0, 1] },
-        { kind: "gem", dy: -19, art: "warm", at: 41.0, word: "meglio", dur: 7.8, cues: ["leggera", "brivido", "segnale"], phases: [{ lines: ["Parti con un", "leggero freddo"] }, { lines: ["Brivido", "iniziale"] }, { lines: ["Brivido", "iniziale"], chip: "Vestito giusto" }], artCues: [-1, -1, 1] },
+        { kind: "gem", dy: -19, art: "warm", at: 41.0, word: "meglio", dur: 7.45, cues: ["leggera", "brivido", "segnale"], phases: [{ lines: ["Parti con un", "leggero freddo"] }, { lines: ["Brivido", "iniziale"] }, { lines: ["Brivido", "iniziale"], chip: "Vestito giusto" }], artCues: [-1, -1, 1] },
+        // a 48,93 il sorgente cambia inquadratura (2 s prima della fine): l'ultima frase va sopra la scheda «da ricordare», che resta fino alla CTA
+        { kind: "takeaway", at: 48.62, dur: 3.1, lines: ["Brivido iniziale:", "vestito giusto"], accent: "vestito giusto", art: "warm" },
       ],
       cta: { word: "BRIVIDO", title: "Vuoi correre bene anche d'inverno?" },
     },
@@ -200,7 +202,9 @@ Anche qui si lavora sulla postura: si va in estensione con le anche e con il bac
         { kind: "gem", art: "lunge", at: 4.4, word: "affondo", dur: 6.4, cues: ["affondo", "coordinata"], phases: [{ lines: ["Affondi"] }, { lines: ["Coordinati", "e gentili"] }], artCues: [0] },
         { kind: "gem", art: "lunge", at: 12.0, word: "non", dur: 7.6, cues: ["male", "dall'interno", "muscolatura"], phases: [{ lines: ["Senza", "farsi male"] }, { lines: ["Caldi", "dall'interno"] }, { lines: ["Muscoli", "attivi"] }], artCues: [-1, 1] },
         { kind: "gem", art: "lunge", at: 33.4, word: "fanno", dur: 10.0, cues: ["tutto", "inferiore", "temperatura"], phases: [{ lines: ["Lavora", "tutto il corpo"] }, { lines: ["Parte", "inferiore"] }, { lines: ["Sale la", "temperatura"] }], artCues: [-1, -1, 2] },
-        { kind: "gem", art: "lunge", at: 46.9, word: "non", dur: 3.6, cues: ["minuto"], phases: [{ lines: ["Massimo", "un minuto"], chip: "Solo scaldarsi" }], artCues: [-1, -1, -1, 0] },
+        { kind: "gem", art: "lunge", at: 46.9, word: "non", dur: 2.4, cues: ["minuto"], phases: [{ lines: ["Massimo", "un minuto"] }], artCues: [-1, -1, -1, 0] },
+        // a 49,72 il sorgente passa alla posa del jumping jack (un secondo prima della fine): l'ultima frase va sopra la scheda «da ricordare»
+        { kind: "takeaway", at: 49.4, dur: 2.0, lines: ["Lo scopo?", "Solo scaldarsi"], accent: "Solo scaldarsi", art: "lunge" },
       ],
       cta: GUIDA_CIRCUITO,
     },

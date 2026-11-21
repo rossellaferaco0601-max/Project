@@ -86,6 +86,7 @@ export type Element = ElementBase &
     | { kind: "fog"; lines: string[]; accent?: string; anim?: "fog" | "rise" | "snap" | "wind" | "type" }
     | { kind: "gem"; art: "nose" | "heat" | "house" | "over" | "warm" | "battery" | "breath" | "squat" | "climber" | "bridge" | "lunge" | "jack" | "gauge"; phases: { lines: string[]; chip?: string; on?: number }[]; artCues?: number[] }
     | { kind: "kin"; words: string[]; anim: "ice" | "pulse" | "slide" }
+    | { kind: "takeaway"; lines: string[]; accent?: string; kicker?: string; art?: string }
     | { kind: "dose"; tags?: string[]; items: string[] }
     | { kind: "ticks"; items: string[]; foot?: string }
     | { kind: "layers"; stage: 1 | 2 | 3; lines: string[]; chips: string[] }

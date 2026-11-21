@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { ALL as REELS22, dirOf } from "./f_series";
 import { layout, remapWords, resolveStart, tailFrames } from "../src/cn/timeline";
-const FULL = new Set(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "wall", "side", "bill", "split"]);
+const FULL = new Set(["orbit", "drill", "guide", "pair", "lifebar", "fulltext", "slides", "renew", "versus", "plan", "wall", "side", "bill", "split", "takeaway"]);
 /** altezza in px (a scala 1) di ogni grafica della zona */
 export const heightOf = (el: any): number => {
   switch (el.kind) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useVideoConfig, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring } from "remotion";
 import type { Element } from "./types";
 import { BRAND, PANEL_X, PANEL_W, GFX_TOP } from "./types";
 import { useInOut } from "./Elements3D";
@@ -219,12 +219,14 @@ export const Gem: React.FC<P<"gem">> = ({ el, start }) => {
   const sec = el.onAt ?? [], at = (i: number) => { const o = el.phases[i].on ?? i; return o < 0 ? 0 : Math.round((sec[o] ?? 9999) * fps); };
   let idx = -1; el.phases.forEach((_, i) => { if (local >= at(i)) idx = i; });
   const ph = idx >= 0 ? el.phases[idx] : null, k = idx >= 0 ? spring({ frame: local - at(idx), fps, config: { damping: 13, stiffness: 210, mass: 0.6 } }) : 0;
+  // finché non c'è una frase il disegno sta al centro del pannello (niente metà vuota); quando entra la prima frase scivola a sinistra
+  const f0 = Math.min(...el.phases.map((_, i) => at(i))), k0 = f0 <= 0 ? 1 : spring({ frame: local - f0 + 4, fps, config: { damping: 15, stiffness: 150, mass: 0.7 } });
   const Art = ARTS[el.art], H = 336, TW = 510;
   const artCues = el.artCues ? el.artCues.map((i) => (i < 0 ? -1 : sec[i] ?? 9999)) : sec;
   const size = ph ? Math.min(...ph.lines.map((l) => fit(l, TW, ph.chip ? 90 : 100))) : 0;
   return (
     <div style={panel(s, out, H)}>
-      <div style={{ position: "absolute", left: 22, top: 18, width: 300, height: 300, transform: `translate(${ART_FIT[el.art][1]}px, ${ART_FIT[el.art][2]}px) scale(${ART_FIT[el.art][0]})` }}>
+      <div style={{ position: "absolute", left: 22, top: 18, width: 300, height: 300, transform: `translate(${ART_FIT[el.art][1] + (1 - k0) * 268}px, ${ART_FIT[el.art][2]}px) scale(${ART_FIT[el.art][0]})` }}>
         <Art t={local / fps} uid={`g${start}`} cues={artCues} />
       </div>
       {ph ? (
@@ -337,5 +339,26 @@ export const Ticks: React.FC<P<"ticks">> = ({ el, start }) => {
         </div>
       ) : null}
     </div>
+  );
+};
+
+/* ---------- scheda finale «da ricordare» a tutto schermo, sul verde della CTA: sale dal basso e resta finché la CTA la copre (stesso fondo:
+   nessuno stacco). Serve quando il sorgente cambia inquadratura negli ultimi secondi: l'ultima frase si sente sopra la scheda, con i
+   sottotitoli, e la «mossa successiva» di Daniele non si vede (regola del finale, 17-21/11). In alto il disegno del reel nel suo stato finale ---------- */
+export const Takeaway: React.FC<P<"takeaway">> = ({ el, start }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const local = frame - start;
+  if (local < 0) return null;
+  const up = 1 - Math.pow(1 - Math.min(1, local / 9), 3), Art = el.art ? ARTS[el.art as GemArt] : null;
+  const k = (d: number) => spring({ frame: local - d, fps, config: { damping: 14, stiffness: 160, mass: 0.7 } });
+  return (
+    <AbsoluteFill style={{ background: BRAND.green, transform: `translateY(${(1 - up) * 100}%)`, fontFamily: FONT, color: BRAND.white }}>
+      {Art ? <div style={{ position: "absolute", left: 390, top: 400, width: 300, height: 300, transform: `scale(${1.95 * (0.8 + 0.2 * k(4))})`, opacity: k(4) }}><Art t={local / fps + 20} uid={`tk${start}`} cues={[-1, -1, -1, -1, -1, -1]} /></div> : null}
+      <div style={{ position: "absolute", left: 0, width: 1080, top: 830, textAlign: "center", opacity: k(8), transform: `translateY(${(1 - k(8)) * 40}px)` }}>
+        <div style={{ fontWeight: 800, fontSize: 48, letterSpacing: 4, textTransform: "uppercase", color: CREAM, marginBottom: 18 }}>{el.kicker ?? "Da ricordare"}</div>
+        {el.lines.map((l, i) => <div key={i} style={{ fontWeight: 900, fontSize: fit(l, 940, 132), lineHeight: 1.04, textTransform: "uppercase", whiteSpace: "nowrap", color: l === el.accent ? BRAND.lime : BRAND.white }}>{l}</div>)}
+      </div>
+    </AbsoluteFill>
   );
 };
