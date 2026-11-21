@@ -1,0 +1,16 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemBattery: React.FC<{ t: number; uid: string; cues: number[] }>
+General rules (all mandatory):
+- `t` = seconds since the graphic appeared. The component is a PURE FUNCTION of t: no hooks, no state, no CSS transitions/animations, no external assets, no <text> at all (no letters, no digits). Inline SVG only. Every id inside <defs> must be prefixed with the `uid` prop (id={`${uid}-something`}) and referenced the same way.
+- `cues` are times in seconds; a cue may be missing: read them with `const cue = (i: number) => (cues[i] ?? Infinity)`. Nothing tied to a cue may show before that cue. Transitions triggered by a cue last 0.4-0.6 s with ease-out (define small helpers clamp/easeOut/lerp inside the file).
+- Canvas: <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>. Transparent background: it is displayed on a near-black panel (#0B0F0A), so use light and bright colours. Palette only: lime #95FF00 (accent/positive), brand green #49762E, cream #F4F1E5, ice blue #B8D7EA (cold), amber #FFB020 and coral #FF6B4A (heat/negative), skin #E7B899, dark #0B0F0A.
+- Style: flat, premium vector illustration with smooth shapes, round caps and joins, a few subtle gradients. NOT clip-art and NOT thin stick figures: human figures are built from thick rounded limbs (stroke width 18-26, round caps) plus a head circle, with joint positions computed by small kinematics functions so the motion is smooth and anatomically believable. Figures wear dark-grey running clothes (#3A4640) with a cream outline 2px so they read on the dark panel; head and hands in skin colour.
+- Something must always move gently (idle loop: breathing, particles, small bob) so the picture never looks frozen. Keep the drawing inside the canvas with 14 px padding and make the subject LARGE (fill the canvas). Strict TypeScript (no implicit any), React 19, `import React from "react"`.
+
+Subject:
+Not wasting energy warming up during the first kilometres of a cold run. Draw a large battery standing vertically in the centre (cream 5 px rounded outline, a small terminal on top) with 5 horizontal charge segments, and a small side-view runner jogging in place at its right side.
+- Before cue(0): all 5 segments are lime and softly breathing; the runner jogs slowly.
+- From cue(0) (use your energy MORE EFFICIENTLY): a lime spark travels up the battery and the segments shine one after the other.
+- From cue(1) (instead of WASTING energy to warm up in the first kilometres): the three top segments turn coral and drain away one by one over 1.5 s while coral heat-waves leave the battery to the left (energy lost as wasted heat) and the runner looks heavy (slower, lower bounce).
+- From cue(2) (enjoy the run from START to FINISH): the segments refill in lime from bottom to top over 1 s, a lime shield outline closes around the battery, and the runner bounces lightly again.

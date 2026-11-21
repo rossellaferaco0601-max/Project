@@ -1,0 +1,236 @@
+import React from "react";
+
+export const GemSquat: React.FC<{ t: number; uid: string; cues: number[] }> = ({ t, uid, cues }) => {
+  const cue = (i: number) => cues[i] ?? Infinity;
+
+  const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+  const easeOut = (v: number) => 1 - Math.pow(1 - v, 3);
+  const lerp = (a: number, b: number, v: number) => a + (b - a) * v;
+
+  const q0 = cue(0);
+  const q1 = cue(1);
+  const q2 = cue(2);
+  const q3 = cue(3);
+
+  const squatP = easeOut(clamp((t - q0) / 0.8, 0, 1));
+  const houseP = easeOut(clamp((t - q1) / 0.6, 0, 1));
+  const timerP = easeOut(clamp((t - q2) / 2.5, 0, 1));
+  const recoveryP = easeOut(clamp((t - q3) / 0.6, 0, 1));
+
+  const breath = Math.sin(t * 1.5) * 3;
+  const idleY = Math.sin(t * 2) * 2;
+
+  // Keyframe coordinates (Side View)
+  // Stand: 0, Squat: 1
+  const ankle = { x: 110, y: 260 };
+  const knee = {
+    x: lerp(110, 175, squatP),
+    y: lerp(210, 225, squatP) + idleY * 0.5,
+  };
+  const hip = {
+    x: lerp(110, 125, squatP),
+    y: lerp(160, 245, squatP) + idleY,
+  };
+  const shoulder = {
+    x: lerp(110, 145, squatP),
+    y: lerp(100, 185, squatP) + breath,
+  };
+  const head = {
+    x: lerp(110, 160, squatP),
+    y: lerp(75, 160, squatP) + breath * 1.2,
+  };
+  const elbow = {
+    x: lerp(110, 165, squatP),
+    y: lerp(130, 215, squatP) + breath,
+  };
+  const wrist = {
+    x: lerp(110, 195, squatP),
+    y: lerp(160, 220, squatP) + breath * 0.8,
+  };
+
+  const timerAngle = timerP * 300;
+  const timerRad = (timerAngle - 90) * (Math.PI / 180);
+  const timerX = 150 + 130 * Math.cos(timerRad);
+  const timerY = 150 + 130 * Math.sin(timerRad);
+  const largeArc = timerAngle > 180 ? 1 : 0;
+
+  const clothesColor = "#3A4640";
+  const skinColor = "#E7B899";
+  const cream = "#F4F1E5";
+  const lime = "#95FF00";
+  const amber = "#FFB020";
+  const iceBlue = "#B8D7EA";
+
+  return (
+    <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+      <defs>
+        <filter id={`${uid}-glow`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        <radialGradient id={`${uid}-warm`}>
+          <stop offset="0%" stopColor={amber} stopOpacity={0.2 * houseP} />
+          <stop offset="100%" stopColor={amber} stopOpacity={0} />
+        </radialGradient>
+      </defs>
+
+      {/* House Tint */}
+      {houseP > 0 && (
+        <path
+          d="M 20 260 L 20 140 L 150 40 L 280 140 L 280 260 Z"
+          fill={`url(#${uid}-warm)`}
+          opacity={houseP}
+        />
+      )}
+
+      {/* Snowflakes */}
+      {houseP > 0 && [0, 1, 2, 3, 4, 5].map((i) => {
+        const offX = (i * 50 + t * 20) % 320 - 10;
+        const offY = (i * 70 + t * 40) % 300;
+        const isOutside = offX < 30 || offX > 270 || offY < 40;
+        return isOutside ? (
+          <circle
+            key={i}
+            cx={offX}
+            cy={offY}
+            r={2}
+            fill={iceBlue}
+            opacity={houseP * 0.6}
+          />
+        ) : null;
+      })}
+
+      {/* House Outline */}
+      {houseP > 0 && (
+        <path
+          d="M 20 260 L 20 140 L 150 40 L 280 140 L 280 260"
+          fill="none"
+          stroke={cream}
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="800"
+          strokeDashoffset={800 * (1 - houseP)}
+        />
+      )}
+
+      {/* Floor */}
+      <line x1="10" y1="260" x2="290" y2="260" stroke={cream} strokeWidth="3" strokeLinecap="round" opacity={0.3} />
+
+      {/* Figure Shadow */}
+      <ellipse cx={ankle.x + 20} cy={263} rx={40 + squatP * 20} ry={6} fill="#000" opacity={0.2} />
+
+      {/* Human Figure - Leg */}
+      <polyline
+        points={`${ankle.x},${ankle.y} ${knee.x},${knee.y} ${hip.x},${hip.y}`}
+        fill="none"
+        stroke={cream}
+        strokeWidth="24"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <polyline
+        points={`${ankle.x},${ankle.y} ${knee.x},${knee.y} ${hip.x},${hip.y}`}
+        fill="none"
+        stroke={clothesColor}
+        strokeWidth="20"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Torso */}
+      <line
+        x1={hip.x}
+        y1={hip.y}
+        x2={shoulder.x}
+        y2={shoulder.y}
+        stroke={cream}
+        strokeWidth="24"
+        strokeLinecap="round"
+      />
+      <line
+        x1={hip.x}
+        y1={hip.y}
+        x2={shoulder.x}
+        y2={shoulder.y}
+        stroke={clothesColor}
+        strokeWidth="20"
+        strokeLinecap="round"
+      />
+
+      {/* Head */}
+      <circle cx={head.x} cy={head.y} r={14} fill={cream} />
+      <circle cx={head.x} cy={head.y} r={12} fill={skinColor} />
+
+      {/* Arm */}
+      <polyline
+        points={`${shoulder.x},${shoulder.y} ${elbow.x},${elbow.y} ${wrist.x},${wrist.y}`}
+        fill="none"
+        stroke={cream}
+        strokeWidth="20"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <polyline
+        points={`${shoulder.x},${shoulder.y} ${elbow.x},${elbow.y} ${wrist.x},${wrist.y}`}
+        fill="none"
+        stroke={clothesColor}
+        strokeWidth="16"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Hand */}
+      <circle cx={wrist.x} cy={wrist.y} r={9} fill={cream} />
+      <circle cx={wrist.x} cy={wrist.y} r={7} fill={skinColor} />
+
+      {/* Recovery Glows */}
+      {recoveryP > 0 && (
+        <g opacity={recoveryP} filter={`url(#${uid}-glow)`}>
+          {[ankle, knee, hip].map((pt, i) => (
+            <circle
+              key={i}
+              cx={pt.x}
+              cy={pt.y}
+              r={12 + Math.sin(t * 8) * 2}
+              fill="none"
+              stroke={lime}
+              strokeWidth="3"
+            />
+          ))}
+          {/* Sparkles */}
+          {[0, 1, 2].map((i) => (
+            <circle
+              key={`sp-${i}`}
+              cx={hip.x + Math.sin(t * 4 + i) * 30}
+              cy={hip.y - 20 - (t * 40 + i * 20) % 60}
+              r={2}
+              fill={lime}
+              opacity={(1 - ((t * 40 + i * 20) % 60) / 60)}
+            />
+          ))}
+        </g>
+      )}
+
+      {/* Timer Arc */}
+      {timerP > 0 && (
+        <g>
+          <path
+            d={`M 150 20 A 130 130 0 ${largeArc} 1 ${timerX} ${timerY}`}
+            fill="none"
+            stroke={lime}
+            strokeWidth="9"
+            strokeLinecap="round"
+          />
+          <circle
+            cx={timerX}
+            cy={timerY}
+            r={6}
+            fill={cream}
+            filter={`url(#${uid}-glow)`}
+          />
+        </g>
+      )}
+    </svg>
+  );
+};

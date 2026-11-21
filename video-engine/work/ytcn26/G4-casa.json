@@ -1,0 +1,21 @@
+{
+ "id": "G4-casa",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G4-casa.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 180.52,
+   "to": 222.3533
+  }
+ ],
+ "crops": {},
+ "ping": true
+}

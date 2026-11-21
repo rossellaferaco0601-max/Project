@@ -15,6 +15,7 @@
 - [Solo i punti richiesti](feedback-solo-punti-richiesti.md) — 6/11: toccare solo ciò che Ross elenca; niente logo nei reel; tagli netti tra inquadrature; box ridotte, titoli sopra la testa
 - [Reference = schema esatto](feedback-reference-schema-esatto.md) — 6/11: misurare la reference e replicarla; logo scontornato; 7/11: brano dato da Ross = solo quello, stacchi sui colpi misurati
 - [GitHub e pulizia versioni](feedback-github-push.md) — 13/11: GitHub di nuovo attivo, push dopo i commit (niente PR); in consegna solo l'ultima versione di ogni video
-- [Finale prima della CTA](feedback-finale-prima-della-cta.md) — 17-18/11: mai la mossa/inquadratura successiva di Daniele, mai fermo immagine, mai stacco netto; ultima grafica fuori prima della CTA
-- [Spazio sottotitoli-grafiche](feedback-spazio-sottotitoli-grafiche.md) — 18/11: ~100 px di aria in tutti i reel, scritte dentro le caselle, zone sicure Instagram (f_place.ts)
+- [Finale prima della CTA](feedback-finale-prima-della-cta.md) — 17-21/11: mai la mossa/inquadratura successiva di Daniele (nemmeno un fotogramma: `f_flash.py`), mai fermo immagine, mai stacco netto; ultima grafica fuori prima della CTA
+- [Spazio sottotitoli-grafiche](feedback-spazio-sottotitoli-grafiche.md) — 18-21/11: ~100 px di aria in tutti i reel, scritte dentro le caselle, zone sicure Instagram (f_place.ts); animazioni grandi quanto lo spazio permette
 - [Niente tagli inutili](feedback-niente-tagli-inutili.md) — 18/11: se il pezzo è integro nell'originale non si taglia in mezzo (interpretazione da confermare)
+- [CTA con guida](project-cta-con-guida.md) — 21/11: reel che chiudono con «commenta e ti mando la guida» (STRATI, CIRCUITO nella serie G); guide ancora da scrivere

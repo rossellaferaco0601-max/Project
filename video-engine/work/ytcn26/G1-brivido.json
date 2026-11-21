@@ -1,0 +1,32 @@
+{
+ "id": "G1-brivido",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G1-brivido.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 41.62,
+   "to": 92.6867
+  }
+ ],
+ "crops": {},
+ "ping": true,
+ "push": {
+  "85.50": [
+   749.5,
+   32.6,
+   584,
+   1038.2
+  ]
+ },
+ "soft": [
+  90.5488
+ ]
+}

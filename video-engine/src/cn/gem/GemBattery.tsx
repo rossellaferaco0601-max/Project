@@ -1,0 +1,252 @@
+// Illustrazione scritta da Gemini (gemini-flash) su indicazioni di regia (work/ytcn26/gemini/prompt_GemBattery.txt); scritte e agganci in Elements10.
+import React from "react";
+
+export const GemBattery: React.FC<{ t: number; uid: string; cues: number[] }> = ({ t, uid, cues }) => {
+  const clamp = (v: number, min: number = 0, max: number = 1) => Math.min(Math.max(v, min), max);
+  const easeOut = (v: number) => 1 - Math.pow(1 - clamp(v), 3);
+  const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
+
+  const cue = (i: number) => (cues[i] ?? Infinity);
+  const t0 = cue(0);
+  const t1 = cue(1);
+  const t2 = cue(2);
+
+  const isCue0 = t >= t0;
+  const isCue1 = t >= t1;
+  const isCue2 = t >= t2;
+
+  // Heavy state transitions smoothly
+  const heavyRaw = isCue1 && !isCue2 ? clamp((t - t1) / 0.5) : isCue2 ? 1 - clamp((t - t2) / 0.5) : 0;
+  const heavy = easeOut(heavyRaw);
+
+  // Runner Motion Math
+  const jogFreq = lerp(7, 4.5, heavy);
+  const bounceAmp = lerp(5, 1.8, heavy);
+  const lean = lerp(0.08, 0.32, heavy);
+  const phase = t * jogFreq * Math.PI * 2;
+
+  const hipX = 225 + heavy * 4;
+  const hipY = 185 - Math.abs(Math.sin(phase)) * bounceAmp;
+
+  const torsoLen = 32;
+  const shoulderX = hipX - Math.sin(lean) * torsoLen;
+  const shoulderY = hipY - Math.cos(lean) * torsoLen;
+
+  const headX = shoulderX - Math.sin(lean) * 16;
+  const headY = shoulderY - Math.cos(lean) * 16 - 3;
+
+  // Leg 1 (Back/Left) & Leg 2 (Front/Right)
+  const legAngle1 = Math.sin(phase) * lerp(0.55, 0.35, heavy);
+  const legAngle2 = Math.sin(phase + Math.PI) * lerp(0.55, 0.35, heavy);
+
+  const kneeX1 = hipX + Math.sin(legAngle1) * 20;
+  const kneeY1 = hipY + Math.cos(legAngle1) * 20;
+  const footX1 = kneeX1 - Math.sin(legAngle1 - 0.4) * 18;
+  const footY1 = kneeY1 + Math.cos(legAngle1 - 0.4) * 18;
+
+  const kneeX2 = hipX + Math.sin(legAngle2) * 20;
+  const kneeY2 = hipY + Math.cos(legAngle2) * 20;
+  const footX2 = kneeX2 - Math.sin(legAngle2 - 0.4) * 18;
+  const footY2 = kneeY2 + Math.cos(legAngle2 - 0.4) * 18;
+
+  // Arm 1 (Back/Left) & Arm 2 (Front/Right)
+  const armAngle1 = Math.sin(phase + Math.PI) * lerp(0.5, 0.25, heavy);
+  const armAngle2 = Math.sin(phase) * lerp(0.5, 0.25, heavy);
+
+  const elbowX1 = shoulderX + Math.sin(armAngle1 + 0.4) * 15;
+  const elbowY1 = shoulderY + Math.cos(armAngle1 + 0.4) * 15;
+  const handX1 = elbowX1 + Math.sin(armAngle1 - 0.5) * 13;
+  const handY1 = elbowY1 + Math.cos(armAngle1 - 0.5) * 13;
+
+  const elbowX2 = shoulderX + Math.sin(armAngle2 + 0.4) * 15;
+  const elbowY2 = shoulderY + Math.cos(armAngle2 + 0.4) * 15;
+  const handX2 = elbowX2 + Math.sin(armAngle2 - 0.5) * 13;
+  const handY2 = elbowY2 + Math.cos(armAngle2 - 0.5) * 13;
+
+  // Spark animation on cue(0)
+  const sparkProgress = clamp((t - t0) / 0.5);
+  const sparkActive = isCue0 && sparkProgress < 1;
+  const sparkY = lerp(230, 70, easeOut(sparkProgress));
+
+  // Shield animation on cue(2)
+  const shieldProgress = isCue2 ? easeOut((t - t2) / 0.6) : 0;
+
+  // Segment states (0 = bottom, 4 = top)
+  const segmentYs = [206, 178, 150, 122, 94];
+  const segmentStates = segmentYs.map((y, i) => {
+    if (isCue2) {
+      const refillP = clamp((t - t2 - (4 - i) * 0.12) / 0.35);
+      return { fill: easeOut(refillP), color: "#95FF00" };
+    } else if (isCue1) {
+      if (i < 2) {
+        return { fill: 1, color: "#95FF00" };
+      } else {
+        const drainP = clamp((t - t1 - (i - 2) * 0.3) / 0.45);
+        return { fill: 1 - easeOut(drainP), color: "#FF6B4A" };
+      }
+    } else {
+      const shineP = isCue0 ? clamp((t - t0 - (4 - i) * 0.08) / 0.25) : 0;
+      const breath = Math.sin(t * 3.5 + i * 0.5) * 0.08 + 0.92;
+      return {
+        fill: 1,
+        color: shineP > 0 && shineP < 1 ? "#F4F1E5" : "#95FF00",
+        opacity: isCue0 ? 1 : breath,
+      };
+    }
+  });
+
+  // Heat waves on cue(1)
+  const waveOffset = (t - t1) * 60;
+
+  return (
+    <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+      <defs>
+        <filter id={`${uid}-glow`} x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        <linearGradient id={`${uid}-lime-grad`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#95FF00" />
+          <stop offset="100%" stopColor="#49762E" />
+        </linearGradient>
+        <linearGradient id={`${uid}-coral-grad`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FF6B4A" />
+          <stop offset="100%" stopColor="#FFB020" />
+        </linearGradient>
+      </defs>
+
+      {/* Ambient background particles */}
+      {[0, 1, 2, 3].map((i) => {
+        const pT = (t * 0.4 + i * 0.25) % 1;
+        const pX = 30 + i * 75 + Math.sin(t + i) * 10;
+        const pY = 270 - pT * 240;
+        const pOp = Math.sin(pT * Math.PI) * 0.25;
+        return <circle key={`bg-p-${i}`} cx={pX} cy={pY} r={2.5} fill="#B8D7EA" opacity={pOp} />;
+      })}
+
+      {/* Shield (Cue 2) */}
+      {shieldProgress > 0 && (
+        <path
+          d="M 107.5 42 L 165 62 V 175 C 165 218 107.5 252 107.5 252 C 107.5 252 50 218 50 175 V 62 Z"
+          fill="rgba(149, 255, 0, 0.08)"
+          stroke="#95FF00"
+          strokeWidth={4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="520"
+          strokeDashoffset={520 * (1 - shieldProgress)}
+          filter={`url(#${uid}-glow)`}
+        />
+      )}
+
+      {/* Battery Outer Frame */}
+      <g>
+        <rect x={92.5} y={66} width={30} height={12} rx={4} fill="#F4F1E5" />
+        <rect
+          x={70}
+          y={80}
+          width={75}
+          height={160}
+          rx={12}
+          fill="#0B0F0A"
+          stroke="#F4F1E5"
+          strokeWidth={5}
+          strokeLinejoin="round"
+        />
+      </g>
+
+      {/* Battery Segments */}
+      {segmentStates.map((seg, i) => {
+        const segY = segmentYs[i];
+        const segH = 22;
+        const currentH = segH * seg.fill;
+        const currentY = segY + (segH - currentH);
+
+        if (seg.fill <= 0.01) return null;
+
+        return (
+          <rect
+            key={`seg-${i}`}
+            x={78}
+            y={currentY}
+            width={59}
+            height={currentH}
+            rx={4}
+            fill={seg.color}
+            opacity={seg.opacity ?? 1}
+            filter={seg.color === "#95FF00" ? `url(#${uid}-glow)` : undefined}
+          />
+        );
+      })}
+
+      {/* Cue 0 Spark */}
+      {sparkActive && (
+        <g transform={`translate(107.5, ${sparkY})`}>
+          <circle r={12} fill="#95FF00" opacity={0.4} filter={`url(#${uid}-glow)`} />
+          <circle r={6} fill="#F4F1E5" />
+        </g>
+      )}
+
+      {/* Cue 1 Wasted Heat Waves */}
+      {isCue1 && !isCue2 && (
+        <g>
+          {[0, 1, 2].map((i) => {
+            const progress = ((waveOffset + i * 35) % 90) / 90;
+            const wx = 65 - progress * 50;
+            const wy = 110 + i * 35 + Math.sin(progress * Math.PI * 3) * 6;
+            const op = Math.sin(progress * Math.PI) * 0.8;
+            return (
+              <path
+                key={`heat-${i}`}
+                d={`M ${wx} ${wy} Q ${wx - 10} ${wy - 8} ${wx - 20} ${wy}`}
+                fill="none"
+                stroke="#FF6B4A"
+                strokeWidth={3}
+                strokeLinecap="round"
+                opacity={op}
+              />
+            );
+          })}
+        </g>
+      )}
+
+      {/* Runner Figure */}
+      <g>
+        {/* Runner Outline Layer (Cream 2px background effect) */}
+        <g stroke="#F4F1E5" strokeWidth={20} strokeLinecap="round" strokeLinejoin="round" fill="none">
+          {/* Back Arm */}
+          <path d={`M ${shoulderX} ${shoulderY} L ${elbowX1} ${elbowY1} L ${handX1} ${handY1}`} />
+          {/* Back Leg */}
+          <path d={`M ${hipX} ${hipY} L ${kneeX1} ${kneeY1} L ${footX1} ${footY1}`} />
+          {/* Torso */}
+          <path d={`M ${hipX} ${hipY} L ${shoulderX} ${shoulderY}`} />
+          {/* Front Leg */}
+          <path d={`M ${hipX} ${hipY} L ${kneeX2} ${kneeY2} L ${footX2} ${footY2}`} />
+          {/* Front Arm */}
+          <path d={`M ${shoulderX} ${shoulderY} L ${elbowX2} ${elbowY2} L ${handX2} ${handY2}`} />
+        </g>
+
+        {/* Runner Body Fill Layer */}
+        <g stroke="#3A4640" strokeWidth={15} strokeLinecap="round" strokeLinejoin="round" fill="none">
+          {/* Back Arm */}
+          <path d={`M ${shoulderX} ${shoulderY} L ${elbowX1} ${elbowY1} L ${handX1} ${handY1}`} />
+          {/* Back Leg */}
+          <path d={`M ${hipX} ${hipY} L ${kneeX1} ${kneeY1} L ${footX1} ${footY1}`} />
+          {/* Torso */}
+          <path d={`M ${hipX} ${hipY} L ${shoulderX} ${shoulderY}`} />
+          {/* Front Leg */}
+          <path d={`M ${hipX} ${hipY} L ${kneeX2} ${kneeY2} L ${footX2} ${footY2}`} />
+          {/* Front Arm */}
+          <path d={`M ${shoulderX} ${shoulderY} L ${elbowX2} ${elbowY2} L ${handX2} ${handY2}`} />
+        </g>
+
+        {/* Head */}
+        <circle cx={headX} cy={headY} r={10} fill="#E7B899" stroke="#F4F1E5" strokeWidth={2.5} />
+
+        {/* Hands */}
+        <circle cx={handX1} cy={handY1} r={3.5} fill="#E7B899" />
+        <circle cx={handX2} cy={handY2} r={3.5} fill="#E7B899" />
+      </g>
+    </svg>
+  );
+};

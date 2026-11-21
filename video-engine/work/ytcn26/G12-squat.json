@@ -1,0 +1,32 @@
+{
+ "id": "G12-squat",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G12-squat.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 609.58,
+   "to": 653.28
+  }
+ ],
+ "crops": {},
+ "ping": true,
+ "push": {
+  "646.52": [
+   756.4,
+   8.4,
+   558.2,
+   992.3
+  ]
+ },
+ "soft": [
+  651.7344
+ ]
+}

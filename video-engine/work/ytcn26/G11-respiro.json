@@ -1,0 +1,32 @@
+{
+ "id": "G11-respiro",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G11-respiro.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 524.56,
+   "to": 567.8933
+  }
+ ],
+ "crops": {},
+ "ping": true,
+ "push": {
+  "561.77": [
+   758.7,
+   0,
+   562.5,
+   1000
+  ]
+ },
+ "soft": [
+  565.9404
+ ]
+}

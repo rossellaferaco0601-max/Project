@@ -4,7 +4,7 @@ description: "In tutti i reel più spazio tra sottotitoli e animazioni (~100 px)
 metadata:
   node_type: memory
   type: feedback
-  modified: 2026-11-18
+  modified: 2026-11-21
 ---
 
 Ross, 18/11/2026: «memorizza questo: in tutti i reel deve esserci più spazio tra i sottotitoli e le animazioni, te lo avevo già detto,
@@ -19,3 +19,9 @@ dei comandi a destra viene coperto dall'interfaccia di Instagram.
 `npx tsx scripts/f_place.ts ID` (mette la grafica più in alto quando il mento lo permette; ✗ se l'aria è sotto i 90 px: accorciare la
 grafica, non avvicinarla). Nelle caselle il corpo del testo si calcola sulla riga più lunga (mai testo che sborda): controllarlo sui
 fotogrammi a grandezza reale. Dove il volto è grande e non c'è posto: una sola scritta in basso, sottotitoli spenti per quel tratto.
+
+**21/11/2026 (G2, serie G):** «le animazioni sono perfette, forse le farei solo leggermente più grandi, ma sempre rispettando le regole
+degli spazi». Le rappresentazioni disegnate (pannello con illustrazione + frase) piacciono: tenerle GRANDI. Come: `gfxScale 0.98` (bordo
+destro a 971 px), pannelli alti 336-350 px alzati con `dy` fin dove il mento lo permette (aria sempre ~100 px), il disegno ingrandito
+dentro il pannello (`ART_FIT` in `Elements10.tsx`). Le miniature dei fogli di controllo ingannano: giudicare la grandezza su un fotogramma
+intero (`npx remotion still ID out.png --frame=N`).

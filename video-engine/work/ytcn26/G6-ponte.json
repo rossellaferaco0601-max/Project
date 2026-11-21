@@ -1,0 +1,45 @@
+{
+ "id": "G6-ponte",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G6-ponte.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "window": {
+  "y": 580,
+  "h": 800,
+  "bg": "0x49762E"
+ },
+ "tail": 1.4,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 269.72,
+   "to": 319.2533
+  }
+ ],
+ "crops": {
+  "267.85": [
+   324,
+   244,
+   1126,
+   834
+  ],
+  "296.13": [
+   172,
+   0,
+   1458,
+   1080
+  ],
+  "311.52": [
+   422,
+   324,
+   1020,
+   754
+  ]
+ },
+ "ping": true
+}

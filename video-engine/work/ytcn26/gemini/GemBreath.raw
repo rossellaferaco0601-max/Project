@@ -1,0 +1,307 @@
+import React from "react";
+
+export const GemBreath: React.FC<{ t: number; uid: string; cues: number[] }> = ({
+  t,
+  uid,
+  cues,
+}) => {
+  const cue = (i: number) => cues[i] ?? Infinity;
+
+  const clamp = (v: number, min = 0, max = 1) => Math.max(min, Math.min(max, v));
+  const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
+  const easeOut = (v: number) => 1 - Math.pow(1 - clamp(v), 3);
+  const easeInOut = (v: number) =>
+    v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2;
+
+  const c0 = cue(0);
+  const c1 = cue(1);
+  const c2 = cue(2);
+  const c3 = cue(3);
+
+  // Cue 0: Nervous spike burst
+  const t0 = t - c0;
+  const p0 = t0 >= 0 && t0 < 0.9 ? easeOut(Math.sin(clamp(t0 / 0.9) * Math.PI)) : 0;
+
+  // Cue 1: Morph to controlled sine wave (over 1s) & color transition
+  const p1 = easeInOut(clamp((t - c1) / 1.0));
+
+  // Cue 2: Guide lines fade in (0.5s)
+  const p2 = easeOut(clamp((t - c2) / 0.5));
+
+  // Cue 3: Mastery pulse & sparkles (0.5s)
+  const p3 = easeOut(clamp((t - c3) / 0.5));
+
+  // Color interpolation: Coral (#FF6B4A) to Lime (#95FF00)
+  const r = Math.round(lerp(255, 149, p1));
+  const g = Math.round(lerp(107, 255, p1));
+  const b = Math.round(lerp(74, 0, p1));
+  const activeColor = `rgb(${r},${g},${b})`;
+
+  // Head idle motion (breathing movement)
+  const headBobY = Math.sin(t * lerp(5.0, 2.2, p1)) * lerp(2.5, 1.2, p1);
+  const headBobX = Math.cos(t * lerp(2.5, 1.1, p1)) * 1.0;
+
+  // Horizontal mid-height Y baseline
+  const Y0 = 180;
+
+  // Sample wave function
+  const numPoints = 60;
+  const points: [number, number][] = [];
+  for (let i = 0; i <= numPoints; i++) {
+    const x = 14 + (i / numPoints) * 272;
+
+    // Smooth wave component
+    const valSmooth = Math.sin((x / 95 - t * 1.3) * Math.PI * 2) * 22;
+
+    // Jagged / Gasping wave component
+    const scroll = t * 3.8;
+    const ph1 = x / 40 + scroll;
+    const ph2 = x / 20 - scroll * 1.5;
+    const ph3 = x / 9 + scroll * 2.4;
+    const sharp = Math.abs(Math.sin(ph3)) * 0.8;
+    const amp = 26 + p0 * 18;
+    const valJagged = (Math.sin(ph1) * 0.5 + Math.sin(ph2) * 0.45 - sharp + 0.25) * amp;
+
+    const h = lerp(valJagged, valSmooth, p1);
+    points.push([x, Y0 - h]);
+  }
+
+  // Path string for stroke
+  const waveD = points
+    .map((pt, idx) => `${idx === 0 ? "M" : "L"} ${pt[0].toFixed(1)},${pt[1].toFixed(1)}`)
+    .join(" ");
+
+  // Path string for area fill under wave
+  const fillD = `${waveD} L 286,286 L 14,286 Z`;
+
+  // Rider dot height at X = 150 (mid canvas)
+  const dotIndex = Math.floor(numPoints / 2);
+  const dotX = points[dotIndex][0];
+  const dotY = points[dotIndex][1];
+
+  // Ring pulse scale (Cue 3)
+  const ringRadius = 12 + Math.sin(t * 3.5) * 4;
+  const ringOpacity = p3 * (0.65 + 0.35 * Math.cos(t * 3.5));
+
+  // Exhaled steam particles / wave origin trail
+  const breathPulse = (Math.sin(t * lerp(5, 2.2, p1)) + 1) * 0.5;
+
+  return (
+    <svg
+      viewBox="0 0 300 300"
+      width={300}
+      height={300}
+      style={{ overflow: "visible" }}
+    >
+      <defs>
+        {/* Soft vertical gradient glow under wave */}
+        <linearGradient
+          id={`${uid}-wave-glow`}
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop offset="0%" stopColor={activeColor} stopOpacity={0.35} />
+          <stop offset="70%" stopColor={activeColor} stopOpacity={0.08} />
+          <stop offset="100%" stopColor="#0B0F0A" stopOpacity="0" />
+        </linearGradient>
+
+        {/* Rider dot glow */}
+        <radialGradient
+          id={`${uid}-dot-radial`}
+          cx="50%"
+          cy="50%"
+          r="50%"
+        >
+          <stop offset="0%" stopColor="#F4F1E5" stopOpacity="1" />
+          <stop offset="40%" stopColor={activeColor} stopOpacity="0.9" />
+          <stop offset="100%" stopColor={activeColor} stopOpacity="0" />
+        </radialGradient>
+
+        {/* Steam gradient */}
+        <linearGradient
+          id={`${uid}-steam-grad`}
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="1"
+        >
+          <stop offset="0%" stopColor="#B8D7EA" stopOpacity={0.7} />
+          <stop offset="100%" stopColor={activeColor} stopOpacity={0.1} />
+        </linearGradient>
+      </defs>
+
+      {/* Background ambient subtle glow */}
+      <circle
+        cx={150}
+        cy={150}
+        r={130}
+        fill={activeColor}
+        opacity={0.03 + p3 * 0.03}
+      />
+
+      {/* Runner Side Profile (Upper Canvas) */}
+      <g transform={`translate(${headBobX.toFixed(2)}, ${headBobY.toFixed(2)})`}>
+        {/* Neck / Body Shoulder */}
+        <path
+          d="M 46 115 C 46 95, 62 82, 72 82 C 78 82, 82 86, 85 92 L 95 115 Z"
+          fill="#3A4640"
+          stroke="#F4F1E5"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+
+        {/* Head / Face Silhouette (Skin) */}
+        <path
+          d="M 60 52 C 60 40, 74 38, 84 44 C 92 48, 96 56, 96 64 C 99 66, 103 67, 102 72 C 100 75, 96 75, 95 77 C 98 79, 97 83, 93 84 C 89 85, 87 88, 82 91 C 74 96, 60 92, 60 76 Z"
+          fill="#E7B899"
+          stroke="#F4F1E5"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Running Cap / Hair (Dark Grey) */}
+        <path
+          d="M 58 56 C 58 40, 72 36, 85 41 C 94 45, 96 53, 98 56 C 90 56, 78 54, 66 59 Z"
+          fill="#3A4640"
+          stroke="#F4F1E5"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Eye/Brow Detail Line */}
+        <path
+          d="M 87 60 Q 91 60 93 63"
+          fill="none"
+          stroke="#3A4640"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+
+        {/* Cold Air Breath Stream (flows from nose/mouth towards wave origin) */}
+        <path
+          d={`M 101 75 C ${115 + breathPulse * 6} ${78 + breathPulse * 4}, ${110 + Math.sin(t * 3) * 8} 110, 30 ${Y0 - 10}`}
+          fill="none"
+          stroke={`url(#${uid}-steam-grad)`}
+          strokeWidth={4 + breathPulse * 3}
+          strokeLinecap="round"
+          opacity={0.7}
+        />
+        <path
+          d={`M 97 83 C ${112 + breathPulse * 4} ${88 + breathPulse * 6}, ${105 - Math.cos(t * 3) * 6} 125, 45 ${Y0}`}
+          fill="none"
+          stroke="#B8D7EA"
+          strokeWidth={2 + breathPulse * 2}
+          strokeLinecap="round"
+          opacity={0.4 + breathPulse * 0.3}
+          strokeDasharray="4 4"
+        />
+      </g>
+
+      {/* Cue 2: Amplitude Guide Lines (Top & Bottom Bounds) */}
+      {p2 > 0 && (
+        <g opacity={p2}>
+          {/* Upper bound */}
+          <line
+            x1="14"
+            y1={Y0 - 22}
+            x2="286"
+            y2={Y0 - 22}
+            stroke="#F4F1E5"
+            strokeWidth="1.5"
+            strokeDasharray="5 5"
+            opacity={0.65}
+          />
+          {/* Lower bound */}
+          <line
+            x1="14"
+            y1={Y0 + 22}
+            x2="286"
+            y2={Y0 + 22}
+            stroke="#F4F1E5"
+            strokeWidth="1.5"
+            strokeDasharray="5 5"
+            opacity={0.65}
+          />
+          {/* Amplitude label indicator dots at ends */}
+          <circle cx="14" cy={Y0 - 22} r="2.5" fill="#F4F1E5" opacity={0.8} />
+          <circle cx="286" cy={Y0 - 22} r="2.5" fill="#F4F1E5" opacity={0.8} />
+          <circle cx="14" cy={Y0 + 22} r="2.5" fill="#F4F1E5" opacity={0.8} />
+          <circle cx="286" cy={Y0 + 22} r="2.5" fill="#F4F1E5" opacity={0.8} />
+        </g>
+      )}
+
+      {/* Gradient Area under Wave */}
+      <path d={fillD} fill={`url(#${uid}-wave-glow)`} />
+
+      {/* Main Breathing Wave Path */}
+      <path
+        d={waveD}
+        fill="none"
+        stroke={activeColor}
+        strokeWidth="9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Cue 3: Lime Sparkles floating along curve */}
+      {p3 > 0 && (
+        <g opacity={p3}>
+          {[0.18, 0.38, 0.62, 0.82].map((ratio, idx) => {
+            const ptIdx = Math.floor(numPoints * ratio);
+            const px = points[ptIdx][0];
+            const py = points[ptIdx][1];
+            const floatY = py - 12 - Math.sin(t * 4 + idx * 1.5) * 6;
+            const sparkScale = 0.6 + 0.4 * Math.sin(t * 5 + idx * 2);
+            return (
+              <g
+                key={idx}
+                transform={`translate(${px.toFixed(1)}, ${floatY.toFixed(1)}) scale(${sparkScale.toFixed(2)})`}
+              >
+                <path
+                  d="M 0 -7 L 2 -2 L 7 0 L 2 2 L 0 7 L -2 2 L -7 0 L -2 -2 Z"
+                  fill="#95FF00"
+                  opacity={0.85}
+                />
+              </g>
+            );
+          })}
+        </g>
+      )}
+
+      {/* Riding Dot Pulse Ring (Cue 3) */}
+      {p3 > 0 && (
+        <circle
+          cx={dotX}
+          cy={dotY}
+          r={ringRadius}
+          fill="none"
+          stroke="#95FF00"
+          strokeWidth="2"
+          opacity={ringOpacity}
+        />
+      )}
+
+      {/* Riding Glow Halo */}
+      <circle
+        cx={dotX}
+        cy={dotY}
+        r="16"
+        fill={`url(#${uid}-dot-radial)`}
+      />
+
+      {/* Riding Central Dot */}
+      <circle
+        cx={dotX}
+        cy={dotY}
+        r="5.5"
+        fill="#F4F1E5"
+        stroke={activeColor}
+        strokeWidth="2.5"
+      />
+    </svg>
+  );
+};

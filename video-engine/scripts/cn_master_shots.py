@@ -15,6 +15,9 @@ config: {id, src, out, shots: "work/x_shots.json", blendFrames, tail, tailLive, 
          soft: [inizio inquadratura, ...]   (stacchi del sorgente resi morbidi: dissolvenza di 5 fotogrammi dal fermo dell'inquadratura prima)
          vstop: {"<indice del pezzo>": t}   (il video del pezzo si ferma al tempo t del sorgente: ultimo fotogramma ripetuto fino a fine pezzo)
          ping: true   (la coda non è un fermo immagine: il video torna indietro sui suoi ultimi fotogrammi; vale anche per i fotogrammi dopo vstop)
+         window: {"y": 580, "h": 800, "bg": "0x49762E"}   (video «a finestra»: l'inquadratura non si ritaglia in verticale ma si mostra a tutta
+                 larghezza in una fascia alta h px che parte da y, su fondo pieno; per riprese dove il corpo è orizzontale (esercizi a terra).
+                 I ritagli (crops, proporzione 1080:h) si calcolano con scripts/g_wincrops.py)
          lead: {"<indice del pezzo>": inizio_video}   (la prima inquadratura del pezzo parte da quel tempo del sorgente, appena rallentata:
                  serve quando la frase comincia qualche fotogramma prima dello stacco e non si vuole un lampo dell'inquadratura precedente)
 Stampa anche la mappa dei pezzi (tempo nel master di ogni inquadratura): serve per coprire le schede grafiche del sorgente."""
@@ -27,6 +30,7 @@ SW, SH = c.get("srcSize", [3840, 2160])
 MINH = 1250 * SH / 2160   # ritaglio più stretto ammesso (in pixel del sorgente): 1250 su un 4K, 625 su un Full HD
 shots = json.load(open(c["shots"]))
 blend, TAIL = c.get("blendFrames", 2), c.get("tail", 0.5)
+WIN = c.get("window")   # video a finestra (vedi sopra)
 PING = bool(c.get("ping"))   # coda con andata e ritorno invece del fermo immagine
 tmp = os.path.join(os.path.dirname(c["out"]), f"tmp_{c['id']}"); os.makedirs(tmp, exist_ok=True)
 
@@ -38,6 +42,7 @@ def crop_of(shot):
     """Ritaglio 9:16 dell'inquadratura: volto con la fronte a ~0,10 e alto ~0,25 dell'altezza (mento a ~0,35: margine per i movimenti della testa)."""
     key = f"{shot['from']:.2f}"
     if key in c.get("crops", {}): return c["crops"][key]
+    if WIN: cw = min(SW, SH * OW / WIN["h"]); return [(SW - cw) / 2, 0, cw, cw * WIN["h"] / OW]
     f = shot.get("face")
     if not f: return [(SW - SH * 9 / 16) / 2, 0, SH * 9 / 16, SH]
     ch = min(SH, max(MINH, f[3] * SH / 0.25))
@@ -87,6 +92,7 @@ for i, s in enumerate(segs):
             HH = f"({cr[3]:.2f}+({pz[3] - cr[3]:.2f})*{E})"; SC = f"({OH}/{HH})"
             XX = f"({cr[0]:.2f}+({pz[0] - cr[0]:.2f})*{E})"; YY = f"({cr[1]:.2f}+({pz[1] - cr[1]:.2f})*{E})"
             cropf = f"scale=w='trunc(iw*{SC}/2)*2':h='trunc(ih*{SC}/2)*2':eval=frame:flags=lanczos,crop={OW}:{OH}:x='max(0,min(iw-{OW},{XX}*{SC}))':y='max(0,min(ih-{OH},{YY}*{SC}))'"
+        elif WIN: cropf = f"crop={w}:{h}:{x}:{y},scale={OW}:{WIN['h']}:flags=lanczos,pad={OW}:{OH}:0:{WIN['y']}:color={WIN.get('bg', '0x49762E')}"
         else: cropf = f"crop={w}:{h}:{x}:{y},scale={OW}:{OH}:flags=lanczos"
         if vb:
             fac = (nf / FPS) / (vb - va - 0.02)
@@ -99,6 +105,10 @@ for i, s in enumerate(segs):
             # del bordo successivo, l'ultimo fotogramma buono viene ripetuto (mai un fotogramma dell'inquadratura dopo nel ritaglio di questa)
             # `start_time=0`: il fotogramma i dell'uscita mostra l'ultimo fotogramma del sorgente con tempo < (i+1)/30 dall'inizio (senza, la
             # numerazione può partire da 1 e tutto slitta di un fotogramma)
+            # il bordo vale SEMPRE, anche per l'ultimo pezzo: se il pezzo finisce a meno di un fotogramma dallo stacco successivo del sorgente,
+            # `round=down` metterebbe nell'ultimo fotogramma il primo dell'inquadratura dopo (G2 v1, 20/11: un fotogramma della «mossa
+            # successiva» prima della CTA). Il limite è il più vicino tra lo stacco chiesto (bcut) e la fine dell'inquadratura nel sorgente.
+            bcut = min(x for x in (bcut, sh["to"] if sh["to"] - 0.001 > va else None) if x) if (bcut or sh["to"] - 0.001 > va) else None
             n_ok = min(nf, int((bcut - ss) * FPS + 1e-6)) if bcut else nf
             if PING and last and k == len(pieces) - 1 and n_ok < nf:
                 short = nf - n_ok; nf = n_ok   # con `ping` i fotogrammi mancanti dopo vstop non si clonano: li dà l'andata e ritorno della coda

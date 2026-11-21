@@ -1,0 +1,195 @@
+// Illustrazione scritta da Gemini (gemini-flash) su indicazioni di regia (work/ytcn26/gemini/prompt_GemOver.txt); scritte e agganci in Elements10.
+import React from "react";
+
+export const GemOver: React.FC<{ t: number; uid: string; cues: number[] }> = ({ t, uid, cues }) => {
+  const cue = (i: number) => (cues[i] ?? Infinity);
+  
+  const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+  const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
+  const easeOut = (v: number) => 1 - Math.pow(1 - v, 3);
+  const backOut = (v: number) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(v - 1, 3) + c1 * Math.pow(v - 1, 2);
+  };
+
+  const t0 = cue(0);
+  const t1 = cue(1);
+  const t2 = cue(2);
+
+  const breath = Math.sin(t * 2.5) * 2;
+  const pulse = Math.sin(t * 6) * 0.5 + 0.5;
+  const heatFactor = easeOut(clamp((t - t2) / 0.6, 0, 1));
+
+  const layerProgress = [0, 1, 2, 3].map(i => {
+    const start = t0 + i * 0.35;
+    return clamp((t - start) / 0.5, 0, 1);
+  });
+
+  const totalLayers = layerProgress.reduce((a, b) => a + (b > 0 ? 1 : 0), 0);
+  const armSplay = easeOut(clamp((t - t0) / 1.5, 0, 1)) * 40;
+  
+  // Body dimensions
+  const centerX = 150;
+  const centerY = 190 + breath;
+  const bodyW = 50;
+  const bodyH = 80;
+
+  const renderLayer = (i: number, color: string, isParka: boolean) => {
+    const p = layerProgress[i];
+    if (p <= 0) return null;
+    const s = backOut(p);
+    const inflation = i * 8;
+    const sw = 22 + i * 4;
+
+    const shoulderY = centerY - bodyH / 2 - inflation * 0.5;
+    const shoulderLX = centerX - bodyW / 2 - inflation;
+    const shoulderRX = centerX + bodyW / 2 + inflation;
+    
+    const armAngle = (80 - armSplay) * (Math.PI / 180);
+    const armLen = 50 + i * 5;
+    
+    const elLX = shoulderLX - Math.sin(armAngle) * armLen;
+    const elLY = shoulderY + Math.cos(armAngle) * armLen;
+    const elRX = shoulderRX + Math.sin(armAngle) * armLen;
+    const elRY = shoulderY + Math.cos(armAngle) * armLen;
+
+    return (
+      <g key={i} transform={`scale(${s})`} style={{ transformOrigin: `${centerX}px ${centerY}px` }}>
+        {/* Torso */}
+        <path
+          d={`M ${shoulderLX} ${shoulderY} Q ${centerX} ${shoulderY - 10} ${shoulderRX} ${shoulderY} L ${shoulderRX + 10} ${centerY + bodyH/2} Q ${centerX} ${centerY + bodyH/2 + 10} ${shoulderLX - 10} ${centerY + bodyH/2} Z`}
+          fill={color}
+          stroke="#F4F1E5"
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
+        {/* Left Arm */}
+        <path
+          d={`M ${shoulderLX} ${shoulderY} L ${elLX} ${elLY}`}
+          stroke={color}
+          strokeWidth={sw}
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${shoulderLX} ${shoulderY} L ${elLX} ${elLY}`}
+          stroke="#F4F1E5"
+          strokeWidth={2}
+          fill="none"
+        />
+        {/* Right Arm */}
+        <path
+          d={`M ${shoulderRX} ${shoulderY} L ${elRX} ${elRY}`}
+          stroke={color}
+          strokeWidth={sw}
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${shoulderRX} ${shoulderY} L ${elRX} ${elRY}`}
+          stroke="#F4F1E5"
+          strokeWidth={2}
+          fill="none"
+        />
+        {isParka && (
+          <g stroke="#F4F1E5" strokeWidth={1} opacity={0.3}>
+            <line x1={shoulderLX} y1={shoulderY + 20} x2={shoulderRX} y2={shoulderY + 20} />
+            <line x1={shoulderLX} y1={shoulderY + 40} x2={shoulderRX} y2={shoulderY + 40} />
+            <line x1={shoulderLX} y1={shoulderY + 60} x2={shoulderRX} y2={shoulderY + 60} />
+          </g>
+        )}
+      </g>
+    );
+  };
+
+  const crossProg = easeOut(clamp((t - t1) / 0.5, 0, 1));
+  const headColor = `rgb(${lerp(231, 255, heatFactor)}, ${lerp(184, 107, heatFactor)}, ${lerp(153, 74, heatFactor)})`;
+
+  return (
+    <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+      <defs>
+        <radialGradient id={`${uid}-heat`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FF6B4A" stopOpacity={0.6 * heatFactor * (0.8 + 0.2 * pulse)} />
+          <stop offset="100%" stopColor="#FF6B4A" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Background Heat Glow */}
+      <circle cx={centerX} cy={centerY - 20} r={100 + pulse * 20} fill={`url(#${uid}-heat)`} />
+
+      {/* Basic Human (under layers) */}
+      <g transform={`translate(0, ${breath * 0.5})`}>
+        {/* Neck */}
+        <rect x={centerX - 8} y={centerY - 95} width={16} height={20} fill="#E7B899" rx={4} />
+        {/* Base Body */}
+        <path
+          d={`M ${centerX - 35} ${centerY - 80} L ${centerX + 35} ${centerY - 80} L ${centerX + 25} ${centerY + 20} L ${centerX - 25} ${centerY + 20} Z`}
+          fill="#3A4640"
+          stroke="#F4F1E5"
+          strokeWidth={2}
+        />
+      </g>
+
+      {/* Layering */}
+      {renderLayer(0, "#B8D7EA", false)}
+      {renderLayer(1, "#49762E", false)}
+      {renderLayer(2, "#F4F1E5", false)}
+      {renderLayer(3, "#3A4640", true)}
+
+      {/* Head - stays on top */}
+      <g transform={`translate(${centerX}, ${centerY - 105 + breath * 0.8})`}>
+        <circle cx={0} cy={0} r={28} fill={headColor} stroke="#F4F1E5" strokeWidth={2} />
+        {/* Flushed cheeks if hot */}
+        {heatFactor > 0.1 && (
+          <>
+            <circle cx={-12} cy={5} r={6 * heatFactor} fill="#FFB020" opacity={0.4} />
+            <circle cx={12} cy={5} r={6 * heatFactor} fill="#FFB020" opacity={0.4} />
+          </>
+        )}
+      </g>
+
+      {/* Sweat Droplets */}
+      {heatFactor > 0.2 && [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
+        const dp = ((t * 1.5 + i * 0.8) % 2) / 2;
+        const angle = (i * 45) * (Math.PI / 180);
+        const dist = 40 + dp * 120;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist + Math.pow(dp, 2) * 40;
+        return (
+          <circle
+            key={i}
+            cx={centerX + dx}
+            cy={centerY - 80 + dy}
+            r={3 * (1 - dp)}
+            fill="#B8D7EA"
+          />
+        );
+      })}
+
+      {/* Steam Wisps */}
+      {heatFactor > 0.5 && [0, 1, 2].map(i => {
+        const sp = ((t * 0.8 + i * 0.33) % 1);
+        const sx = centerX - 30 + i * 30 + Math.sin(t * 4 + i) * 5;
+        const sy = centerY - 120 - sp * 60;
+        return (
+          <path
+            key={i}
+            d={`M ${sx} ${sy} Q ${sx + 5} ${sy - 10} ${sx - 5} ${sy - 20}`}
+            fill="none"
+            stroke="#F4F1E5"
+            strokeWidth={3}
+            strokeLinecap="round"
+            opacity={0.6 * (1 - sp)}
+          />
+        );
+      })}
+
+      {/* Big X Mark */}
+      {crossProg > 0 && (
+        <g transform="translate(240, 50)" stroke="#FF6B4A" strokeWidth={12} strokeLinecap="round">
+          <line x1={0} y1={0} x2={40 * crossProg} y2={40 * crossProg} />
+          <line x1={40 * crossProg} y1={0} x2={0} y2={40 * crossProg} />
+        </g>
+      )}
+    </svg>
+  );
+};

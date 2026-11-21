@@ -14,7 +14,7 @@ import { Clip, Compare, Step, Airflow, Filter, Beats, Ring, Duo, Slam, Orbit, Dr
 import { Pair, Lifebar, Fulltext, Slides } from "./Elements6";
 import { Flow, Renew, Versus, Grid4, Plan, Lights, Cycle, Beat } from "./Elements7";
 import { TopWord, Counter, BigPointer, Wall, Side, SIDE, sideK } from "./Elements8";
-import { Fog, Layers, HangTag, Gust, Rings, Duel } from "./Elements10";
+import { Fog, Layers, HangTag, Gust, Rings, Duel, Gem, WinHeader, Kin, Dose, Ticks } from "./Elements10";
 import { Loop, Drain, Progress, Scale2, Stamp, Chips, Switches, Pressure, Journey, Receipt, Bill, Quad, Rise } from "./Elements9";
 import { Title, Mouth, Runner, Lungs, Horizon, Chat, BigStrike, Stack, Guide, Question, NameTag } from "./Elements4";
 
@@ -93,6 +93,10 @@ const AnyElement: React.FC<{ el: Element; start: number }> = ({ el, start }) => 
     case "quad": return <Quad el={el} start={start} />;
     case "rise": return <Rise el={el} start={start} />;
     case "fog": return <Fog el={el} start={start} />;
+    case "gem": return <Gem el={el} start={start} />;
+    case "kin": return <Kin el={el} start={start} />;
+    case "dose": return <Dose el={el} start={start} />;
+    case "ticks": return <Ticks el={el} start={start} />;
     case "layers": return <Layers el={el} start={start} />;
     case "hangtag": return <HangTag el={el} start={start} />;
     case "gust": return <Gust el={el} start={start} />;
@@ -164,6 +168,7 @@ export const CNReel: React.FC<CNReelProps> = (p) => {
         </AbsoluteFill>
         {p.hook ? <Hook hook={p.hook} /> : null}
         <AbsoluteFill style={{ transform: `translateY(${p.gfxShift ?? 0}px) scale(${p.gfxScale ?? 1})`, transformOrigin: `50% ${H * 0.44}px` }}>
+          {p.winHeader ? <WinHeader {...p.winHeader} show={Math.min(...p.elements.map((el, i) => { const l = frame - starts[i], d = Math.round(el.dur * fps); return l < -8 ? Math.min(1, (-8 - l) / 6) : l > d + 2 ? Math.min(1, (l - d - 2) / 6) : 0; }), 1) * Math.min(1, Math.max(0, (total - tailF - frame) / 6))} /> : null}
           {p.elements.map((el, i) => (FULLSCREEN.has(el.kind) ? null : el.dy || el.shiftAt !== undefined ? (
             <AbsoluteFill key={i} style={{ transform: `translateY(${(el.dy ?? 0) + (el.shiftAt !== undefined && frame - starts[i] >= Math.round(el.shiftAt * fps) ? el.shiftDy ?? 0 : 0)}px)` }}><AnyElement el={{ ...el, onAt: resolveCues(el, starts[i], words) } as Element} start={starts[i]} /></AbsoluteFill>
           ) : (

@@ -1,0 +1,17 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemClimber: React.FC<{ t: number; uid: string; cues: number[] }>
+General rules (all mandatory):
+- `t` = seconds since the graphic appeared. The component is a PURE FUNCTION of t: no hooks, no state, no CSS transitions/animations, no external assets, no <text> at all (no letters, no digits). Inline SVG only. Every id inside <defs> must be prefixed with the `uid` prop (id={`${uid}-something`}) and referenced the same way.
+- `cues` are times in seconds; a cue may be missing: read them with `const cue = (i: number) => (cues[i] ?? Infinity)`. Nothing tied to a cue may show before that cue. Transitions triggered by a cue last 0.4-0.6 s with ease-out (define small helpers clamp/easeOut/lerp inside the file).
+- Canvas: <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>. Transparent background: it is displayed on a near-black panel (#0B0F0A), so use light and bright colours. Palette only: lime #95FF00 (accent/positive), brand green #49762E, cream #F4F1E5, ice blue #B8D7EA (cold), amber #FFB020 and coral #FF6B4A (heat/negative), skin #E7B899, dark #0B0F0A.
+- Style: flat, premium vector illustration with smooth shapes, round caps and joins, a few subtle gradients. NOT clip-art and NOT thin stick figures: human figures are built from thick rounded limbs (stroke width 18-26, round caps) plus a head circle, with joint positions computed by small kinematics functions so the motion is smooth and anatomically believable. Figures wear dark-grey running clothes (#3A4640) with a cream outline 2px so they read on the dark panel; head and hands in skin colour.
+- Something must always move gently (idle loop: breathing, particles, small bob) so the picture never looks frozen. Keep the drawing inside the canvas with 14 px padding and make the subject LARGE (fill the canvas). Strict TypeScript (no implicit any), React 19, `import React from "react"`.
+
+Subject:
+The "mountain climber" warm-up exercise. Draw a side-view human figure (head to the right, thick rounded limbs) in a high plank position on a floor line: straight arms planted on the floor under the shoulders, body in a straight diagonal line from shoulders to heels, large in the canvas. Animate the exercise as a continuous loop: the knees drive forward toward the chest ALTERNATELY (one leg bends and the knee comes under the torso while the other leg stays extended back, then they swap), about 1.6 cycles per second, with simple two-segment kinematics for each leg and a tiny bounce of the hips.
+- From cue(0) (it works POSTURE and ABS): a lime glow band lights up along the abdomen / core between ribs and hips, pulsing with the rhythm.
+- From cue(1) (the UPPER BODY): shoulders and arms get a lime glow as well.
+- From cue(2) (the HIP FLEXORS): a bright lime ring pulses at the hip joint of the leg that is driving forward.
+- From cue(3) (it activates the FEET too): small lime rings flash at the feet each time a foot lands back.
+- From cue(4) (it raises your INNER HEAT): the torso core turns amber with a soft warm aura and small heat waves rise from the back.

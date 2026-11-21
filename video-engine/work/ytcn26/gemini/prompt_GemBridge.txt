@@ -1,0 +1,16 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemBridge: React.FC<{ t: number; uid: string; cues: number[] }>
+General rules (all mandatory):
+- `t` = seconds since the graphic appeared. The component is a PURE FUNCTION of t: no hooks, no state, no CSS transitions/animations, no external assets, no <text> at all (no letters, no digits). Inline SVG only. Every id inside <defs> must be prefixed with the `uid` prop (id={`${uid}-something`}) and referenced the same way.
+- `cues` are times in seconds; a cue may be missing: read them with `const cue = (i: number) => (cues[i] ?? Infinity)`. Nothing tied to a cue may show before that cue. Transitions triggered by a cue last 0.4-0.6 s with ease-out (define small helpers clamp/easeOut/lerp inside the file).
+- Canvas: <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>. Transparent background: it is displayed on a near-black panel (#0B0F0A), so use light and bright colours. Palette only: lime #95FF00 (accent/positive), brand green #49762E, cream #F4F1E5, ice blue #B8D7EA (cold), amber #FFB020 and coral #FF6B4A (heat/negative), skin #E7B899, dark #0B0F0A.
+- Style: flat, premium vector illustration with smooth shapes, round caps and joins, a few subtle gradients. NOT clip-art and NOT thin stick figures: human figures are built from thick rounded limbs (stroke width 18-26, round caps) plus a head circle, with joint positions computed by small kinematics functions so the motion is smooth and anatomically believable. Figures wear dark-grey running clothes (#3A4640) with a cream outline 2px so they read on the dark panel; head and hands in skin colour.
+- Something must always move gently (idle loop: breathing, particles, small bob) so the picture never looks frozen. Keep the drawing inside the canvas with 14 px padding and make the subject LARGE (fill the canvas). Strict TypeScript (no implicit any), React 19, `import React from "react"`.
+
+Subject:
+The "glute bridge" exercise. Draw a side-view human figure lying on its back on a floor line, head to the right resting on the floor, arms along the body, knees bent with feet flat on the floor (to the left), large in the canvas. Animate the exercise as a continuous loop (about 2.4 s per cycle): the hips lift from the floor until thighs and torso form a straight line from knees to shoulders, hold briefly at the top, then lower again. Use thick rounded limbs and compute the hip position so that feet and shoulders stay fixed on the floor.
+- From cue(0) (the GLUTE bridge): a lime glow lights up the glute / back-of-hip area and gets brighter at the top of each lift.
+- From cue(1) (HIP EXTENSION, with the pelvis): a curved lime arrow next to the hips draws itself upward each time the hips rise.
+- From cue(2) (great after SITTING or just after waking up, when the body was flexed and still): for 1.5 s a ghost outline (cream, dashed, 0.5 opacity) of the same person sitting bent on a chair appears on the left side and then dissolves toward the bridging figure, suggesting going from flexion to extension.
+- From cue(3) (DYNAMIC or STATIC hold): the loop changes: the hips stay up at the top position (static hold) with a lime timer arc slowly sweeping above the hips.

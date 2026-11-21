@@ -83,7 +83,11 @@ export type Element = ElementBase &
     | { kind: "bill"; title: string; items: string[]; total: string }
     | { kind: "quad"; items: string[]; foot?: string }
     | { kind: "rise"; label: string; lines: string[] }
-    | { kind: "fog"; lines: string[]; accent?: string }
+    | { kind: "fog"; lines: string[]; accent?: string; anim?: "fog" | "rise" | "snap" | "wind" | "type" }
+    | { kind: "gem"; art: "nose" | "heat" | "house" | "over" | "warm" | "battery" | "breath" | "squat" | "climber" | "bridge" | "lunge" | "jack" | "gauge"; phases: { lines: string[]; chip?: string; on?: number }[]; artCues?: number[] }
+    | { kind: "kin"; words: string[]; anim: "ice" | "pulse" | "slide" }
+    | { kind: "dose"; tags?: string[]; items: string[] }
+    | { kind: "ticks"; items: string[]; foot?: string }
     | { kind: "layers"; stage: 1 | 2 | 3; lines: string[]; chips: string[] }
     | { kind: "hangtag"; lines: string[] }
     | { kind: "gust"; words: string[] }
@@ -98,7 +102,10 @@ export type Hook = { lines: string[]; keyword: string; dur: number };
  *  arretra (campo largo con sfondo sfocato) per lasciare spazio sopra la testa. Le altre chiavi passano a fx.py. */
 export type Fx = { fx: string; at: number; dur: number; word?: string; wide?: boolean; [k: string]: unknown };
 
-export type CTA = { word: string; title: string; sub?: string };
+/** `offer` = le righe dentro la targhetta lime (default: «coaching personalizzato / di Correre Naturale®»); con una GUIDA da scaricare
+ *  (Ross 21/11: «devono commentare per avere una guida di approfondimento») si mettono qui il titolo della guida, in `sub` «Scarica gratis
+ *  la guida» e in `dm` il testo della notifica («Ti mando la guida»). */
+export type CTA = { word: string; title: string; sub?: string; offer?: string[]; dm?: string };
 
 export type CNReelProps = {
   /** master 1080x1920 già montato (scripts/cn_master.py) */
@@ -112,6 +119,9 @@ export type CNReelProps = {
   elements: Element[];
   fx?: Fx[];
   cta: CTA;
+  /** reel «a finestra» (video orizzontale a tutta larghezza su fondo verde, master con `window`): intestazione fissa nella fascia sopra la
+   *  finestra, visibile quando non c'è una grafica. `title` può andare su due righe con «|». */
+  winHeader?: { kicker: string; title: string; n?: string };
   wordFix: Record<string, string>;
   blendFrames: number;
   ctaSeconds: number;

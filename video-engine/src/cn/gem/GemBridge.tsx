@@ -1,0 +1,272 @@
+// Illustrazione scritta da Gemini (gemini-flash) su indicazioni di regia (work/ytcn26/gemini/prompt_GemBridge.txt); scritte e agganci in Elements10.
+import React from "react";
+
+export const GemBridge: React.FC<{ t: number; uid: string; cues: number[] }> = ({ t, uid, cues }) => {
+  const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(max, val));
+  const easeOut = (v: number) => 1 - Math.pow(1 - clamp(v, 0, 1), 3);
+  const lerp = (a: number, b: number, v: number) => a + (b - a) * v;
+
+  const cue = (i: number) => (cues && cues[i] !== undefined ? cues[i] : Infinity);
+  const c0 = cue(0);
+  const c1 = cue(1);
+  const c2 = cue(2);
+  const c3 = cue(3);
+
+  // Cue weights
+  const w0 = t >= c0 ? easeOut((t - c0) / 0.5) : 0;
+  const w1 = t >= c1 ? easeOut((t - c1) / 0.5) : 0;
+  const w2Raw = t - c2;
+  const w2 = w2Raw >= 0 && w2Raw <= 1.6 ? Math.sin((w2Raw / 1.6) * Math.PI) * 0.65 : 0;
+  const w2Progress = clamp(w2Raw / 1.5, 0, 1);
+  const w3 = t >= c3 ? easeOut((t - c3) / 0.5) : 0;
+
+  // Lift motion calculation
+  let lift = 0;
+  if (w3 > 0) {
+    lift = lerp(0, 1, w3);
+  } else {
+    const period = 2.4;
+    const phase = (t % period) / period;
+    if (phase < 0.15) {
+      lift = 0;
+    } else if (phase < 0.45) {
+      lift = easeOut((phase - 0.15) / 0.3);
+    } else if (phase < 0.70) {
+      lift = 1;
+    } else if (phase < 0.95) {
+      lift = 1 - easeOut((phase - 0.70) / 0.25);
+    } else {
+      lift = 0;
+    }
+  }
+
+  // Micro idle movement
+  const idle = Math.sin(t * 2.5) * 1.2;
+
+  // Key joints for main figure
+  const Sx = 215;
+  const Sy = 222 + idle * 0.2;
+  const Fx = 75;
+  const Fy = 228;
+
+  const torsoAngle = lerp(0, 0.58, lift); // Radians
+  const torsoLen = 62;
+  const Hx = Sx - torsoLen * Math.cos(torsoAngle);
+  const Hy = Sy - torsoLen * Math.sin(torsoAngle);
+
+  // Knee IK solver
+  const L1 = 58; // Thigh
+  const L2 = 58; // Shin
+  const dx = Hx - Fx;
+  const dy = Hy - Fy;
+  const D = Math.max(0.001, Math.sqrt(dx * dx + dy * dy));
+  const a = D / 2;
+  const h = Math.sqrt(Math.max(0, L1 * L1 - a * a));
+  const Px = Fx + (dx / D) * a;
+  const Py = Fy + (dy / D) * a;
+  const nx = dy / D;
+  const ny = -dx / D;
+  const Kx = Px + h * nx;
+  const Ky = Py + h * ny;
+
+  // Glute center (for glow/arrow)
+  const gluteX = Hx + (Sx - Hx) * 0.22;
+  const gluteY = Hy + (Sy - Hy) * 0.22;
+
+  // Ghost sitting figure (Cue 2)
+  const ghostShiftX = lerp(0, 45, easeOut(w2Progress));
+  const ghostShiftY = lerp(0, 15, easeOut(w2Progress));
+  const gHeadX = 40 + ghostShiftX;
+  const gHeadY = 125 + ghostShiftY;
+  const gShoulderX = 55 + ghostShiftX;
+  const gShoulderY = 145 + ghostShiftY;
+  const gHipX = 50 + ghostShiftX;
+  const gHipY = 195 + ghostShiftY;
+  const gKneeX = 85 + ghostShiftX;
+  const gKneeY = 198 + ghostShiftY;
+  const gFootX = 85 + ghostShiftX;
+  const gFootY = 230 + ghostShiftY;
+
+  // Cue 3 Timer Sweep Arc
+  const timerRadius = 26;
+  const timerProgress = w3 > 0 ? clamp((t - c3) / 3.0, 0, 1) : 0;
+  const timerAngle = timerProgress * Math.PI * 2;
+  const timerX = gluteX + timerRadius * Math.cos(-Math.PI / 2 + timerAngle);
+  const timerY = gluteY - 20 + timerRadius * Math.sin(-Math.PI / 2 + timerAngle);
+  const largeArcFlag = timerAngle > Math.PI ? 1 : 0;
+
+  return (
+    <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+      <defs>
+        <radialGradient id={`${uid}-glute-glow`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#95FF00" stopOpacity={0.85 * w0 * (0.4 + lift * 0.6)} />
+          <stop offset="60%" stopColor="#95FF00" stopOpacity={0.35 * w0 * (0.4 + lift * 0.6)} />
+          <stop offset="100%" stopColor="#95FF00" stopOpacity={0} />
+        </radialGradient>
+
+        <linearGradient id={`${uid}-floor-grad`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#49762E" stopOpacity={0.2} />
+          <stop offset="50%" stopColor="#95FF00" stopOpacity={0.8} />
+          <stop offset="100%" stopColor="#49762E" stopOpacity={0.2} />
+        </linearGradient>
+
+        <filter id={`${uid}-blur-glow`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="8" />
+        </filter>
+      </defs>
+
+      {/* Floor / Mat */}
+      <line x1="20" y1="230" x2="280" y2="230" stroke="#3A4640" strokeWidth="4" strokeLinecap="round" />
+      <line x1="40" y1="230" x2="260" y2="230" stroke={`url(#${uid}-floor-grad)`} strokeWidth="2" strokeLinecap="round" />
+
+      {/* Background Particles / Energy subtle ambient */}
+      {w0 > 0 && (
+        <circle
+          cx={gluteX}
+          cy={gluteY}
+          r={35 + lift * 15}
+          fill={`url(#${uid}-glute-glow)`}
+          filter={`url(#${uid}-blur-glow)`}
+        />
+      )}
+
+      {/* Cue 2: Ghost Sitting Figure */}
+      {w2 > 0 && (
+        <g opacity={w2}>
+          {/* Ghost Chair */}
+          <path
+            d={`M ${gHipX - 25} ${gHipY + 5} L ${gHipX + 15} ${gHipY + 5} M ${gHipX - 5} ${gHipY + 5} L ${gHipX - 5} ${gFootY}`}
+            stroke="#B8D7EA"
+            strokeWidth="3"
+            strokeDasharray="4 4"
+            strokeLinecap="round"
+          />
+          {/* Ghost Body */}
+          <path
+            d={`M ${gShoulderX} ${gShoulderY} L ${gHipX} ${gHipY} L ${gKneeX} ${gKneeY} L ${gFootX} ${gFootY}`}
+            stroke="#F4F1E5"
+            strokeWidth="16"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+            opacity="0.4"
+          />
+          <path
+            d={`M ${gShoulderX} ${gShoulderY} L ${gHipX} ${gHipY} L ${gKneeX} ${gKneeY} L ${gFootX} ${gFootY}`}
+            stroke="#FFB020"
+            strokeWidth="3"
+            strokeDasharray="3 3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+          <circle cx={gHeadX} cy={gHeadY} r="12" fill="#E7B899" stroke="#F4F1E5" strokeWidth="2" opacity="0.6" />
+        </g>
+      )}
+
+      {/* MAIN FIGURE UNDER-LAYER (Cream Outline for contrast on dark bg) */}
+      <g stroke="#F4F1E5" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        {/* Legs */}
+        <path d={`M ${Hx} ${Hy} L ${Kx} ${Ky} L ${Fx} ${Fy}`} />
+        {/* Torso */}
+        <path d={`M ${Sx} ${Sy} L ${Hx} ${Hy}`} />
+        {/* Arms */}
+        <path d={`M ${Sx} ${Sy} L ${Sx - 45} ${228}`} />
+      </g>
+
+      {/* MAIN FIGURE BODY (Running clothes dark grey #3A4640) */}
+      <g stroke="#3A4640" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        {/* Legs */}
+        <path d={`M ${Hx} ${Hy} L ${Kx} ${Ky} L ${Fx} ${Fy}`} />
+        {/* Torso */}
+        <path d={`M ${Sx} ${Sy} L ${Hx} ${Hy}`} />
+        {/* Arms */}
+        <path d={`M ${Sx} ${Sy} L ${Sx - 45} ${228}`} />
+      </g>
+
+      {/* Skin Details: Head & Hands */}
+      {/* Hand on floor */}
+      <circle cx={Sx - 47} cy={228} r="8" fill="#E7B899" stroke="#F4F1E5" strokeWidth="1.5" />
+
+      {/* Head resting on floor */}
+      <circle cx={242} cy={218 + idle * 0.1} r="14" fill="#E7B899" stroke="#F4F1E5" strokeWidth="2" />
+      {/* Hair / Cap accent */}
+      <path
+        d={`M 235 ${206 + idle * 0.1} A 14 14 0 0 1 254 ${215 + idle * 0.1} Z`}
+        fill="#3A4640"
+      />
+
+      {/* Foot / Shoe */}
+      <path
+        d={`M ${Fx - 12} ${Fy + 2} L ${Fx + 8} ${Fy + 2}`}
+        stroke="#F4F1E5"
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+
+      {/* Glute Activation Highlight (Cue 0) */}
+      {w0 > 0 && (
+        <path
+          d={`M ${Sx - (Sx - Hx) * 0.5} ${Sy - (Sy - Hy) * 0.5} L ${Hx} ${Hy} L ${Hx - (Hx - Kx) * 0.4} ${Hy - (Hy - Ky) * 0.4}`}
+          stroke="#95FF00"
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+          opacity={w0 * (0.4 + lift * 0.6)}
+        />
+      )}
+
+      {/* Cue 1: Upward Extension Dynamic Arrow */}
+      {w1 > 0 && (
+        <g transform={`translate(${gluteX - 10}, ${gluteY - 22})`} opacity={w1}>
+          <path
+            d="M -12 25 C -20 10, -10 -10, 8 -15"
+            stroke="#95FF00"
+            strokeWidth="4"
+            strokeLinecap="round"
+            fill="none"
+            strokeDasharray="40"
+            strokeDashoffset={40 * (1 - lift)}
+          />
+          <path
+            d="M 2 -22 L 10 -15 L 1 -8"
+            fill="none"
+            stroke="#95FF00"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={clamp(lift * 2 - 0.5, 0, 1)}
+          />
+        </g>
+      )}
+
+      {/* Cue 3: Static Hold Timer Arc */}
+      {w3 > 0 && (
+        <g opacity={w3}>
+          {/* Background circle track */}
+          <circle
+            cx={gluteX}
+            cy={gluteY - 20}
+            r={timerRadius}
+            stroke="#3A4640"
+            strokeWidth="4"
+            fill="none"
+          />
+          {/* Progress arc */}
+          {timerProgress > 0 && (
+            <path
+              d={`M ${gluteX} ${gluteY - 20 - timerRadius} A ${timerRadius} ${timerRadius} 0 ${largeArcFlag} 1 ${timerX} ${timerY}`}
+              stroke="#95FF00"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+          )}
+          {/* Center glowing dot */}
+          <circle cx={gluteX} cy={gluteY - 20} r="3" fill="#95FF00" />
+        </g>
+      )}
+    </svg>
+  );
+};

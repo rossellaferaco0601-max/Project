@@ -17,7 +17,7 @@ export const heightOf = (el: any): number => {
     case "drain": return 86 + el.items.length * 84; case "progress": return 340; case "lights": return 400; case "loop": return 392; case "stat": return 250;
     case "widget": return 110 + el.lines.length * 64; case "counter": return 250; case "bigstrike": return 260; case "journey": return 96 + el.items.length * 98;
     case "scale2": return 372; case "grid4": return 394; case "checklist": return el.items.length * (el.big ? 112 : 78); case "receipt": return 376; case "quad": return el.foot ? 370 : 270; case "rise": return 250;
-    case "fog": return 20 + el.lines.length * 116; case "layers": return 320; case "hangtag": return 290; case "gust": return 250; case "rings": return 320; case "duel": return 212;
+    case "fog": return 20 + el.lines.length * 124; case "layers": return 350; case "hangtag": return 312; case "gust": return 280; case "rings": return 336; case "gem": return 336; case "kin": return 12 + el.words.length * 140; case "dose": return (el.tags ? 100 : 0) + 240; case "ticks": return el.items.length * 118; case "duel": return 244;
     case "nametag": return 230; default: return 400;
   }
 };

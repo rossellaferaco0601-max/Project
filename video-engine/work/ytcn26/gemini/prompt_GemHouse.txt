@@ -1,0 +1,18 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemHouse: React.FC<{ t: number; uid: string; cues: number[] }>
+General rules (all mandatory):
+- `t` = seconds since the graphic appeared. The component is a PURE FUNCTION of t: no hooks, no state, no CSS transitions/animations, no external assets, no <text> at all (no letters, no digits). Inline SVG only. Every id inside <defs> must be prefixed with the `uid` prop (id={`${uid}-something`}) and referenced the same way.
+- `cues` are times in seconds; a cue may be missing: read them with `const cue = (i: number) => (cues[i] ?? Infinity)`. Nothing tied to a cue may show before that cue. Transitions triggered by a cue last 0.4-0.6 s with ease-out (define small helpers clamp/easeOut/lerp inside the file).
+- Canvas: <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>. Transparent background: it is displayed on a near-black panel (#0B0F0A), so use light and bright colours. Palette only: lime #95FF00 (accent/positive), brand green #49762E, cream #F4F1E5, ice blue #B8D7EA (cold), amber #FFB020 and coral #FF6B4A (heat/negative), skin #E7B899, dark #0B0F0A.
+- Style: flat, premium vector illustration with smooth shapes, round caps and joins, a few subtle gradients. NOT clip-art and NOT thin stick figures: human figures are built from thick rounded limbs (stroke width 18-26, round caps) plus a head circle, with joint positions computed by small kinematics functions so the motion is smooth and anatomically believable. Figures wear dark-grey running clothes (#3A4640) with a cream outline 2px so they read on the dark panel; head and hands in skin colour.
+- Something must always move gently (idle loop: breathing, particles, small bob) so the picture never looks frozen. Keep the drawing inside the canvas with 14 px padding and make the subject LARGE (fill the canvas). Strict TypeScript (no implicit any), React 19, `import React from "react"`.
+
+Subject:
+Warming up indoors before going out to run in the cold. Draw a house in cross-section (cream 4 px outline with a pitched roof, floor line, a door on the right side) occupying most of the canvas; outside, to the left and above the roof, ice-blue snowflakes fall continuously and a few wind streaks pass. Inside stands a small runner figure (thick rounded limbs) doing gentle warm-up movements in place (arm swings / marching knees, looping).
+- Before cue(0): the house outline draws itself (stroke-dashoffset) during the first 0.6 s; the figure is ice blue (cold).
+- From cue(0) (INDOORS): the inside of the house fills with a soft warm amber glow.
+- From cue(1) (FIVE MINUTES are enough): a circular timer ring around the figure sweeps from 0 to full over 2.5 s (lime stroke, 8 px) with a small clock-hand, then stays full.
+- From cue(2) (warm the body FROM THE INSIDE): the figure's colour changes from ice blue to amber starting from the chest outward, with small heat waves rising from it.
+- From cue(3) (increase CIRCULATION): small coral pulse dots travel continuously along a loop through the figure's body (chest - arms - legs).
+- From cue(4) (READY to go out): the door swings open, a lime glow frames it and the snow outside looks less threatening (flakes fade to 50%).

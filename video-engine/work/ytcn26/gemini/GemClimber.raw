@@ -1,0 +1,191 @@
+import React from "react";
+
+export const GemClimber: React.FC<{ t: number; uid: string; cues: number[] }> = ({ t, uid, cues }) => {
+  const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+  const easeOut = (v: number) => 1 - Math.pow(1 - v, 3);
+  const lerp = (v0: number, v1: number, m: number) => v0 * (1 - m) + v1 * m;
+
+  const cue = (i: number) => (cues[i] ?? Infinity);
+  const cv = (i: number) => easeOut(clamp((t - cue(i)) / 0.5, 0, 1));
+
+  const freq = 1.6;
+  const phase = t * freq * Math.PI * 2;
+  const bounce = Math.sin(phase * 2) * 3;
+  const breath = Math.sin(t * 3) * 2;
+
+  const getIK = (p1: [number, number], p2: [number, number], l1: number, l2: number, flip: number): [number, number] => {
+    const dx = p2[0] - p1[0];
+    const dy = p2[1] - p1[1];
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const a = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
+    const h = Math.sqrt(Math.max(0, l1 * l1 - a * a));
+    const x0 = p1[0] + (a * dx) / d;
+    const y0 = p1[1] + (a * dy) / d;
+    return [x0 + ((-dy * h) / d) * flip, y0 + ((dx * h) / d) * flip];
+  };
+
+  const sh = [210, 140 + bounce] as [number, number];
+  const hp = [80, 170 + bounce] as [number, number];
+  const hndN = [210, 270] as [number, number];
+  const hndF = [225, 265] as [number, number];
+
+  const leg1P = Math.sin(phase) * 0.5 + 0.5;
+  const leg2P = Math.sin(phase + Math.PI) * 0.5 + 0.5;
+
+  const f1 = [lerp(40, 150, leg1P), lerp(270, 220, leg1P)] as [number, number];
+  const f2 = [lerp(40, 150, leg2P), lerp(270, 220, leg2P)] as [number, number];
+
+  const kn1 = getIK(hp, f1, 65, 65, -1);
+  const kn2 = getIK(hp, f2, 65, 65, -1);
+  const elN = getIK(sh, hndN, 65, 65, 1);
+  const elF = getIK([sh[0] + 15, sh[1] - 5], hndF, 65, 65, 1);
+
+  const colors = {
+    lime: "#95FF00",
+    brand: "#49762E",
+    cream: "#F4F1E5",
+    ice: "#B8D7EA",
+    amber: "#FFB020",
+    coral: "#FF6B4A",
+    skin: "#E7B899",
+    dark: "#0B0F0A",
+    clothes: "#3A4640",
+  };
+
+  const limb = (pts: [number, number][], stroke: string, width: number) => (
+    <path
+      d={`M ${pts.map((p) => p.join(",")).join(" L ")}`}
+      fill="none"
+      stroke={stroke}
+      strokeWidth={width}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  );
+
+  const fullLimb = (pts: [number, number][]) => (
+    <g>
+      {limb(pts, colors.cream, 26)}
+      {limb(pts, colors.clothes, 22)}
+    </g>
+  );
+
+  const landing1 = Math.pow(clamp(Math.cos(phase) * -1.2 + 0.2, 0, 1), 3);
+  const landing2 = Math.pow(clamp(Math.cos(phase + Math.PI) * -1.2 + 0.2, 0, 1), 3);
+  const hipPulse1 = Math.pow(clamp(Math.sin(phase) * 1.2 - 0.2, 0, 1), 2);
+  const hipPulse2 = Math.pow(clamp(Math.sin(phase + Math.PI) * 1.2 - 0.2, 0, 1), 2);
+
+  const coreGlow = cv(0) * (0.6 + 0.4 * Math.sin(phase));
+  const heatVal = cv(4);
+
+  return (
+    <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+      <defs>
+        <filter id={`${uid}-blur`}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
+        </filter>
+        <linearGradient id={`${uid}-torso-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor={heatVal > 0.1 ? colors.amber : colors.clothes} />
+          <stop offset="100%" stopColor={heatVal > 0.1 ? colors.coral : colors.clothes} />
+        </linearGradient>
+      </defs>
+
+      {/* Floor */}
+      <line x1={20} y1={270} x2={280} y2={270} stroke={colors.brand} strokeWidth={2} strokeLinecap="round" opacity={0.4} />
+
+      {/* Core/Heat Glows */}
+      {cv(0) > 0 && (
+        <path
+          d={`M ${hp[0]},${hp[1]} L ${sh[0]},${sh[1]}`}
+          stroke={colors.lime}
+          strokeWidth={40}
+          strokeLinecap="round"
+          filter={`url(#${uid}-blur)`}
+          opacity={coreGlow * 0.6}
+        />
+      )}
+      {heatVal > 0 && (
+        <path
+          d={`M ${hp[0]},${hp[1] - 10} L ${sh[0]},${sh[1] - 10}`}
+          stroke={colors.amber}
+          strokeWidth={50}
+          strokeLinecap="round"
+          filter={`url(#${uid}-blur)`}
+          opacity={heatVal * 0.4}
+        />
+      )}
+
+      {/* Heat Waves */}
+      {[0, 1, 2].map((i) => {
+        const wt = ((t * 1.2) + i * 0.33) % 1;
+        const wx = hp[0] + (sh[0] - hp[0]) * (0.3 + i * 0.2);
+        const wy = hp[1] - 30 - wt * 40;
+        return (
+          <path
+            key={i}
+            d={`M ${wx} ${wy} Q ${wx + 5} ${wy - 10} ${wx} ${wy - 20}`}
+            fill="none"
+            stroke={colors.amber}
+            strokeWidth={3}
+            strokeLinecap="round"
+            opacity={heatVal * (1 - wt) * 0.8}
+          />
+        );
+      })}
+
+      {/* Far Leg */}
+      {fullLimb([hp, kn2, f2])}
+
+      {/* Far Arm */}
+      <g opacity={0.7}>
+        {fullLimb([[sh[0] + 15, sh[1] - 5], elF, hndF])}
+        <circle cx={hndF[0]} cy={hndF[1]} r={11} fill={colors.skin} />
+      </g>
+
+      {/* Torso */}
+      <g>
+        <path d={`M ${hp[0]},${hp[1]} L ${sh[0]},${sh[1]}`} stroke={colors.cream} strokeWidth={34} strokeLinecap="round" />
+        <path d={`M ${hp[0]},${hp[1]} L ${sh[0]},${sh[1]}`} stroke={`url(#${uid}-torso-grad)`} strokeWidth={30} strokeLinecap="round" />
+        {cv(1) > 0 && (
+            <path d={`M ${hp[0]},${hp[1]} L ${sh[0]},${sh[1]}`} stroke={colors.lime} strokeWidth={30} strokeLinecap="round" opacity={cv(1) * 0.3} />
+        )}
+      </g>
+
+      {/* Near Leg */}
+      {fullLimb([hp, kn1, f1])}
+
+      {/* Near Arm */}
+      <g>
+        {fullLimb([sh, elN, hndN])}
+        <circle cx={hndN[0]} cy={hndN[1]} r={11} fill={colors.skin} />
+        {cv(1) > 0 && (
+           <path d={`M ${sh[0]},${sh[1]} L ${elN[0]},${elN[1]} L ${hndN[0]},${hndN[1]}`} stroke={colors.lime} strokeWidth={22} strokeLinecap="round" opacity={cv(1) * 0.4} fill="none" />
+        )}
+      </g>
+
+      {/* Head */}
+      <g transform={`translate(${sh[0] + 25}, ${sh[1] - 25}) rotate(15)`}>
+        <circle cx={0} cy={0} r={18} fill={colors.cream} />
+        <circle cx={0} cy={0} r={15} fill={colors.skin} />
+        <path d="M -8 -5 Q -2 -12 4 -5" fill="none" stroke={colors.clothes} strokeWidth={2} opacity={0.3} />
+        <circle cx={8} cy={-2} r={3} fill={colors.ice} opacity={0.4} />
+      </g>
+
+      {/* FX: Hip Rings */}
+      {cv(2) > 0 && (
+        <>
+          <circle cx={hp[0]} cy={hp[1]} r={20 + hipPulse1 * 20} fill="none" stroke={colors.lime} strokeWidth={4} opacity={hipPulse1 * cv(2)} />
+          <circle cx={hp[0]} cy={hp[1]} r={20 + hipPulse2 * 20} fill="none" stroke={colors.lime} strokeWidth={4} opacity={hipPulse2 * cv(2)} />
+        </>
+      )}
+
+      {/* FX: Foot Landing Rings */}
+      {cv(3) > 0 && (
+        <>
+          <circle cx={40} cy={270} r={5 + landing1 * 30} fill="none" stroke={colors.lime} strokeWidth={3} opacity={landing1 * cv(3)} />
+          <circle cx={40} cy={270} r={5 + landing2 * 30} fill="none" stroke={colors.lime} strokeWidth={3} opacity={landing2 * cv(3)} />
+        </>
+      )}
+    </svg>
+  );
+};

@@ -32,7 +32,7 @@ export const CTA: React.FC<{ cta: CTAT; frames: number }> = ({ cta, frames }) =>
         <div style={{ marginTop: 40, opacity: hl, transform: `scale(${0.9 + 0.1 * hl})` }}>
           <div style={{ fontWeight: 600, fontSize: 44, color: BRAND.cream, marginBottom: 12 }}>{cta.sub ?? "Te lo insegniamo con il"}</div>
           <div style={{ display: "inline-block", background: BRAND.lime, color: BRAND.ink, fontWeight: 900, fontSize: 52, lineHeight: 1.12, padding: "14px 30px", borderRadius: 18 }}>
-            coaching personalizzato<br />di Correre Naturale®
+            {(cta.offer ?? ["coaching personalizzato", "di Correre Naturale®"]).map((l, i) => <div key={i} style={{ whiteSpace: "nowrap" }}>{l}</div>)}
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export const CTA: React.FC<{ cta: CTAT; frames: number }> = ({ cta, frames }) =>
           </div>
           <div style={{ flex: 1, textAlign: "left" }}>
             <div style={{ fontWeight: 800, fontSize: 36, color: BRAND.lime }}>Correre Naturale®</div>
-            <div style={{ fontWeight: 700, fontSize: 46, lineHeight: 1.15 }}>Ti mando tutte le info</div>
+            <div style={{ fontWeight: 700, fontSize: 46, lineHeight: 1.15 }}>{cta.dm ?? "Ti mando tutte le info"}</div>
           </div>
         </div>
       </div>

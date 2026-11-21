@@ -1,0 +1,51 @@
+{
+ "id": "G5-climber",
+ "src": "public/ytcn26/ytcn26_src.mp4",
+ "out": "public/ytcn26/masters/G5-climber.mp4",
+ "shots": "work/ytcn26_shots.json",
+ "srcSize": [
+  1920,
+  1080
+ ],
+ "blendFrames": 0,
+ "window": {
+  "y": 580,
+  "h": 800,
+  "bg": "0x49762E"
+ },
+ "tail": 0.8,
+ "tailLive": 0,
+ "segments": [
+  {
+   "from": 240.4,
+   "to": 269.7
+  }
+ ],
+ "crops": {
+  "240.32": [
+   124,
+   0,
+   1458,
+   1080
+  ],
+  "246.33": [
+   322,
+   310,
+   1038,
+   768
+  ],
+  "259.80": [
+   230,
+   0,
+   1458,
+   1080
+  ],
+  "267.85": [
+   330,
+   316,
+   1028,
+   762
+  ]
+ },
+ "ping": true
+}

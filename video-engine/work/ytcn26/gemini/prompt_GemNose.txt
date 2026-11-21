@@ -1,0 +1,17 @@
+You are a senior motion designer writing a React (TSX) component for Remotion. Output ONLY the TSX code, no markdown fences, no explanations.
+
+Write: export const GemNose: React.FC<{ t: number; uid: string; cues: number[] }>
+General rules (all mandatory):
+- `t` = seconds since the graphic appeared. The component is a PURE FUNCTION of t: no hooks, no state, no CSS transitions/animations, no external assets, no <text> at all (no letters, no digits). Inline SVG only. Every id inside <defs> must be prefixed with the `uid` prop (id={`${uid}-something`}) and referenced the same way.
+- `cues` are times in seconds; a cue may be missing: read them with `const cue = (i: number) => (cues[i] ?? Infinity)`. Nothing tied to a cue may show before that cue. Transitions triggered by a cue last 0.4-0.6 s with ease-out (define small helpers clamp/easeOut/lerp inside the file).
+- Canvas: <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>. Transparent background: it is displayed on a near-black panel (#0B0F0A), so use light and bright colours. Palette only: lime #95FF00 (accent/positive), brand green #49762E, cream #F4F1E5, ice blue #B8D7EA (cold), amber #FFB020 and coral #FF6B4A (heat/negative), skin #E7B899, dark #0B0F0A.
+- Style: flat, premium vector illustration with smooth shapes, round caps and joins, a few subtle gradients. NOT clip-art and NOT thin stick figures: human figures are built from thick rounded limbs (stroke width 18-26, round caps) plus a head circle, with joint positions computed by small kinematics functions so the motion is smooth and anatomically believable. Figures wear dark-grey running clothes (#3A4640) with a cream outline 2px so they read on the dark panel; head and hands in skin colour.
+- Something must always move gently (idle loop: breathing, particles, small bob) so the picture never looks frozen. Keep the drawing inside the canvas with 14 px padding and make the subject LARGE (fill the canvas). Strict TypeScript (no implicit any), React 19, `import React from "react"`.
+
+Subject:
+Cold winter air breathed through the nose and warmed before reaching the lungs. Draw a clean side-profile silhouette of a head and neck facing LEFT (one smooth bezier path, cream at 0.16 opacity with a 3 px cream outline; no facial details except the profile outline: forehead, nose, lips, chin) with a visible airway inside: from the nostril through a wide nasal cavity, down the throat to a pair of lungs at the bottom. About 16 air particles flow continuously from outside-left into the nostril and along the airway (positions computed along a polyline with a helper, staggered phases, seamless loop). A small rotating snowflake mark (6 arms, ice blue) sits near the incoming air.
+- Before cue(0): the air stays ice blue all the way, and the lungs show small jagged icy spikes flickering (the "sharp cold air" discomfort).
+- From cue(0) (the nose WARMS the air): the nasal cavity glows amber and the particles gradually change colour along the path from ice blue to amber to coral-warm and grow slightly; the icy spikes melt away and the lungs glow softly warm.
+- From cue(1) (it HUMIDIFIES): small water droplets (ice-blue teardrops with a white highlight) appear inside the nasal cavity and join the stream.
+- From cue(2) (it FILTERS): a fine lime mesh appears across the nostril entrance and small dark-grey dust specks arriving with the air are stopped by it and bounce away.
+- From cue(3) (it PROTECTS the airways): a soft lime outline pulses around the lungs.

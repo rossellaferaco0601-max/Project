@@ -4,7 +4,7 @@ description: "Prima della CTA non si deve mai vedere la mossa/inquadratura succe
 metadata:
   node_type: memory
   type: feedback
-  modified: 2026-11-18
+  modified: 2026-11-21
 ---
 
 Ross, 17 e 18/11/2026 (serie F, YTCN 22). Prima su F1 («quello stacco strano prima della CTA, devi renderlo più fluido»), poi su F4
@@ -25,3 +25,11 @@ cade a metà dell'ultima parola.)
 - L'ultima grafica deve essere uscita prima che la CTA cominci a salire (F11: la frase barrata veniva coperta a metà).
 - Controllo prima di consegnare: fotogrammi degli ultimi 2,5 s di OGNI reel, uno ogni 3, più la differenza tra fotogrammi della coda
   (una fila di zeri = fermo immagine).
+
+**21/11/2026 (G2 v1, serie G):** Ross: «c'è sempre quello stacco brutto prima della CTA, prova a risolvere». Guardando il file fotogramma
+per fotogramma c'era UN SOLO fotogramma dell'inquadratura successiva (un lampo a 56,30 s) proprio prima della coda: quando il pezzo
+finisce a meno di un fotogramma dallo stacco successivo del sorgente, ffmpeg (`fps=30:round=down`) metteva nell'ultimo fotogramma il primo
+dell'inquadratura dopo. Corretto alla radice in `scripts/cn_master_shots.py` (il limite vale anche per l'ultimo pezzo).
+- Controllo obbligatorio su master e file finale di OGNI reel: `python3 scripts/f_flash.py file.mp4` (un fotogramma diverso da quello
+  prima e da quello dopo = lampo). È dentro `scripts/f_all.sh`. I 15 reel della serie F, ricontrollati, erano puliti.
+- Prima di dire «il finale è a posto» guardare TUTTI i fotogrammi dell'ultimo secondo e mezzo, non uno ogni 3.
