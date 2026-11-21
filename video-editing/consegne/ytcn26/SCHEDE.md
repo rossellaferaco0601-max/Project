@@ -1,6 +1,6 @@
 # Schede dei reel · YTCN 26 (serie G)
 
-Formato fisso delle schede (vedi `memoria/feedback-formato-schede.md`). File in `video-engine/out/ytcn26/consegna/` (`G2-strati_v2`, gli altri `_v1`, con copertina, didascalia e anteprima).
+Formato fisso delle schede (vedi `memoria/feedback-formato-schede.md`). File in `video-engine/out/ytcn26/consegna/` (`G2-strati_v2`, `G4-casa_v2`, `G6-ponte_v2`, `G7-affondi_v2`, `G8-jack_v2`, gli altri `_v1`, con copertina, didascalia e anteprima).
 
 ## YTCN 26 · «Correre al freddo» (serie G, 12 reel, 21/11)
 
